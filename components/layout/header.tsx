@@ -116,30 +116,29 @@ export function SiteHeader() {
     >
       <div
         className={cn(
-          "pointer-events-auto relative mx-auto flex h-[84px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-4 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)] backdrop-blur-[22px] sm:px-5 lg:px-6",
+          "pointer-events-auto relative mx-auto flex h-[88px] w-[96%] max-w-[1280px] items-center justify-between gap-5 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-5 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.12)] backdrop-blur-[24px] lg:px-7",
         )}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent"
+          className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
         />
 
-        <div className="flex h-full items-center">
-          <Logo />
-        </div>
+        <Logo />
+
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-0.5 xl:flex"
+          className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 xl:flex"
         >
           {mainNavigation.map((item) => (
             <NavDropdown key={item.label} item={item} />
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-5 lg:flex">
           <Link
             href={routes.login}
-            className="text-[14px] font-medium text-[#AAB2C5] transition-colors hover:text-white"
+            className="inline-flex h-10 items-center text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
           >
             Login
           </Link>
@@ -151,7 +150,6 @@ export function SiteHeader() {
             Get Started
           </GlowButton>
         </div>
-
         <button
           type="button"
           className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white xl:hidden"

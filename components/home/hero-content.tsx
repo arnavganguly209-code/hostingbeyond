@@ -38,11 +38,11 @@ export function HeroContent() {
   };
 
   return (
-    <div className="relative z-20 max-w-xl">
+    <div className="relative z-20 mx-auto w-full max-w-xl lg:mx-0">
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="inline-flex items-center rounded-full border border-[#6F3CFF]/35 bg-[rgba(10,16,35,0.7)] px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md"
+        className="inline-flex items-center rounded-full border border-[#6F3CFF]/35 bg-[rgba(10,16,35,0.7)] px-3.5 py-1.5 text-[10px] font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md"
       >
         Fast • Secure • Reliable
       </motion.div>
@@ -51,7 +51,7 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.06 }}
-        className="mt-3 text-[2rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.55rem] lg:text-[2.85rem] xl:text-[3.1rem]"
+        className="mt-4 text-[2.15rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.65rem] lg:text-[3rem] xl:text-[3.25rem]"
       >
         Everything You Need.
         <br />
@@ -64,7 +64,7 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.12 }}
-        className="mt-3 max-w-md text-[13px] leading-relaxed text-[#AAB2C5] sm:text-[14px]"
+        className="mt-4 max-w-md text-[14px] leading-relaxed text-[#AAB2C5] sm:text-[15px]"
       >
         Premium domains, blazing-fast hosting, and secure business email —
         everything you need to build, grow, and succeed online.
@@ -75,7 +75,7 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.18 }}
-        className="mt-5 flex w-full max-w-lg items-center gap-1.5 rounded-full border border-white/12 bg-[rgba(10,16,35,0.78)] p-1 shadow-[0_0_30px_rgb(10_132_255_/_0.12)] backdrop-blur-xl"
+        className="mt-7 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/14 bg-[rgba(10,16,35,0.8)] p-1.5 shadow-[0_12px_40px_rgb(0_0_0_/_0.35),0_0_0_1px_rgb(10_132_255_/_0.08),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-xl"
       >
         <label htmlFor="domain-search" className="sr-only">
           Find your perfect domain
@@ -86,19 +86,19 @@ export function HeroContent() {
           value={domain}
           onChange={(event) => setDomain(event.target.value)}
           placeholder="Find your perfect domain"
-          className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-[13px] text-white outline-none placeholder:text-[#AAB2C5]/80"
+          className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-[#AAB2C5]/80"
         />
         <Link
           href={routes.domains}
-          className="hidden shrink-0 px-2 text-[12px] font-medium text-[#AAB2C5] transition-colors hover:text-white sm:inline"
+          className="hidden shrink-0 px-2 text-sm font-medium text-[#AAB2C5] transition-colors hover:text-white sm:inline"
         >
           Bulk Search
         </Link>
         <button
           type="submit"
-          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-[#0A84FF] to-[#6F3CFF] px-4 text-[13px] font-semibold text-white shadow-[0_0_20px_rgb(10_132_255_/_0.4)] transition hover:brightness-110"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#0A84FF] to-[#6F3CFF] px-5 text-sm font-semibold text-white shadow-[0_0_22px_rgb(10_132_255_/_0.4)] transition hover:brightness-110"
         >
-          <Search className="size-3.5" aria-hidden />
+          <Search className="size-4" aria-hidden />
           Search
         </button>
       </motion.form>
@@ -107,18 +107,18 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.24 }}
-        className="mt-5 grid grid-cols-3 gap-2"
+        className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5"
       >
         {trustItems.map((item) => (
-          <li key={item.title} className="flex items-start gap-2">
-            <span className="mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-[#0A84FF]/30 bg-[#0A84FF]/10 text-[#7CC4FF]">
-              <item.icon className="size-3" strokeWidth={1.9} />
+          <li key={item.title} className="flex items-start gap-2.5">
+            <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-[#0A84FF]/30 bg-[#0A84FF]/10 text-[#7CC4FF]">
+              <item.icon className="size-3.5" strokeWidth={1.9} />
             </span>
             <span>
-              <span className="block text-[11px] font-semibold text-white sm:text-[12px]">
+              <span className="block text-[12px] font-semibold text-white sm:text-[13px]">
                 {item.title}
               </span>
-              <span className="hidden text-[10px] text-[#AAB2C5] sm:block">
+              <span className="mt-0.5 block text-[11px] text-[#AAB2C5]">
                 {item.subtitle}
               </span>
             </span>
