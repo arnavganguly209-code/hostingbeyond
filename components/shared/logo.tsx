@@ -9,7 +9,8 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond wordmark — transparent PNG, same size/placement.
+ * Official HostingBeyond wordmark — transparent PNG,
+ * vertically centered in the header glass frame.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
@@ -31,7 +32,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="relative inline-flex shrink-0 -translate-y-[18px] items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
+      className="relative inline-flex shrink-0 translate-y-[4px] items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
       aria-label="HostingBeyond home"
     >
       {content}
