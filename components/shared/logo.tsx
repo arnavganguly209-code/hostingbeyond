@@ -9,18 +9,18 @@ type LogoProps = {
 };
 
 /**
- * Exact uploaded HostingBeyond logo — no redesign, transparent PNG, ~60px height.
+ * Exact HostingBeyond logo — 240px wide, clear brand lockup (from uploaded asset).
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
     <Image
-      src="/logo/hostingbeyond-logo.png"
+      src="/logo/hostingbeyond-logo-header.png"
       alt="HostingBeyond"
-      width={220}
-      height={60}
+      width={240}
+      height={84}
       priority
       className={cn(
-        "h-[60px] w-auto max-w-[min(240px,48vw)] bg-transparent object-contain object-left",
+        "h-auto w-[240px] max-w-[240px] bg-transparent object-contain object-left",
         className,
       )}
     />

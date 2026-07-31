@@ -112,11 +112,11 @@ export function SiteHeader() {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="pointer-events-none fixed inset-x-0 top-0 z-50 px-[2%] pt-5"
+      className="pointer-events-none fixed inset-x-0 top-0 z-50 px-[2%] pt-4"
     >
       <div
         className={cn(
-          "pointer-events-auto relative mx-auto flex h-[76px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-4 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)] backdrop-blur-[22px] sm:px-5 lg:px-6",
+          "pointer-events-auto relative mx-auto flex h-[92px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-4 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)] backdrop-blur-[22px] sm:px-5 lg:px-6",
         )}
       >
         <span

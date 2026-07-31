@@ -3,11 +3,9 @@ import { HeroSection } from "@/components/home";
 
 export default function HomePage() {
   return (
-    <>
+    <div className="h-[100svh] overflow-hidden bg-[#050814]">
       <SiteHeader />
-      <main>
-        <HeroSection />
-      </main>
-    </>
+      <HeroSection />
+    </div>
   );
 }
