@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import {
   AnimatePresence,
   motion,
@@ -22,7 +22,7 @@ export function SiteHeader() {
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (value) => {
-    setScrolled(value > 16);
+    setScrolled(value > 12);
   });
 
   useEffect(() => {
@@ -40,49 +40,47 @@ export function SiteHeader() {
 
   return (
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background,border,box-shadow,backdrop-filter] duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled || open
-          ? "border-b border-white/10 bg-[#05050a]/75 shadow-[0_10px_40px_rgb(0_0_0_/_0.35)] backdrop-blur-xl"
+          ? "border-b border-white/10 bg-black/70 shadow-[0_8px_32px_rgb(0_0_0_/_0.45)] backdrop-blur-2xl"
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:px-8">
         <Logo />
 
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-0.5 xl:flex"
-        >
+        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {mainNavigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-lg px-2.5 py-2 text-[0.8rem] font-medium tracking-wide text-[#c5cde0] transition-colors hover:bg-white/[0.04] hover:text-white"
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium text-white/90 transition-colors hover:text-white"
             >
               {item.label}
+              {item.hasDropdown ? (
+                <ChevronDown className="size-3.5 opacity-70" aria-hidden />
+              ) : null}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <Link
-            href={routes.login}
-            className="rounded-lg px-3 py-2 text-sm font-medium text-[#c5cde0] transition-colors hover:text-white"
+        <div className="hidden lg:block">
+          <GlowButton
+            href={routes.getStarted}
+            size="md"
+            className="rounded-full px-6"
           >
-            Login
-          </Link>
-          <GlowButton href={routes.getStarted} size="md">
             Get Started
           </GlowButton>
         </div>
 
         <button
           type="button"
-          className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white xl:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -99,39 +97,26 @@ export function SiteHeader() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.28 }}
-            className="border-t border-white/10 bg-[#05050a]/95 backdrop-blur-xl xl:hidden"
+            className="border-t border-white/10 bg-black/95 backdrop-blur-xl lg:hidden"
           >
-            <nav
-              aria-label="Mobile"
-              className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
-            >
+            <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Mobile">
               {mainNavigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-xl px-3 py-3 text-sm font-medium text-[#d5dceb] transition-colors hover:bg-white/[0.05] hover:text-white"
+                  className="rounded-xl px-3 py-3 text-sm font-medium text-white/90"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              <div className="mt-3 flex flex-col gap-2 border-t border-white/10 pt-4">
-                <Link
-                  href={routes.login}
-                  className="rounded-xl px-3 py-3 text-sm font-medium text-[#c5cde0]"
-                  onClick={() => setOpen(false)}
-                >
-                  Login
-                </Link>
-                <GlowButton
-                  href={routes.getStarted}
-                  className="w-full"
-                  size="lg"
-                >
-                  Get Started
-                </GlowButton>
-              </div>
+              <GlowButton
+                href={routes.getStarted}
+                className="mt-3 w-full rounded-full"
+                size="lg"
+              >
+                Get Started
+              </GlowButton>
             </nav>
           </motion.div>
         ) : null}

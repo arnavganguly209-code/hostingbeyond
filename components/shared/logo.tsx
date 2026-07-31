@@ -8,99 +8,90 @@ type LogoProps = {
   href?: string;
 };
 
+/** HB monogram matching the HostingBeyond brand mark. */
 function LogoMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 72 56"
+      viewBox="0 0 64 52"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-10 w-auto", className)}
+      className={cn("h-11 w-auto shrink-0", className)}
       aria-hidden="true"
     >
       <defs>
         <linearGradient
-          id="hb-mark"
-          x1="0"
-          y1="8"
-          x2="72"
+          id="hbLogoGrad"
+          x1="2"
+          y1="4"
+          x2="62"
           y2="48"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#2F6BFF" />
-          <stop offset="0.55" stopColor="#7B4DFF" />
-          <stop offset="1" stopColor="#B45CFF" />
+          <stop stopColor="#3B82F6" />
+          <stop offset="0.45" stopColor="#6366F1" />
+          <stop offset="1" stopColor="#A855F7" />
         </linearGradient>
-        <linearGradient
-          id="hb-orbit"
-          x1="4"
-          y1="44"
-          x2="68"
-          y2="40"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#2F6BFF" />
-          <stop offset="1" stopColor="#9B5CFF" />
-        </linearGradient>
-        <filter id="hb-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.2" result="blur" />
+        <filter id="hbLogoGlow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1.4" result="b" />
           <feMerge>
-            <feMergeNode in="blur" />
+            <feMergeNode in="b" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
       </defs>
 
-      {/* Pixel accents */}
       <rect
-        x="6"
-        y="6"
-        width="3.5"
-        height="3.5"
-        rx="0.6"
-        fill="url(#hb-mark)"
-        opacity="0.95"
-      />
-      <rect
-        x="11"
-        y="3"
-        width="2.8"
-        height="2.8"
+        x="4"
+        y="5"
+        width="3.2"
+        height="3.2"
         rx="0.5"
-        fill="url(#hb-mark)"
-        opacity="0.75"
+        fill="url(#hbLogoGrad)"
       />
       <rect
-        x="3"
-        y="11"
-        width="2.5"
-        height="2.5"
-        rx="0.5"
-        fill="url(#hb-mark)"
-        opacity="0.65"
+        x="8.5"
+        y="2.5"
+        width="2.6"
+        height="2.6"
+        rx="0.4"
+        fill="url(#hbLogoGrad)"
+        opacity="0.85"
+      />
+      <rect
+        x="1.5"
+        y="9.5"
+        width="2.4"
+        height="2.4"
+        rx="0.4"
+        fill="url(#hbLogoGrad)"
+        opacity="0.7"
+      />
+      <rect
+        x="9"
+        y="8"
+        width="2"
+        height="2"
+        rx="0.35"
+        fill="url(#hbLogoGrad)"
+        opacity="0.55"
       />
 
-      {/* H */}
       <path
-        d="M14 10h6.2v12.2H28V10h6.2v30H28V28.4H20.2V40H14V10Z"
-        fill="url(#hb-mark)"
-        filter="url(#hb-glow)"
+        d="M13 8h5.6v11.5h7.2V8H31.4v28H26V25.2h-7.4V36H13V8Z"
+        fill="url(#hbLogoGrad)"
+        filter="url(#hbLogoGlow)"
       />
-
-      {/* B */}
       <path
-        d="M38 10h12.4c4.6 0 7.6 2.4 7.6 6.2 0 2.5-1.3 4.4-3.5 5.4 2.8.9 4.5 3.1 4.5 6.1 0 4.2-3.2 7.3-8.4 7.3H38V10Zm6.2 5.1v6.1h5.4c1.9 0 3-0.9 3-2.9s-1.1-3.2-3.1-3.2H44.2Zm0 11.1v7.3h6.2c2.2 0 3.6-1.1 3.6-3.5s-1.4-3.8-3.7-3.8h-6.1Z"
-        fill="url(#hb-mark)"
-        filter="url(#hb-glow)"
+        d="M35 8h11.5c4.2 0 7 2.2 7 5.7 0 2.3-1.2 4-3.2 5 2.6.85 4.2 2.85 4.2 5.65 0 3.9-3 6.65-7.8 6.65H35V8Zm5.6 4.7v5.6h5c1.75 0 2.75-.85 2.75-2.7 0-1.9-1-2.9-2.85-2.9h-4.9Zm0 10.2v6.7h5.7c2 0 3.3-1 3.3-3.2 0-2.25-1.3-3.5-3.4-3.5h-5.6Z"
+        fill="url(#hbLogoGrad)"
+        filter="url(#hbLogoGlow)"
       />
-
-      {/* Orbit swoosh */}
       <path
-        d="M8 46c10-8 24-12 38-9 8 1.6 16 5.2 22 10"
-        stroke="url(#hb-orbit)"
-        strokeWidth="2.4"
+        d="M6 43c9.5-7.5 22-11 35-8.2 7 1.5 14.5 4.8 20 9.2"
+        stroke="url(#hbLogoGrad)"
+        strokeWidth="2.6"
         strokeLinecap="round"
         fill="none"
-        opacity="0.95"
       />
     </svg>
   );
@@ -111,14 +102,14 @@ export function Logo({ className, showTagline = true, href = "/" }: LogoProps) {
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoMark />
       <span className="flex min-w-0 flex-col leading-none">
-        <span className="font-heading text-[0.95rem] font-bold tracking-[0.04em] text-white sm:text-[1.05rem]">
+        <span className="text-[1.05rem] font-extrabold tracking-[0.02em] text-white sm:text-[1.15rem]">
           HOSTING
-          <span className="bg-[linear-gradient(105deg,#5eb7ff,#7b4dff_55%,#b45cff)] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#60A5FA] via-[#818CF8] to-[#C084FC] bg-clip-text text-transparent">
             BEYOND
           </span>
         </span>
         {showTagline ? (
-          <span className="mt-1 hidden text-[0.55rem] font-medium tracking-[0.14em] text-[#7f8aa3] uppercase sm:block">
+          <span className="mt-1.5 hidden text-[0.52rem] font-medium tracking-[0.16em] text-[#8B93A7] uppercase sm:block">
             Beyond Hosting, Beyond Possibilities
           </span>
         ) : null}
@@ -126,14 +117,12 @@ export function Logo({ className, showTagline = true, href = "/" }: LogoProps) {
     </span>
   );
 
-  if (!href) {
-    return content;
-  }
+  if (!href) return content;
 
   return (
     <Link
       href={href}
-      className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-[#7b4dff]/60"
+      className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
       aria-label="HostingBeyond home"
     >
       {content}

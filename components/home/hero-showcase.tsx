@@ -1,196 +1,101 @@
 "use client";
 
-import { Cloud, Globe2, Mail, Server, type LucideIcon } from "lucide-react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
-import { useRef, type MouseEvent } from "react";
+import { Globe2, Mail } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
-import { GlassPanel } from "@/components/shared/glass-panel";
-import { cn } from "@/lib/utils";
-
-type ShowcaseItem = {
-  title: string;
-  subtitle: string;
-  detail: string;
-  icon: LucideIcon;
-  glow: "blue" | "purple";
-  className: string;
-  delay: number;
-};
-
-const showcaseItems: ShowcaseItem[] = [
-  {
-    title: "Business Email",
-    subtitle: "From $5 / 12 months",
-    detail: "Professional inbox that builds trust",
-    icon: Mail,
-    glow: "blue",
-    className: "lg:left-0 lg:top-[8%]",
-    delay: 0.15,
-  },
-  {
-    title: "Domain .COM",
-    subtitle: "Bundle from $15 / year",
-    detail: "Secure your brand identity",
-    icon: Globe2,
-    glow: "purple",
-    className: "lg:right-0 lg:top-[2%]",
-    delay: 0.28,
-  },
-  {
-    title: "Web Hosting",
-    subtitle: "NVMe · Global CDN",
-    detail: "Built for speed and uptime",
-    icon: Server,
-    glow: "blue",
-    className: "lg:bottom-[18%] lg:left-[8%]",
-    delay: 0.4,
-  },
-  {
-    title: "Cloud VPS",
-    subtitle: "Dedicated resources",
-    detail: "Scale without compromise",
-    icon: Cloud,
-    glow: "purple",
-    className: "lg:right-[4%] lg:bottom-[8%]",
-    delay: 0.52,
-  },
-];
-
-function ShowcaseCard({
-  item,
-  reduceMotion,
-  className,
-}: {
-  item: ShowcaseItem;
-  reduceMotion: boolean | null;
-  className?: string;
-}) {
-  const Icon = item.icon;
-
-  return (
-    <motion.div
-      className={cn("w-full", className)}
-      initial={{ opacity: 0, y: 24, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        duration: 0.65,
-        delay: item.delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      <motion.div
-        animate={
-          reduceMotion
-            ? undefined
-            : { y: [0, item.glow === "blue" ? -8 : -12, 0] }
-        }
-        transition={{
-          duration: item.glow === "blue" ? 5.2 : 6.1,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: item.delay,
-        }}
-        whileHover={reduceMotion ? undefined : { y: -4, scale: 1.02 }}
-        className="will-change-transform"
-      >
-        <GlassPanel
-          glow={item.glow}
-          className={cn(
-            "group h-full p-4 transition-shadow duration-300",
-            item.glow === "blue"
-              ? "hover:shadow-[0_0_50px_rgb(47_107_255_/_0.35)]"
-              : "hover:shadow-[0_0_50px_rgb(155_92_255_/_0.35)]",
-          )}
-        >
-          <div
-            className={cn(
-              "mb-4 inline-flex size-11 items-center justify-center rounded-xl border",
-              item.glow === "blue"
-                ? "border-[#4d8cff]/35 bg-[#2f6bff]/15 text-[#8ec0ff] shadow-[0_0_24px_rgb(47_107_255_/_0.35)]"
-                : "border-[#9b5cff]/35 bg-[#7b4dff]/15 text-[#d2b4ff] shadow-[0_0_24px_rgb(155_92_255_/_0.35)]",
-            )}
-          >
-            <Icon className="size-5" strokeWidth={1.75} />
-          </div>
-          <p className="text-[0.7rem] font-semibold tracking-[0.16em] text-[#9eb0d4] uppercase">
-            {item.title}
-          </p>
-          <p className="font-heading mt-2 text-lg font-semibold text-white">
-            {item.subtitle}
-          </p>
-          <p className="mt-1 text-xs leading-relaxed text-[#8f9bb3]">
-            {item.detail}
-          </p>
-        </GlassPanel>
-      </motion.div>
-    </motion.div>
-  );
-}
-
+/**
+ * Two floating offer cards matching the official hero mockup.
+ */
 export function HeroShowcase() {
   const reduceMotion = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 60, damping: 18 });
-  const springY = useSpring(y, { stiffness: 60, damping: 18 });
-
-  const onMove = (event: MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width - 0.5;
-    const py = (event.clientY - rect.top) / rect.height - 0.5;
-    x.set(px * 18);
-    y.set(py * 14);
-  };
-
-  const onLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
 
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="relative mx-auto w-full max-w-lg lg:h-[34rem] lg:max-w-none"
-    >
-      {/* Mobile / tablet grid */}
-      <div className="grid grid-cols-2 gap-3 lg:hidden">
-        {showcaseItems.map((item) => (
-          <ShowcaseCard
-            key={item.title}
-            item={item}
-            reduceMotion={reduceMotion}
-          />
-        ))}
-      </div>
-
-      {/* Desktop floating composition */}
-      <motion.div
-        style={{ x: springX, y: springY }}
-        className="absolute inset-0 hidden lg:block"
-      >
-        {showcaseItems.map((item) => (
-          <ShowcaseCard
-            key={item.title}
-            item={item}
-            reduceMotion={reduceMotion}
-            className={cn("absolute w-[13rem]", item.className)}
-          />
-        ))}
-      </motion.div>
-
+    <div className="relative mx-auto flex h-auto w-full max-w-md items-end justify-center gap-4 pt-6 sm:max-w-lg sm:gap-5 lg:h-[420px] lg:max-w-none lg:pt-0">
+      {/* Soft reflection floor */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-[10%] bottom-0 hidden h-24 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgb(123_77_255_/_0.22),transparent_70%)] blur-2xl lg:block"
+        className="pointer-events-none absolute inset-x-[8%] bottom-0 h-28 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgb(99_102_241_/_0.35),transparent_70%)] blur-2xl"
       />
+
+      {/* Business Email card */}
+      <motion.article
+        initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -4 }}
+        animate={{ opacity: 1, y: 0, rotate: -6 }}
+        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-[46%] max-w-[200px] origin-bottom"
+      >
+        <motion.div
+          animate={reduceMotion ? undefined : { y: [0, -12, 0] }}
+          transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+          whileHover={reduceMotion ? undefined : { y: -8, scale: 1.03 }}
+          className="rounded-[22px] border border-cyan-400/40 bg-[linear-gradient(160deg,rgb(15_23_42_/_0.75),rgb(8_15_35_/_0.55))] p-5 shadow-[0_0_40px_rgb(34_211_238_/_0.28),inset_0_1px_0_rgb(255_255_255_/_0.12)] backdrop-blur-xl"
+        >
+          <p className="text-center text-[10px] font-bold tracking-[0.18em] text-cyan-200 uppercase">
+            Business Email
+          </p>
+          <p className="mt-4 text-center text-[11px] font-semibold tracking-wide text-slate-300 uppercase">
+            Start Just
+          </p>
+          <p className="mt-1 text-center text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+            $5
+          </p>
+          <p className="mt-1 text-center text-[11px] font-semibold tracking-wide text-slate-300 uppercase">
+            /12 Month
+          </p>
+          <p className="mt-4 text-center text-[10px] font-medium tracking-[0.12em] text-slate-400 uppercase">
+            No Hidden Charges
+          </p>
+          <div className="mt-5 flex justify-center">
+            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-cyan-400/40 bg-cyan-500/15 text-cyan-300 shadow-[0_0_24px_rgb(34_211_238_/_0.4)]">
+              <Mail className="size-6" strokeWidth={1.6} />
+            </span>
+          </div>
+        </motion.div>
+      </motion.article>
+
+      {/* Domain bundle card */}
+      <motion.article
+        initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: 4 }}
+        animate={{ opacity: 1, y: 0, rotate: 6 }}
+        transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-20 w-[48%] max-w-[210px] origin-bottom self-start sm:mt-2"
+      >
+        <motion.div
+          animate={reduceMotion ? undefined : { y: [0, -14, 0] }}
+          transition={{
+            duration: 5.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 0.4,
+          }}
+          whileHover={reduceMotion ? undefined : { y: -8, scale: 1.03 }}
+          className="relative rounded-[22px] border border-fuchsia-400/40 bg-[linear-gradient(160deg,rgb(30_15_50_/_0.75),rgb(12_10_30_/_0.55))] p-5 shadow-[0_0_44px_rgb(217_70_239_/_0.3),inset_0_1px_0_rgb(255_255_255_/_0.12)] backdrop-blur-xl"
+        >
+          <div className="absolute -top-3 -right-3 z-30 flex size-[72px] items-center justify-center rounded-full border border-fuchsia-300/40 bg-[linear-gradient(145deg,#7C3AED,#DB2777)] p-2 text-center text-[9px] leading-tight font-bold tracking-wide text-white uppercase shadow-[0_0_24px_rgb(217_70_239_/_0.55)]">
+            Limited
+            <br />
+            Time Offer
+          </div>
+
+          <p className="pr-4 text-center text-[9px] font-bold tracking-[0.14em] text-fuchsia-200 uppercase sm:text-[10px]">
+            Domain .COM + 1 Business Mail
+          </p>
+          <p className="mt-4 text-center text-[11px] font-semibold tracking-wide text-slate-300 uppercase">
+            1 Year Just
+          </p>
+          <p className="mt-1 text-center text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+            $15
+          </p>
+          <p className="mt-4 text-center text-[10px] font-medium tracking-[0.12em] text-fuchsia-200/90 uppercase">
+            Limited Time Offer
+          </p>
+          <div className="mt-5 flex justify-center">
+            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-300 shadow-[0_0_24px_rgb(217_70_239_/_0.4)]">
+              <Globe2 className="size-6" strokeWidth={1.6} />
+            </span>
+          </div>
+        </motion.div>
+      </motion.article>
     </div>
   );
 }
