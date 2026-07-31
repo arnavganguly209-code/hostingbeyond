@@ -50,7 +50,7 @@ export function SiteHeader() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:px-8">
+      <div className="mx-auto flex h-[132px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:px-8">
         <Logo />
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">

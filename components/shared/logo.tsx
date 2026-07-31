@@ -5,32 +5,25 @@ import { cn } from "@/lib/utils";
 
 type LogoProps = {
   className?: string;
-  showTagline?: boolean;
   href?: string;
 };
 
 /**
- * Official HostingBeyond logo on the header left.
- * Crops the brand sheet to the HB mark + wordmark (excludes service icons).
+ * Official HostingBeyond logo — transparent PNG, exactly 240px wide, no background fill.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
-    <span
+    <Image
+      src="/logo/hostingbeyond-logo.png"
+      alt="HostingBeyond"
+      width={240}
+      height={127}
+      priority
       className={cn(
-        "relative block h-11 w-[168px] overflow-hidden sm:h-12 sm:w-[210px]",
+        "h-auto w-[240px] bg-transparent object-contain",
         className,
       )}
-    >
-      <Image
-        src="/logo/hostingbeyond-logo.jpg"
-        alt="HostingBeyond"
-        width={1024}
-        height={428}
-        priority
-        sizes="210px"
-        className="absolute top-[-6%] left-0 h-[150%] w-auto max-w-none object-cover object-left"
-      />
-    </span>
+    />
   );
 
   if (!href) return content;
@@ -38,7 +31,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="inline-flex shrink-0 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
+      className="inline-flex shrink-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
       aria-label="HostingBeyond home"
     >
       {content}
