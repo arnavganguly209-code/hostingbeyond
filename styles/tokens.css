@@ -1,4 +1,27 @@
 /**
- * Global style entry for non-Tailwind tokens.
- * Brand colors and design tokens will be defined after assets are provided.
+ * HostingBeyond brand design tokens.
  */
+
+:root {
+  --hb-black: #000000;
+  --hb-void: #05050a;
+  --hb-navy: #0a0a14;
+  --hb-blue: #2f6bff;
+  --hb-blue-bright: #4d8cff;
+  --hb-cyan: #5eb7ff;
+  --hb-violet: #7b4dff;
+  --hb-purple: #9b5cff;
+  --hb-magenta: #b45cff;
+  --hb-text: #f4f7ff;
+  --hb-muted: #9aa3b8;
+  --hb-glass: rgb(255 255 255 / 0.04);
+  --hb-glass-border: rgb(255 255 255 / 0.1);
+  --hb-glow-blue: rgb(47 107 255 / 0.45);
+  --hb-glow-purple: rgb(155 92 255 / 0.4);
+  --hb-gradient: linear-gradient(135deg, #2f6bff 0%, #7b4dff 50%, #b45cff 100%);
+  --hb-gradient-soft: linear-gradient(
+    135deg,
+    rgb(47 107 255 / 0.9),
+    rgb(155 92 255 / 0.9)
+  );
+}

@@ -1,5 +1,4 @@
-/**
- * Shared presentational components — added when design assets are ready.
- */
-
-export {};
+export { Logo } from "./logo";
+export { GradientText } from "./gradient-text";
+export { GlowButton } from "./glow-button";
+export { GlassPanel } from "./glass-panel";

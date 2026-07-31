@@ -5,9 +5,15 @@
 export const routes = {
   home: "/",
   domains: "/domains",
-  hosting: "/hosting",
   businessEmail: "/business-email",
+  hosting: "/hosting",
+  vps: "/vps",
+  cloud: "/cloud",
+  pricing: "/pricing",
   resources: "/resources",
+  about: "/about",
+  contact: "/contact",
+  login: "/login",
   getStarted: "/get-started",
 } as const;
 
