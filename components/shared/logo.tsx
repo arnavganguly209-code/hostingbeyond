@@ -9,18 +9,19 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond logo — exactly 240px wide, aspect ratio preserved.
+ * Official HostingBeyond logo — 264px (10% above base 240px).
+ * Nudged up optically to match nav / CTA midline.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
     <Image
       src="/logo/hostingbeyond-logo-header.png"
       alt="HostingBeyond"
-      width={240}
-      height={84}
+      width={264}
+      height={92}
       priority
       className={cn(
-        "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] bg-transparent object-contain object-left align-middle",
+        "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] -translate-y-[6px] bg-transparent object-contain object-left align-middle",
         className,
       )}
     />
