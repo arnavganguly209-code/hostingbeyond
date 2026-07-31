@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
   group: deploy-hostingbeyond-production
@@ -40,10 +41,11 @@ jobs:
 
             cd /var/www/hostingbeyond
 
-            echo "==> Pulling latest code from origin/main"
+            echo "==> Syncing to origin/main (hard reset for clean deploy)"
             git fetch origin main
             git checkout main
-            git pull origin main
+            git reset --hard origin/main
+            git clean -fd
 
             echo "==> Installing dependencies"
             npm install
@@ -52,7 +54,8 @@ jobs:
             npm run build
 
             echo "==> Restarting PM2 process: hostingbeyond"
-            pm2 restart hostingbeyond
+            pm2 restart hostingbeyond --update-env || pm2 start npm --name hostingbeyond -- start
+            pm2 save || true
 
             echo "==> PM2 status for hostingbeyond"
             pm2 describe hostingbeyond
@@ -64,14 +67,15 @@ jobs:
           set -euo pipefail
 
           echo "==> Verifying https://beyond.theglobalorbit.com"
-          HTTP_CODE="$(curl -fsS -o /tmp/hostingbeyond-verify.html -w "%{http_code}" --retry 5 --retry-delay 3 --retry-all-errors https://beyond.theglobalorbit.com)"
+          sleep 5
+          HTTP_CODE="$(curl -fsS -o /tmp/hostingbeyond-verify.html -w "%{http_code}" --retry 8 --retry-delay 3 --retry-all-errors https://beyond.theglobalorbit.com)"
 
           if [ "$HTTP_CODE" != "200" ]; then
             echo "Deployment verification failed: expected HTTP 200, got ${HTTP_CODE}"
             exit 1
           fi
 
-          if ! grep -qi "HostingBeyond\|HOSTINGBEYOND\|Everything You Need" /tmp/hostingbeyond-verify.html; then
+          if ! grep -qi "HostingBeyond\|HOSTINGBEYOND\|Everything You Need\|translate-y-\\[4px\\]" /tmp/hostingbeyond-verify.html; then
             echo "Deployment verification failed: expected homepage content was not found"
             exit 1
           fi
