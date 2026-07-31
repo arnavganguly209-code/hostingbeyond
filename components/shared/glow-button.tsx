@@ -26,14 +26,14 @@ export function GlowButton({
     <Link
       href={href}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-semibold tracking-tight transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#6F3CFF]/70",
+        "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-semibold tracking-tight transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/70",
         sizeClasses[size],
         variant === "primary" &&
-          "bg-gradient-to-r from-[#0A84FF] to-[#6F3CFF] text-white shadow-[0_0_28px_rgb(10_132_255_/_0.35)] hover:shadow-[0_0_40px_rgb(111_60_255_/_0.5)] hover:brightness-110",
+          "bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] text-white shadow-[0_0_28px_var(--hb-glow-blue)] hover:shadow-[0_0_40px_var(--hb-glow-purple)] hover:brightness-110",
         variant === "secondary" &&
           "border border-white/15 bg-white/[0.03] text-white backdrop-blur-md hover:border-white/30 hover:bg-white/[0.07]",
         variant === "ghost" &&
-          "text-[#AAB2C5] hover:bg-white/[0.05] hover:text-white",
+          "text-[var(--hb-muted)] hover:bg-white/[0.05] hover:text-white",
         className,
       )}
     >

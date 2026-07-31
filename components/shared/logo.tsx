@@ -20,7 +20,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
       height={84}
       priority
       className={cn(
-        "h-auto w-[240px] max-w-[240px] bg-transparent object-contain object-left",
+        "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] bg-transparent object-contain object-left align-middle",
         className,
       )}
     />
@@ -31,7 +31,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="inline-flex shrink-0 items-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[#6F3CFF]/60"
+      className="inline-flex shrink-0 items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
       aria-label="HostingBeyond home"
     >
       {content}

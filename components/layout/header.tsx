@@ -30,7 +30,7 @@ function NavDropdown({ item }: { item: NavItem }) {
     return (
       <Link
         href={item.href}
-        className="rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
+        className="rounded-lg px-3.5 py-2 text-[17px] font-semibold tracking-tight text-white transition-colors duration-200 hover:text-[var(--hb-blue)]"
       >
         {item.label}
       </Link>
@@ -48,14 +48,14 @@ function NavDropdown({ item }: { item: NavItem }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
+        className="inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[17px] font-semibold tracking-tight text-white transition-colors duration-200 hover:text-[var(--hb-blue)]"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
         {item.label}
         <ChevronDown
           className={cn(
-            "size-4 text-white/80 transition-transform duration-200",
+            "size-3.5 opacity-70 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -68,15 +68,15 @@ function NavDropdown({ item }: { item: NavItem }) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="absolute top-[calc(100%+10px)] left-1/2 z-50 min-w-[220px] -translate-x-1/2"
           >
-            <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[rgba(10,16,35,0.82)] p-2 shadow-[0_20px_60px_rgb(0_0_0_/_0.45),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[22px]">
+            <div className="overflow-hidden rounded-2xl border border-[var(--hb-border)] bg-[var(--hb-glass-strong)] p-2 shadow-[0_20px_60px_rgb(0_0_0_/_0.45)] backdrop-blur-[var(--hb-header-blur)]">
               {item.children.map((child) => (
                 <Link
                   key={child.href}
                   href={child.href}
-                  className="block rounded-xl px-3.5 py-2.5 text-[13px] font-medium text-[#AAB2C5] transition-colors hover:bg-white/[0.06] hover:text-white"
+                  className="block rounded-xl px-3.5 py-2.5 text-[13px] font-medium text-[var(--hb-muted)] transition-colors hover:bg-white/[0.06] hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   {child.label}
@@ -109,26 +109,26 @@ export function SiteHeader() {
 
   return (
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 px-[2%] pt-4"
     >
       <div
         className={cn(
-          "pointer-events-auto relative mx-auto flex h-[88px] w-[96%] max-w-[1280px] items-center justify-between gap-5 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-5 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.12)] backdrop-blur-[24px] lg:px-7",
+          "pointer-events-auto relative mx-auto flex h-[92px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[var(--hb-header-radius)] border border-[var(--hb-border-blue)] bg-[var(--hb-glass)] px-5 shadow-[0_18px_50px_rgb(0_0_0_/_0.4),0_0_0_1px_rgb(10_132_255_/_0.12),0_0_40px_rgb(10_132_255_/_0.12),inset_0_1px_0_rgb(255_255_255_/_0.12)] backdrop-blur-[var(--hb-header-blur)] lg:px-7",
         )}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
+          className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--hb-blue)]/50 to-transparent"
         />
 
         <Logo />
 
         <nav
           aria-label="Primary"
-          className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 xl:flex"
+          className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 xl:flex"
         >
           {mainNavigation.map((item) => (
             <NavDropdown key={item.label} item={item} />
@@ -138,7 +138,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-5 lg:flex">
           <Link
             href={routes.login}
-            className="inline-flex h-10 items-center text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
+            className="inline-flex h-10 items-center text-[17px] font-semibold tracking-tight text-white transition-colors hover:text-[var(--hb-blue)]"
           >
             Login
           </Link>
@@ -150,6 +150,7 @@ export function SiteHeader() {
             Get Started
           </GlowButton>
         </div>
+
         <button
           type="button"
           className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white xl:hidden"
@@ -169,7 +170,7 @@ export function SiteHeader() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="pointer-events-auto mx-auto mt-2 w-[96%] max-w-[1280px] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[rgba(10,16,35,0.92)] shadow-[0_20px_60px_rgb(0_0_0_/_0.45)] backdrop-blur-[22px] xl:hidden"
+            className="pointer-events-auto mx-auto mt-2 w-[96%] max-w-[1280px] overflow-hidden rounded-[var(--hb-header-radius)] border border-[var(--hb-border)] bg-[var(--hb-glass-strong)] shadow-[0_20px_60px_rgb(0_0_0_/_0.45)] backdrop-blur-[var(--hb-header-blur)] xl:hidden"
           >
             <nav className="flex flex-col gap-1 p-4" aria-label="Mobile">
               {mainNavigation.map((item) => (
@@ -178,7 +179,7 @@ export function SiteHeader() {
                     <>
                       <button
                         type="button"
-                        className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-medium text-white"
+                        className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-semibold text-white"
                         onClick={() =>
                           setMobileSection((current) =>
                             current === item.label ? null : item.label,
@@ -205,7 +206,7 @@ export function SiteHeader() {
                               <Link
                                 key={child.href}
                                 href={child.href}
-                                className="block rounded-lg px-3 py-2.5 text-sm text-[#AAB2C5]"
+                                className="block rounded-lg px-3 py-2.5 text-sm text-[var(--hb-muted)]"
                                 onClick={() => setOpen(false)}
                               >
                                 {child.label}
@@ -218,7 +219,7 @@ export function SiteHeader() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="block rounded-xl px-3 py-3 text-sm font-medium text-white"
+                      className="block rounded-xl px-3 py-3 text-sm font-semibold text-white"
                       onClick={() => setOpen(false)}
                     >
                       {item.label}
@@ -228,7 +229,7 @@ export function SiteHeader() {
               ))}
               <Link
                 href={routes.login}
-                className="rounded-xl px-3 py-3 text-sm font-medium text-[#AAB2C5]"
+                className="rounded-xl px-3 py-3 text-sm font-semibold text-[var(--hb-muted)]"
                 onClick={() => setOpen(false)}
               >
                 Login

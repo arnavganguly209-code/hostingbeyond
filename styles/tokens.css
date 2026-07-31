@@ -3,25 +3,20 @@
  */
 
 :root {
-  --hb-black: #000000;
-  --hb-void: #05050a;
-  --hb-navy: #0a0a14;
-  --hb-blue: #2f6bff;
-  --hb-blue-bright: #4d8cff;
-  --hb-cyan: #5eb7ff;
-  --hb-violet: #7b4dff;
-  --hb-purple: #9b5cff;
-  --hb-magenta: #b45cff;
-  --hb-text: #f4f7ff;
-  --hb-muted: #9aa3b8;
-  --hb-glass: rgb(255 255 255 / 0.04);
-  --hb-glass-border: rgb(255 255 255 / 0.1);
-  --hb-glow-blue: rgb(47 107 255 / 0.45);
-  --hb-glow-purple: rgb(155 92 255 / 0.4);
-  --hb-gradient: linear-gradient(135deg, #2f6bff 0%, #7b4dff 50%, #b45cff 100%);
-  --hb-gradient-soft: linear-gradient(
-    135deg,
-    rgb(47 107 255 / 0.9),
-    rgb(155 92 255 / 0.9)
-  );
+  --hb-bg: #050814;
+  --hb-navy: #0a1023;
+  --hb-blue: #0a84ff;
+  --hb-purple: #6f3cff;
+  --hb-white: #ffffff;
+  --hb-muted: #aab2c5;
+  --hb-glass: rgba(10, 16, 35, 0.55);
+  --hb-glass-strong: rgba(10, 16, 35, 0.72);
+  --hb-border: rgba(255, 255, 255, 0.08);
+  --hb-border-blue: rgba(10, 132, 255, 0.35);
+  --hb-glow-blue: rgba(10, 132, 255, 0.35);
+  --hb-glow-purple: rgba(111, 60, 255, 0.28);
+  --hb-gradient: linear-gradient(105deg, #0a84ff 0%, #6f3cff 100%);
+  --hb-logo-width: 240px;
+  --hb-header-radius: 24px;
+  --hb-header-blur: 24px;
 }

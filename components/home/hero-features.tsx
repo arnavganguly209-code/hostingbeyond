@@ -31,25 +31,25 @@ export function HeroFeatures() {
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.28, duration: 0.45 }}
-      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-3 sm:px-6 lg:px-8"
+      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-4 sm:px-6 lg:px-8"
     >
-      <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/[0.08] bg-[rgba(10,16,35,0.62)] p-2 shadow-[0_12px_40px_rgb(0_0_0_/_0.3),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[20px] lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-1 rounded-[24px] border border-[var(--hb-border-blue)] bg-[var(--hb-glass)] p-2 shadow-[0_16px_50px_rgb(0_0_0_/_0.35),0_0_30px_var(--hb-glow-blue),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[var(--hb-header-blur)] lg:grid-cols-4 lg:gap-0 lg:p-3">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5"
+            className="flex items-center gap-3 rounded-2xl px-3 py-3 sm:px-4"
           >
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[#6F3CFF]/35 bg-gradient-to-br from-[#0A84FF]/25 to-[#6F3CFF]/3 text-white">
+            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--hb-purple)]/35 bg-gradient-to-br from-[var(--hb-blue)]/25 to-[var(--hb-purple)]/30 text-white shadow-[0_0_18px_var(--hb-glow-purple)]">
               <stat.icon className="size-4" strokeWidth={1.7} />
             </span>
             <div className="min-w-0">
-              <p className="text-base font-extrabold text-white sm:text-lg">
+              <p className="text-lg font-extrabold text-white sm:text-xl">
                 {stat.value}
               </p>
-              <p className="truncate text-[10px] leading-snug text-[#AAB2C5] sm:text-[11px]">
+              <p className="truncate text-[11px] leading-snug text-[var(--hb-muted)] sm:text-[12px]">
                 {stat.label}
               </p>
             </div>
