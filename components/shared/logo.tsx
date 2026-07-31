@@ -9,8 +9,9 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond logo — 264px (10% above base 240px).
- * Nudged up optically to match nav / CTA midline.
+ * Official HostingBeyond logo — 264px wide.
+ * Strong upward optical shift so HB + wordmark sit on the header midline
+ * (asset includes tagline/padding that otherwise pulls the mark downward).
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
@@ -21,7 +22,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
       height={92}
       priority
       className={cn(
-        "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] -translate-y-[6px] bg-transparent object-contain object-left align-middle",
+        "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] bg-transparent object-contain object-left align-middle",
         className,
       )}
     />
@@ -32,7 +33,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="inline-flex shrink-0 items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
+      className="relative inline-flex shrink-0 -translate-y-[18px] items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
       aria-label="HostingBeyond home"
     >
       {content}

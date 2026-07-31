@@ -124,7 +124,7 @@ export function SiteHeader() {
           className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--hb-blue)]/50 to-transparent"
         />
 
-        <div className="flex h-full items-center">
+        <div className="relative z-10 flex h-full items-center overflow-visible">
           <Logo />
         </div>
 
