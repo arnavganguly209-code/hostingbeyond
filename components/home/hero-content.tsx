@@ -38,7 +38,7 @@ export function HeroContent() {
   };
 
   return (
-    <div className="relative z-20 w-full max-w-xl">
+    <div className="relative z-20 w-full">
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
