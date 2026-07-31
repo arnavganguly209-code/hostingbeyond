@@ -16,7 +16,7 @@ type LogoProps = {
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
     <Image
-      src="/logo/hostingbeyond-logo-header.png"
+      src="/logo/hostingbeyond-logo-wordmark.png"
       alt="HostingBeyond"
       width={264}
       height={92}

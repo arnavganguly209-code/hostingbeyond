@@ -39,20 +39,11 @@ export function HeroContent() {
 
   return (
     <div className="relative z-20 w-full">
-      <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
-        className="inline-flex items-center rounded-full border border-[var(--hb-purple)]/35 bg-[var(--hb-glass-strong)] px-3.5 py-1.5 text-[10px] font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md"
-      >
-        Fast • Secure • Reliable
-      </motion.div>
-
       <motion.h1
         initial={reduceMotion ? false : { opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.06, duration: 0.5 }}
-        className="mt-4 text-[2.2rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.7rem] lg:text-[3.05rem] xl:text-[3.3rem]"
+        className="text-[2.2rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.7rem] lg:text-[3.05rem] xl:text-[3.3rem]"
       >
         Everything You Need.
         <br />
