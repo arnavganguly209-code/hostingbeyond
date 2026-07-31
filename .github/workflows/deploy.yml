@@ -1,0 +1,79 @@
+name: Deploy HostingBeyond
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-hostingbeyond-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy HostingBeyond to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script_stop: true
+          command_timeout: 15m
+          script: |
+            set -euo pipefail
+
+            echo "==> Deploying HostingBeyond only"
+            echo "==> Target: /var/www/hostingbeyond"
+            echo "==> PM2 process: hostingbeyond"
+
+            cd /var/www/hostingbeyond
+
+            echo "==> Pulling latest code from origin/main"
+            git fetch origin main
+            git checkout main
+            git pull origin main
+
+            echo "==> Installing dependencies"
+            npm install
+
+            echo "==> Building production bundle"
+            npm run build
+
+            echo "==> Restarting PM2 process: hostingbeyond"
+            pm2 restart hostingbeyond
+
+            echo "==> PM2 status for hostingbeyond"
+            pm2 describe hostingbeyond
+
+            echo "==> HostingBeyond deploy completed on VPS"
+
+      - name: Verify live site
+        run: |
+          set -euo pipefail
+
+          echo "==> Verifying https://beyond.theglobalorbit.com"
+          HTTP_CODE="$(curl -fsS -o /tmp/hostingbeyond-verify.html -w "%{http_code}" --retry 5 --retry-delay 3 --retry-all-errors https://beyond.theglobalorbit.com)"
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Deployment verification failed: expected HTTP 200, got ${HTTP_CODE}"
+            exit 1
+          fi
+
+          if ! grep -qi "HostingBeyond\|HOSTINGBEYOND\|Everything You Need" /tmp/hostingbeyond-verify.html; then
+            echo "Deployment verification failed: expected homepage content was not found"
+            exit 1
+          fi
+
+          echo "==> Verification passed (HTTP ${HTTP_CODE})"
