@@ -22,7 +22,7 @@ export function SiteHeader() {
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (value) => {
-    setScrolled(value > 12);
+    setScrolled(value > 8);
   });
 
   useEffect(() => {
@@ -40,39 +40,45 @@ export function SiteHeader() {
 
   return (
     <motion.header
-      initial={{ y: -20, opacity: 0 }}
+      initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#070b16]/55 backdrop-blur-xl transition-shadow duration-300",
         scrolled || open
-          ? "border-b border-white/10 bg-black/70 shadow-[0_8px_32px_rgb(0_0_0_/_0.45)] backdrop-blur-2xl"
-          : "border-b border-transparent bg-transparent",
+          ? "bg-[#070b16]/85 shadow-[0_10px_40px_rgb(0_0_0_/_0.45)]"
+          : "",
       )}
     >
-      <div className="mx-auto flex h-[132px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:px-8">
-        <Logo />
+      <div className="mx-auto flex h-[88px] max-w-[1240px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Logo className="h-auto w-[240px] max-w-[42vw]" />
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
           {mainNavigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium text-white/90 transition-colors hover:text-white"
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium text-white transition-colors hover:text-cyan-200"
             >
               {item.label}
               {item.hasDropdown ? (
-                <ChevronDown className="size-3.5 opacity-70" aria-hidden />
+                <ChevronDown className="size-3.5 text-white/70" aria-hidden />
               ) : null}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-4 lg:flex">
+          <Link
+            href={routes.login}
+            className="text-[15px] font-medium text-white transition-colors hover:text-cyan-200"
+          >
+            Log In
+          </Link>
           <GlowButton
             href={routes.getStarted}
             size="md"
-            className="rounded-full px-6"
+            className="rounded-lg px-5"
           >
             Get Started
           </GlowButton>
@@ -80,7 +86,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white xl:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -97,22 +103,29 @@ export function SiteHeader() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t border-white/10 bg-black/95 backdrop-blur-xl lg:hidden"
+            className="border-t border-white/10 bg-[#070b16]/95 backdrop-blur-xl xl:hidden"
           >
-            <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Mobile">
+            <nav className="flex flex-col gap-1 px-4 py-4" aria-label="Mobile">
               {mainNavigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-xl px-3 py-3 text-sm font-medium text-white/90"
+                  className="rounded-lg px-3 py-3 text-sm font-medium text-white"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
+              <Link
+                href={routes.login}
+                className="rounded-lg px-3 py-3 text-sm font-medium text-white"
+                onClick={() => setOpen(false)}
+              >
+                Log In
+              </Link>
               <GlowButton
                 href={routes.getStarted}
-                className="mt-3 w-full rounded-full"
+                className="mt-2 w-full rounded-lg"
                 size="lg"
               >
                 Get Started

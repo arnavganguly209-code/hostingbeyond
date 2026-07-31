@@ -9,7 +9,7 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond logo — transparent PNG, exactly 240px wide, no background fill.
+ * Official HostingBeyond logo — transparent PNG, 240px wide, no background.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
