@@ -9,14 +9,12 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond logo — 264px wide.
- * Strong upward optical shift so HB + wordmark sit on the header midline
- * (asset includes tagline/padding that otherwise pulls the mark downward).
+ * Official HostingBeyond wordmark — transparent PNG, same size/placement.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
     <Image
-      src="/logo/hostingbeyond-logo-wordmark.png"
+      src="/logo/hostingbeyond-logo-transparent.png"
       alt="HostingBeyond"
       width={264}
       height={92}
