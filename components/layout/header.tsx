@@ -30,7 +30,7 @@ function NavDropdown({ item }: { item: NavItem }) {
     return (
       <Link
         href={item.href}
-        className="rounded-lg px-3 py-2 text-[14px] font-medium text-white/95 transition-colors hover:text-white"
+        className="rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
       >
         {item.label}
       </Link>
@@ -48,14 +48,14 @@ function NavDropdown({ item }: { item: NavItem }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-medium text-white/95 transition-colors hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-tight text-white transition-colors hover:text-[#7CC4FF]"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
         {item.label}
         <ChevronDown
           className={cn(
-            "size-3.5 text-white/70 transition-transform duration-200",
+            "size-4 text-white/80 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -116,7 +116,7 @@ export function SiteHeader() {
     >
       <div
         className={cn(
-          "pointer-events-auto relative mx-auto flex h-[92px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-4 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)] backdrop-blur-[22px] sm:px-5 lg:px-6",
+          "pointer-events-auto relative mx-auto flex h-[84px] w-[96%] max-w-[1280px] items-center justify-between gap-4 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(10,16,35,0.55)] px-4 shadow-[0_18px_50px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)] backdrop-blur-[22px] sm:px-5 lg:px-6",
         )}
       >
         <span
@@ -124,8 +124,9 @@ export function SiteHeader() {
           className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent"
         />
 
-        <Logo />
-
+        <div className="flex h-full items-center">
+          <Logo />
+        </div>
         <nav
           aria-label="Primary"
           className="hidden items-center gap-0.5 xl:flex"

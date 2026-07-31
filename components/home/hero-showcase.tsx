@@ -1,163 +1,116 @@
 "use client";
 
-import { Globe2, Mail } from "lucide-react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-} from "framer-motion";
-import { useRef, type MouseEvent } from "react";
-
-import { cn } from "@/lib/utils";
+import { motion, useReducedMotion } from "framer-motion";
 
 /**
- * Floating offer cards over the full-bleed speaker background.
+ * Coding-style offer blocks — stacked on the right, never over the speaker face.
  */
 export function HeroShowcase() {
   const reduceMotion = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 55, damping: 18 });
-  const springY = useSpring(y, { stiffness: 55, damping: 18 });
-
-  const onMove = (event: MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width - 0.5;
-    const py = (event.clientY - rect.top) / rect.height - 0.5;
-    x.set(px * 10);
-    y.set(py * 8);
-  };
 
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={onMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      className="relative z-10 hidden h-full min-h-[280px] w-full lg:block"
-    >
+    <div className="relative z-10 flex h-full w-full items-center justify-end lg:pr-2">
       <motion.div
-        style={{ x: springX, y: springY }}
-        className="absolute inset-0"
+        initial={reduceMotion ? false : { opacity: 0, x: 18 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-[300px] space-y-3"
       >
-        <OfferCard
-          tone="blue"
-          icon={Mail}
-          title="Business Email"
-          lines={["Start Just", "$5", "/12 Month"]}
-          footer="No Hidden Charges"
-          className="bottom-[18%] left-[8%]"
-          delay={0.1}
-          reduceMotion={reduceMotion}
+        <CodeOffer
+          accent="blue"
+          filename="business-email.offer"
+          lines={[
+            { tone: "comment", text: "// BUSINESS EMAIL" },
+            { tone: "key", text: "plan", sep: true, value: '"START JUST"' },
+            {
+              tone: "price",
+              text: "price",
+              sep: true,
+              value: '"$5 / 12 MONTH"',
+            },
+            { tone: "ok", text: "charges", sep: true, value: '"NO HIDDEN"' },
+          ]}
         />
-        <OfferCard
-          tone="purple"
-          icon={Globe2}
-          title={"Domain .COM\n+ 1 Business Mail"}
-          lines={["1 Year Just", "$15"]}
-          footer="Limited Time Offer"
-          className="right-[6%] bottom-[8%]"
-          delay={0.18}
-          reduceMotion={reduceMotion}
+        <CodeOffer
+          accent="purple"
+          filename="domain-bundle.offer"
+          lines={[
+            { tone: "comment", text: "// DOMAIN .COM + 1 BUSINESS MAIL" },
+            { tone: "key", text: "term", sep: true, value: '"1 YEAR JUST"' },
+            { tone: "price", text: "price", sep: true, value: '"$15"' },
+            { tone: "warn", text: "offer", sep: true, value: '"LIMITED TIME"' },
+          ]}
         />
       </motion.div>
     </div>
   );
 }
 
-type OfferCardProps = {
-  tone: "blue" | "purple";
-  icon: typeof Mail;
-  title: string;
-  lines: string[];
-  footer: string;
-  className?: string;
-  delay: number;
-  reduceMotion: boolean | null;
+type CodeLine = {
+  tone: "comment" | "key" | "price" | "ok" | "warn";
+  text: string;
+  sep?: boolean;
+  value?: string;
 };
 
-function OfferCard({
-  tone,
-  icon: Icon,
-  title,
+function CodeOffer({
+  accent,
+  filename,
   lines,
-  footer,
-  className,
-  delay,
-  reduceMotion,
-}: OfferCardProps) {
-  const isBlue = tone === "blue";
+}: {
+  accent: "blue" | "purple";
+  filename: string;
+  lines: CodeLine[];
+}) {
+  const isBlue = accent === "blue";
 
   return (
-    <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={cn("absolute w-[150px]", className)}
+    <article
+      className={
+        isBlue
+          ? "overflow-hidden rounded-xl border border-[#0A84FF]/35 bg-[rgba(8,12,28,0.88)] shadow-[0_12px_40px_rgb(0_0_0_/_0.35),0_0_24px_rgb(10_132_255_/_0.12)] backdrop-blur-md"
+          : "overflow-hidden rounded-xl border border-[#6F3CFF]/35 bg-[rgba(8,12,28,0.88)] shadow-[0_12px_40px_rgb(0_0_0_/_0.35),0_0_24px_rgb(111_60_255_/_0.12)] backdrop-blur-md"
+      }
     >
-      <motion.div
-        animate={reduceMotion ? undefined : { y: [0, isBlue ? -8 : -11, 0] }}
-        transition={{
-          duration: isBlue ? 4.8 : 5.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay,
-        }}
-        whileHover={reduceMotion ? undefined : { scale: 1.04 }}
-        className={cn(
-          "rounded-[16px] border px-3.5 py-4 text-center backdrop-blur-xl",
-          isBlue
-            ? "border-[#0A84FF]/55 bg-[rgba(10,16,35,0.7)] shadow-[0_0_32px_rgb(10_132_255_/_0.35)]"
-            : "border-[#6F3CFF]/55 bg-[rgba(10,16,35,0.7)] shadow-[0_0_32px_rgb(111_60_255_/_0.38)]",
-        )}
-      >
-        <span
-          className={cn(
-            "mx-auto mb-2 inline-flex size-9 items-center justify-center rounded-lg border",
-            isBlue
-              ? "border-[#0A84FF]/40 bg-[#0A84FF]/15 text-[#7CC4FF]"
-              : "border-[#6F3CFF]/40 bg-[#6F3CFF]/15 text-[#C4B5FF]",
-          )}
-        >
-          <Icon className="size-4" strokeWidth={1.7} />
+      <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3 py-2">
+        <span className="size-2 rounded-full bg-[#FF5F57]" />
+        <span className="size-2 rounded-full bg-[#FEBC2E]" />
+        <span className="size-2 rounded-full bg-[#28C840]" />
+        <span className="ml-2 font-mono text-[11px] text-[#AAB2C5]">
+          {filename}
         </span>
-        <p
-          className={cn(
-            "text-[9px] font-bold tracking-[0.12em] whitespace-pre-line uppercase",
-            isBlue ? "text-[#9AD0FF]" : "text-[#D4C4FF]",
-          )}
-        >
-          {title}
+      </div>
+      <div className="space-y-1 px-3.5 py-3 font-mono text-[12px] leading-relaxed sm:text-[13px]">
+        {lines.map((line) => (
+          <p key={line.text + (line.value ?? "")} className="truncate">
+            {line.tone === "comment" ? (
+              <span className="text-[#6B7A99]">{line.text}</span>
+            ) : (
+              <>
+                <span className="text-[#7CC4FF]">{line.text}</span>
+                {line.sep ? <span className="text-white/50">: </span> : null}
+                <span
+                  className={
+                    line.tone === "price"
+                      ? "font-semibold text-[#E879F9]"
+                      : line.tone === "ok"
+                        ? "text-[#4ADE80]"
+                        : line.tone === "warn"
+                          ? "text-[#FBBF24]"
+                          : "text-[#E2E8F0]"
+                  }
+                >
+                  {line.value}
+                </span>
+                <span className="text-white/40">,</span>
+              </>
+            )}
+          </p>
+        ))}
+        <p>
+          <span className="text-[#6B7A99]">{"// ready to launch"}</span>
         </p>
-        <div className="mt-2 space-y-0.5">
-          {lines.map((line) => (
-            <p
-              key={line}
-              className={cn(
-                "font-extrabold text-white",
-                line.startsWith("$")
-                  ? "text-4xl tracking-tight"
-                  : "text-[10px] tracking-[0.12em] text-[#AAB2C5] uppercase",
-              )}
-            >
-              {line}
-            </p>
-          ))}
-        </div>
-        <p
-          className={cn(
-            "mt-3 text-[9px] font-semibold tracking-[0.1em] uppercase",
-            isBlue ? "text-[#AAB2C5]" : "text-[#D4C4FF]/90",
-          )}
-        >
-          {footer}
-        </p>
-      </motion.div>
-    </motion.article>
+      </div>
+    </article>
   );
 }

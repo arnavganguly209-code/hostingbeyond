@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 
 import { gsapConfig } from "@/lib/animations/gsap";
 
 /**
- * Full-hero background using the exact uploaded speaker image.
+ * Full-hero background — exact speaker image, face clear and professional.
  */
 export function HeroBackground() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -19,8 +19,8 @@ export function HeroBackground() {
     gsap.defaults(gsapConfig.defaults);
     const ctx = gsap.context(() => {
       gsap.to(".hb-glow", {
-        opacity: 0.9,
-        duration: 4.8,
+        opacity: 0.75,
+        duration: 5,
         yoyo: true,
         repeat: -1,
         ease: "sine.inOut",
@@ -37,27 +37,24 @@ export function HeroBackground() {
     >
       <div className="absolute inset-0 bg-[#050814]" />
 
-      {/* Exact speaker photo — full hero background */}
-      <Image
-        src="/images/hero-speaker.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-[72%_center] opacity-90 sm:object-[78%_center]"
-      />
+      {/* Exact speaker — face framed clearly on the right (Name.com clarity) */}
+      <div className="absolute inset-y-0 right-0 w-full sm:w-[62%] lg:w-[58%]">
+        <Image
+          src="/images/hero-speaker.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 60vw"
+          className="object-cover object-[58%_18%] sm:object-[55%_12%] lg:object-[52%_10%]"
+        />
+      </div>
 
-      {/* Blend overlays so left copy stays readable */}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,#050814_0%,rgb(5_8_20_/_0.92)_34%,rgb(5_8_20_/_0.45)_58%,rgb(5_8_20_/_0.25)_78%,rgb(5_8_20_/_0.55)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(5_8_20_/_0.55)_0%,transparent_22%,transparent_72%,rgb(5_8_20_/_0.75)_100%)]" />
-      <div className="hb-glow absolute top-[12%] right-[18%] h-[22rem] w-[22rem] rounded-full bg-[radial-gradient(circle,rgb(10_132_255_/_0.28),transparent_70%)] blur-3xl" />
-      <div className="hb-glow absolute right-[8%] bottom-[18%] h-[18rem] w-[18rem] rounded-full bg-[radial-gradient(circle,rgb(111_60_255_/_0.24),transparent_70%)] blur-3xl" />
+      {/* Soft left wash for copy — keeps face area clean */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,#050814_0%,#050814_36%,rgb(5_8_20_/_0.55)_48%,transparent_62%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(5_8_20_/_0.45)_0%,transparent_18%,transparent_78%,rgb(5_8_20_/_0.7)_100%)]" />
 
-      <motion.div
-        className="absolute top-[30%] right-[30%] h-px w-48 rotate-[-12deg] bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent"
-        animate={reduceMotion ? undefined : { opacity: [0.25, 0.8, 0.25] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+      <div className="hb-glow absolute top-[16%] right-[22%] h-[16rem] w-[16rem] rounded-full bg-[radial-gradient(circle,rgb(10_132_255_/_0.18),transparent_70%)] blur-3xl" />
+      <div className="hb-glow absolute right-[10%] bottom-[22%] h-[14rem] w-[14rem] rounded-full bg-[radial-gradient(circle,rgb(111_60_255_/_0.14),transparent_70%)] blur-3xl" />
     </div>
   );
 }

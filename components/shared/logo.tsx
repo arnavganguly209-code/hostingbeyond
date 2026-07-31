@@ -9,21 +9,25 @@ type LogoProps = {
 };
 
 /**
- * Exact HostingBeyond logo — 240px wide, clear brand lockup (from uploaded asset).
+ * Exact HostingBeyond logo — 240px, vertically centered in the header frame.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
-    <Image
-      src="/logo/hostingbeyond-logo-header.png"
-      alt="HostingBeyond"
-      width={240}
-      height={84}
-      priority
+    <span
       className={cn(
-        "h-auto w-[240px] max-w-[240px] bg-transparent object-contain object-left",
+        "relative flex h-[52px] w-[240px] items-center overflow-hidden",
         className,
       )}
-    />
+    >
+      <Image
+        src="/logo/hostingbeyond-logo-header.png"
+        alt="HostingBeyond"
+        width={240}
+        height={84}
+        priority
+        className="h-[52px] w-[240px] -translate-y-[2px] bg-transparent object-contain object-left"
+      />
+    </span>
   );
 
   if (!href) return content;
@@ -31,7 +35,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="inline-flex shrink-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#6F3CFF]/60"
+      className="inline-flex shrink-0 items-center self-center bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#6F3CFF]/60"
       aria-label="HostingBeyond home"
     >
       {content}
