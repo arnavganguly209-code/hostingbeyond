@@ -9,18 +9,18 @@ type LogoProps = {
 };
 
 /**
- * Official HostingBeyond logo — transparent PNG, 240px wide, no background.
+ * Exact uploaded HostingBeyond logo — no redesign, transparent PNG, ~60px height.
  */
 export function Logo({ className, href = "/" }: LogoProps) {
   const content = (
     <Image
       src="/logo/hostingbeyond-logo.png"
       alt="HostingBeyond"
-      width={240}
-      height={127}
+      width={220}
+      height={60}
       priority
       className={cn(
-        "h-auto w-[240px] bg-transparent object-contain",
+        "h-[60px] w-auto max-w-[min(240px,48vw)] bg-transparent object-contain object-left",
         className,
       )}
     />
@@ -31,7 +31,7 @@ export function Logo({ className, href = "/" }: LogoProps) {
   return (
     <Link
       href={href}
-      className="inline-flex shrink-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
+      className="inline-flex shrink-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#6F3CFF]/60"
       aria-label="HostingBeyond home"
     >
       {content}

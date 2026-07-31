@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import Link from "next/link";
 import { Headphones, Lock, Search, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -32,31 +32,30 @@ export function HeroContent() {
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const query = domain.trim();
-    const target = query
+    window.location.href = query
       ? `${routes.domains}?q=${encodeURIComponent(query)}`
       : routes.domains;
-    window.location.href = target;
   };
 
   return (
-    <div className="relative z-10 max-w-xl">
+    <div className="relative z-20 max-w-xl xl:max-w-[560px]">
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        className="inline-flex items-center rounded-md border border-[#4f6bff]/35 bg-[#1a2450]/80 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md"
+        className="inline-flex items-center rounded-full border border-[#6F3CFF]/35 bg-[rgba(10,16,35,0.65)] px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-white uppercase shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-md"
       >
-        Fast. Secure. Reliable.
+        Fast • Secure • Reliable
       </motion.div>
 
       <motion.h1
         initial={reduceMotion ? false : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08 }}
-        className="mt-5 text-[2.35rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.85rem] lg:text-[3.15rem]"
+        className="mt-5 text-[2.5rem] leading-[1.05] font-extrabold tracking-tight text-white sm:text-[3.1rem] lg:text-[3.45rem]"
       >
         Everything You Need.
         <br />
-        <span className="bg-gradient-to-r from-[#38BDF8] via-[#818CF8] to-[#E879F9] bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[#0A84FF] via-[#5B6CFF] to-[#6F3CFF] bg-clip-text text-transparent">
           Beyond Expectations.
         </span>
       </motion.h1>
@@ -65,10 +64,12 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.16 }}
-        className="mt-4 max-w-lg text-[15px] leading-relaxed text-[#A7B0C5] sm:text-base"
+        className="mt-5 max-w-lg text-[15px] leading-relaxed text-[#AAB2C5] sm:text-base"
       >
-        Premium domains, blazing-fast hosting, and secure business email —
-        everything you need to build, grow, and succeed online.
+        Premium domains, lightning-fast hosting, secure business email,
+        enterprise cloud hosting, VPS, reseller hosting, SSL protection, and
+        everything you need to build, manage, and grow your online business with
+        confidence.
       </motion.p>
 
       <motion.form
@@ -76,7 +77,7 @@ export function HeroContent() {
         initial={reduceMotion ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.24 }}
-        className="mt-7 flex w-full max-w-xl items-center gap-2 rounded-xl border border-white/15 bg-[#0b1224]/75 p-1.5 shadow-[0_0_30px_rgb(59_130_246_/_0.12)] backdrop-blur-xl"
+        className="mt-8 flex w-full max-w-xl items-center gap-2 rounded-full border border-white/12 bg-[rgba(10,16,35,0.72)] p-1.5 shadow-[0_0_40px_rgb(10_132_255_/_0.12),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-xl"
       >
         <label htmlFor="domain-search" className="sr-only">
           Find your perfect domain
@@ -86,20 +87,23 @@ export function HeroContent() {
           type="text"
           value={domain}
           onChange={(event) => setDomain(event.target.value)}
-          placeholder="Find your perfect domain"
-          className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-white outline-none placeholder:text-slate-400"
+          placeholder="Find your perfect domain..."
+          className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-[#AAB2C5]/80"
         />
         <Link
           href={routes.domains}
-          className="hidden shrink-0 px-2 text-sm font-medium text-slate-300 transition-colors hover:text-white sm:inline"
+          className="hidden shrink-0 px-2 text-sm font-medium text-[#AAB2C5] transition-colors hover:text-white sm:inline"
         >
           Bulk Search
         </Link>
         <button
           type="submit"
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#C026D3] px-4 text-sm font-semibold text-white shadow-[0_0_20px_rgb(124_58_237_/_0.45)] transition hover:brightness-110"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-[#0A84FF] to-[#6F3CFF] px-5 text-sm font-semibold text-white shadow-[0_0_24px_rgb(10_132_255_/_0.45)] transition hover:brightness-110"
         >
-          <Search className="size-4" aria-hidden />
+          <Search
+            className="size-4 drop-shadow-[0_0_8px_rgb(10_132_255)]"
+            aria-hidden
+          />
           Search
         </button>
       </motion.form>
@@ -112,14 +116,14 @@ export function HeroContent() {
       >
         {trustItems.map((item) => (
           <li key={item.title} className="flex items-start gap-2.5">
-            <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-cyan-400/30 bg-cyan-500/10 text-cyan-300">
+            <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-[#0A84FF]/30 bg-[#0A84FF]/10 text-[#7CC4FF]">
               <item.icon className="size-3.5" strokeWidth={1.9} />
             </span>
             <span>
               <span className="block text-[13px] font-semibold text-white">
                 {item.title}
               </span>
-              <span className="block text-[11px] text-slate-400">
+              <span className="block text-[11px] text-[#AAB2C5]">
                 {item.subtitle}
               </span>
             </span>

@@ -1,41 +1,85 @@
 "use client";
 
+import Image from "next/image";
 import { Globe2, Mail } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "framer-motion";
+import { useRef, type MouseEvent } from "react";
+
 import { cn } from "@/lib/utils";
 
 /**
- * Two offer boxes matching the official HostingBeyond mockup.
+ * Exact uploaded speaker + floating offer cards (mockup composition).
  */
 export function HeroShowcase() {
   const reduceMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 55, damping: 18 });
+  const springY = useSpring(y, { stiffness: 55, damping: 18 });
+
+  const onMove = (event: MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width - 0.5;
+    const py = (event.clientY - rect.top) / rect.height - 0.5;
+    x.set(px * 14);
+    y.set(py * 10);
+  };
 
   return (
-    <div className="relative z-10 mx-auto flex w-full max-w-md items-stretch justify-center gap-4 sm:max-w-lg sm:gap-5 lg:max-w-none lg:justify-end">
-      <OfferCard
-        tone="blue"
-        icon={Mail}
-        title="Business Email"
-        eyebrow="Start Just"
-        price="$5"
-        period="/12 Month"
-        footer="No Hidden Charges"
-        reduceMotion={reduceMotion}
-        delay={0}
-        className="rotate-[-2deg]"
-      />
-      <OfferCard
-        tone="purple"
-        icon={Globe2}
-        title="Domain .COM + 1 Business Mail"
-        eyebrow="1 Year Just"
-        price="$15"
-        period=""
-        footer="Limited Time Offer"
-        reduceMotion={reduceMotion}
-        delay={0.12}
-        className="mt-6 rotate-[2deg] sm:mt-8"
-      />
+    <div
+      ref={containerRef}
+      onMouseMove={onMove}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
+      className="relative z-10 mx-auto h-[420px] w-full max-w-lg sm:h-[480px] lg:h-[560px] lg:max-w-none"
+    >
+      {/* Mobile / tablet speaker */}
+      <div className="absolute inset-0 md:hidden">
+        <Image
+          src="/images/hero-speaker.jpg"
+          alt="HostingBeyond speaker"
+          fill
+          priority
+          sizes="100vw"
+          className="object-contain object-bottom opacity-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050814] via-[#050814]/35 to-transparent" />
+      </div>
+
+      <motion.div
+        style={{ x: springX, y: springY }}
+        className="absolute inset-0"
+      >
+        <OfferCard
+          tone="blue"
+          icon={Mail}
+          title="Business Email"
+          lines={["Start Just", "$5", "/12 Month"]}
+          footer="No Hidden Charges"
+          className="top-[8%] left-[2%] sm:top-[10%] sm:left-[4%] lg:top-[12%] lg:left-[2%]"
+          delay={0.1}
+          reduceMotion={reduceMotion}
+        />
+        <OfferCard
+          tone="purple"
+          icon={Globe2}
+          title={"Domain .COM\n+ 1 Business Mail"}
+          lines={["1 Year", "Just", "$15"]}
+          footer="Limited Time Offer"
+          className="top-[28%] right-[2%] sm:top-[30%] sm:right-[4%] lg:top-[26%] lg:right-[4%]"
+          delay={0.22}
+          reduceMotion={reduceMotion}
+        />
+      </motion.div>
     </div>
   );
 }
@@ -44,92 +88,85 @@ type OfferCardProps = {
   tone: "blue" | "purple";
   icon: typeof Mail;
   title: string;
-  eyebrow: string;
-  price: string;
-  period: string;
+  lines: string[];
   footer: string;
-  reduceMotion: boolean | null;
-  delay: number;
   className?: string;
+  delay: number;
+  reduceMotion: boolean | null;
 };
 
 function OfferCard({
   tone,
   icon: Icon,
   title,
-  eyebrow,
-  price,
-  period,
+  lines,
   footer,
-  reduceMotion,
-  delay,
   className,
+  delay,
+  reduceMotion,
 }: OfferCardProps) {
   const isBlue = tone === "blue";
 
   return (
     <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 36 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={cn("w-[48%] max-w-[210px]", className)}
+      className={cn("absolute w-[148px] sm:w-[168px]", className)}
     >
       <motion.div
         animate={reduceMotion ? undefined : { y: [0, isBlue ? -10 : -14, 0] }}
         transition={{
-          duration: isBlue ? 5 : 5.8,
+          duration: isBlue ? 5.1 : 5.8,
           repeat: Infinity,
           ease: "easeInOut",
           delay,
         }}
-        whileHover={reduceMotion ? undefined : { y: -6, scale: 1.03 }}
+        whileHover={reduceMotion ? undefined : { scale: 1.04, y: -4 }}
         className={cn(
-          "flex h-full min-h-[280px] flex-col items-center rounded-[18px] border px-4 py-6 text-center backdrop-blur-xl sm:min-h-[310px] sm:px-5",
+          "rounded-[18px] border px-4 py-5 text-center backdrop-blur-xl",
           isBlue
-            ? "border-cyan-400/60 bg-[linear-gradient(180deg,rgb(8_20_45_/_0.72),rgb(6_14_32_/_0.55))] shadow-[0_0_36px_rgb(34_211_238_/_0.35),inset_0_0_24px_rgb(34_211_238_/_0.08)]"
-            : "border-fuchsia-400/60 bg-[linear-gradient(180deg,rgb(35_12_55_/_0.72),rgb(18_8_35_/_0.55))] shadow-[0_0_36px_rgb(217_70_239_/_0.38),inset_0_0_24px_rgb(217_70_239_/_0.08)]",
+            ? "border-[#0A84FF]/55 bg-[rgba(10,16,35,0.62)] shadow-[0_0_40px_rgb(10_132_255_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.1)]"
+            : "border-[#6F3CFF]/55 bg-[rgba(10,16,35,0.62)] shadow-[0_0_40px_rgb(111_60_255_/_0.38),inset_0_1px_0_rgb(255_255_255_/_0.1)]",
         )}
       >
         <span
           className={cn(
-            "mb-4 inline-flex size-12 items-center justify-center rounded-xl border",
+            "mx-auto mb-3 inline-flex size-10 items-center justify-center rounded-xl border",
             isBlue
-              ? "border-cyan-400/40 bg-cyan-500/15 text-cyan-300 shadow-[0_0_20px_rgb(34_211_238_/_0.4)]"
-              : "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-300 shadow-[0_0_20px_rgb(217_70_239_/_0.4)]",
+              ? "border-[#0A84FF]/40 bg-[#0A84FF]/15 text-[#7CC4FF]"
+              : "border-[#6F3CFF]/40 bg-[#6F3CFF]/15 text-[#C4B5FF]",
           )}
         >
-          <Icon className="size-6" strokeWidth={1.6} />
+          <Icon className="size-5" strokeWidth={1.7} />
         </span>
-
         <p
           className={cn(
-            "text-[10px] font-bold tracking-[0.14em] uppercase sm:text-[11px]",
-            isBlue ? "text-cyan-200" : "text-fuchsia-200",
+            "text-[10px] font-bold tracking-[0.12em] whitespace-pre-line uppercase",
+            isBlue ? "text-[#9AD0FF]" : "text-[#D4C4FF]",
           )}
         >
           {title}
         </p>
-
-        <p className="mt-5 text-[11px] font-semibold tracking-[0.16em] text-slate-300 uppercase">
-          {eyebrow}
-        </p>
-
-        <p className="mt-1 text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
-          {price}
-        </p>
-
-        {period ? (
-          <p className="mt-1 text-[11px] font-semibold tracking-[0.14em] text-slate-300 uppercase">
-            {period}
-          </p>
-        ) : (
-          <span className="mt-1 block h-4" />
-        )}
-
+        <div className="mt-3 space-y-0.5">
+          {lines.map((line) => (
+            <p
+              key={line}
+              className={cn(
+                "font-extrabold text-white",
+                line.startsWith("$")
+                  ? "text-4xl tracking-tight sm:text-5xl"
+                  : "text-[11px] tracking-[0.14em] text-[#AAB2C5] uppercase",
+              )}
+            >
+              {line}
+            </p>
+          ))}
+        </div>
         <p
           className={cn(
-            "mt-auto pt-6 text-[10px] font-semibold tracking-[0.14em] uppercase",
-            isBlue ? "text-slate-400" : "text-fuchsia-200/90",
+            "mt-4 text-[10px] font-semibold tracking-[0.12em] uppercase",
+            isBlue ? "text-[#AAB2C5]" : "text-[#D4C4FF]/90",
           )}
         >
           {footer}
