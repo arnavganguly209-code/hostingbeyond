@@ -1,0 +1,8 @@
+# Prettier ignore
+node_modules
+.next
+.out
+build
+coverage
+.netlify
+package-lock.json

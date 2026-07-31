@@ -1,0 +1,11 @@
+// HostingBeyond — Prisma schema (PostgreSQL ready)
+// Add models when product data requirements are defined.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
