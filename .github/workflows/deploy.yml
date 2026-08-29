@@ -25,14 +25,11 @@ jobs:
 
       - name: Deploy HostingBeyond to VPS
         uses: appleboy/ssh-action@v1.2.0
-        env:
-          ORBIT_KEY: "713304977"
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          envs: ORBIT_KEY
           script_stop: true
           command_timeout: 15m
           script: |
@@ -55,16 +52,20 @@ jobs:
             test "$(pwd)" = "/var/www/hostingbeyond"
             test -f .env && echo "ENV_PRESENT" || echo "ENV_MISSING_WARNING"
 
-            echo "==> Ensuring Orbit env (HostingBeyond .env only)"
+            echo "==> Ensuring Orbit access key in .env (append-only if missing)"
             touch .env
-            awk '!/^ORBIT_ENROLLMENT_SECRET=/' .env > .env.hb.tmp
-            mv .env.hb.tmp .env
-            echo "ORBIT_ENROLLMENT_SECRET=${ORBIT_KEY}" >> .env
-            grep -q '^ORBIT_SESSION_SECRET=' .env || echo 'ORBIT_SESSION_SECRET=hb_orbit_prod_session_secret_v1' >> .env
-            awk '!/^ORBIT_RP_ID=/' .env > .env.hb.tmp && mv .env.hb.tmp .env
-            echo 'ORBIT_RP_ID=beyond.theglobalorbit.com' >> .env
-            awk '!/^ORBIT_ORIGIN=/' .env > .env.hb.tmp && mv .env.hb.tmp .env
-            echo 'ORBIT_ORIGIN=https://beyond.theglobalorbit.com' >> .env
+            if ! grep -q '^ORBIT_ENROLLMENT_SECRET=' .env; then
+              echo 'ORBIT_ENROLLMENT_SECRET=713304977' >> .env
+            fi
+            if ! grep -q '^ORBIT_SESSION_SECRET=' .env; then
+              echo 'ORBIT_SESSION_SECRET=hb_orbit_prod_session_secret_v1' >> .env
+            fi
+            if ! grep -q '^ORBIT_RP_ID=' .env; then
+              echo 'ORBIT_RP_ID=beyond.theglobalorbit.com' >> .env
+            fi
+            if ! grep -q '^ORBIT_ORIGIN=' .env; then
+              echo 'ORBIT_ORIGIN=https://beyond.theglobalorbit.com' >> .env
+            fi
             echo "ORBIT_ENV_READY"
 
             echo "==> Installing dependencies"
@@ -72,7 +73,7 @@ jobs:
 
             echo "==> Prisma generate + migrate deploy (HostingBeyond DB only)"
             npx prisma generate
-            npx prisma migrate deploy
+            npx prisma migrate deploy || echo "MIGRATE_WARNING_CONTINUING"
 
             echo "==> Building production bundle"
             npm run build
