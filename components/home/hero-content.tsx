@@ -89,14 +89,14 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         transition={{ delay: 0.04, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-[16ch] text-[2.55rem] leading-[1.02] tracking-[-0.04em] text-white sm:max-w-none sm:text-[3.15rem] lg:text-[3.55rem] xl:text-[3.85rem]"
       >
-        <span className="block font-sans font-extrabold text-white drop-shadow-[0_2px_24px_rgb(0_0_0_/_0.35)]">
+        <span className="font-heading block font-extrabold text-white drop-shadow-[0_2px_24px_rgb(0_0_0_/_0.35)]">
           {headline}
         </span>
         <span
           className={
             reduceMotion
-              ? "mt-1 inline-block bg-gradient-to-r from-[#5BA8FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-sans font-extrabold text-transparent"
-              : "hb-hero-gradient mt-1 inline-block bg-clip-text font-sans font-extrabold text-transparent"
+              ? "font-heading mt-1 inline-block bg-gradient-to-r from-[#5BA8FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-extrabold text-transparent"
+              : "hb-hero-gradient font-heading mt-1 inline-block bg-clip-text font-extrabold text-transparent"
           }
         >
           {accent}

@@ -10,6 +10,7 @@ import { priceIdForProduct } from "@/config/products";
 import { routes } from "@/config/routes";
 import { useLocale } from "@/components/locale/locale-provider";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { CmsProductOffer, CmsProductsContent } from "@/lib/orbit/defaults";
 import { DomainVisual, EmailVisual, HostingVisual } from "./product-visuals";
 
@@ -278,6 +279,59 @@ function ProductCard({
   );
 }
 
+function localizeOffer(
+  offer: CmsProductOffer,
+  products: Dictionary["products"],
+  useCms: boolean,
+): CmsProductOffer {
+  if (useCms) return offer;
+
+  if (offer.id === "domain") {
+    return {
+      ...offer,
+      title: products.domainTitle,
+      badge: products.domainBadge,
+      subtitle: "",
+      priceSuffix: products.perYear,
+      highlight: products.domainHighlight,
+      priceLabel: "",
+      ctaLabel: products.domainCta,
+      searchPlaceholder: products.domainSearchPlaceholder,
+      features: products.domainFeatures,
+    };
+  }
+
+  if (offer.id === "email") {
+    return {
+      ...offer,
+      title: products.emailTitle,
+      badge: products.emailBadge,
+      subtitle: products.emailSubtitle,
+      priceSuffix: products.perMonth,
+      highlight: "",
+      priceLabel: products.perMailbox,
+      ctaLabel: products.emailCta,
+      features: products.emailFeatures,
+    };
+  }
+
+  if (offer.id === "hosting") {
+    return {
+      ...offer,
+      title: products.hostingTitle,
+      badge: products.hostingBadge,
+      subtitle: products.hostingSubtitle,
+      priceSuffix: products.perMonth,
+      highlight: "",
+      priceLabel: products.startingPlan,
+      ctaLabel: products.hostingCta,
+      features: products.hostingFeatures,
+    };
+  }
+
+  return offer;
+}
+
 export function ProductsSection({ content }: { content?: CmsProductsContent }) {
   const reduceMotion = useReducedMotion();
   const { t, formatPrice, preferences, isPending } = useLocale();
@@ -300,8 +354,10 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
     const list = (content?.offers ?? []).filter(
       (offer) => offer.visible !== false,
     );
-    return [...list].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, [content?.offers]);
+    return [...list]
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((offer) => localizeOffer(offer, t.products, useCms));
+  }, [content?.offers, t.products, useCms]);
 
   return (
     <section
@@ -328,7 +384,7 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.04, duration: 0.45 }}
-            className="mt-4 text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-white sm:text-[2.55rem] lg:text-[3.05rem]"
+            className="font-heading mt-4 text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-white sm:text-[2.55rem] lg:text-[3.05rem]"
           >
             {title}
             <br />

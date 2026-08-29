@@ -1,6 +1,7 @@
 /**
- * Centralized commercial pricing — base amounts by product + currency.
- * These are commercial list prices (not live FX conversion).
+ * Centralized commercial pricing.
+ * USD book is the source of truth; other currencies use mid-market FX
+ * (exchangerate-api / Google-aligned) with pinned INR=95 and NPR=154 per USD.
  */
 
 export type CurrencyCode =
@@ -49,42 +50,86 @@ export const basePriceBookUsd: PriceBook = {
 };
 
 /**
- * Localized commercial prices by currency.
- * Missing currencies fall back to USD book with USD formatting.
+ * Units of local currency per 1 USD.
+ * Sourced from open.er-api.com (2026-08-29), with commercial pins:
+ * INR = 95, NPR = 154 (as specified).
  */
-export const priceBooksByCurrency: Partial<Record<CurrencyCode, PriceBook>> = {
-  USD: basePriceBookUsd,
-  EUR: { domain_yearly: 14, email_monthly: 0.39, hosting_monthly: 0.95 },
-  GBP: { domain_yearly: 12, email_monthly: 0.35, hosting_monthly: 0.85 },
-  INR: { domain_yearly: 1249, email_monthly: 35, hosting_monthly: 89 },
-  NPR: { domain_yearly: 2099, email_monthly: 59, hosting_monthly: 149 },
-  JPY: { domain_yearly: 2300, email_monthly: 65, hosting_monthly: 150 },
-  AUD: { domain_yearly: 23, email_monthly: 0.65, hosting_monthly: 1.55 },
-  CAD: { domain_yearly: 21, email_monthly: 0.59, hosting_monthly: 1.39 },
-  AED: { domain_yearly: 55, email_monthly: 1.55, hosting_monthly: 3.7 },
-  SGD: { domain_yearly: 20, email_monthly: 0.55, hosting_monthly: 1.35 },
-  MYR: { domain_yearly: 69, email_monthly: 1.9, hosting_monthly: 4.5 },
-  THB: { domain_yearly: 520, email_monthly: 15, hosting_monthly: 35 },
-  IDR: { domain_yearly: 245000, email_monthly: 6900, hosting_monthly: 16500 },
-  PHP: { domain_yearly: 850, email_monthly: 24, hosting_monthly: 58 },
-  KRW: { domain_yearly: 19900, email_monthly: 550, hosting_monthly: 1350 },
-  BRL: { domain_yearly: 79, email_monthly: 2.2, hosting_monthly: 5.5 },
-  MXN: { domain_yearly: 269, email_monthly: 7.5, hosting_monthly: 18 },
-  ZAR: { domain_yearly: 269, email_monthly: 7.5, hosting_monthly: 18 },
-  CHF: { domain_yearly: 14, email_monthly: 0.39, hosting_monthly: 0.95 },
-  SEK: { domain_yearly: 159, email_monthly: 4.5, hosting_monthly: 11 },
-  NOK: { domain_yearly: 159, email_monthly: 4.5, hosting_monthly: 11 },
-  DKK: { domain_yearly: 105, email_monthly: 2.9, hosting_monthly: 7 },
-  PLN: { domain_yearly: 59, email_monthly: 1.7, hosting_monthly: 4 },
-  TRY: { domain_yearly: 499, email_monthly: 14, hosting_monthly: 35 },
-  SAR: { domain_yearly: 56, email_monthly: 1.55, hosting_monthly: 3.75 },
-  HKD: { domain_yearly: 118, email_monthly: 3.3, hosting_monthly: 7.9 },
-  NZD: { domain_yearly: 25, email_monthly: 0.7, hosting_monthly: 1.7 },
-  PKR: { domain_yearly: 4199, email_monthly: 119, hosting_monthly: 289 },
-  BDT: { domain_yearly: 1799, email_monthly: 49, hosting_monthly: 119 },
-  LKR: { domain_yearly: 4599, email_monthly: 129, hosting_monthly: 309 },
-  VND: { domain_yearly: 379000, email_monthly: 10500, hosting_monthly: 25500 },
+export const usdToLocalRate: Record<CurrencyCode, number> = {
+  USD: 1,
+  EUR: 0.861354,
+  GBP: 0.737868,
+  INR: 95,
+  NPR: 154,
+  JPY: 159.924891,
+  AUD: 1.394552,
+  CAD: 1.388787,
+  AED: 3.6725,
+  SGD: 1.272477,
+  MYR: 4.02581,
+  THB: 33.024424,
+  IDR: 17701.341153,
+  PHP: 62.335023,
+  KRW: 1377.942221,
+  BRL: 5.163864,
+  MXN: 17.011519,
+  ZAR: 16.092366,
+  CHF: 0.808088,
+  SEK: 9.573656,
+  NOK: 9.359458,
+  DKK: 6.41952,
+  PLN: 3.735912,
+  TRY: 48.228751,
+  SAR: 3.75,
+  HKD: 7.840335,
+  NZD: 1.689402,
+  PKR: 277.911269,
+  BDT: 123.208033,
+  LKR: 328.294208,
+  VND: 26056.967123,
 };
+
+const ZERO_DECIMAL: ReadonlySet<CurrencyCode> = new Set([
+  "JPY",
+  "KRW",
+  "VND",
+  "IDR",
+]);
+
+function roundCommercial(amount: number, currency: CurrencyCode): number {
+  if (ZERO_DECIMAL.has(currency) || amount >= 100) {
+    return Math.round(amount);
+  }
+  if (amount >= 10) {
+    return Math.round(amount * 10) / 10;
+  }
+  return Math.round(amount * 100) / 100;
+}
+
+function buildBookFromRate(rate: number, currency: CurrencyCode): PriceBook {
+  return {
+    domain_yearly: roundCommercial(
+      basePriceBookUsd.domain_yearly * rate,
+      currency,
+    ),
+    email_monthly: roundCommercial(
+      basePriceBookUsd.email_monthly * rate,
+      currency,
+    ),
+    hosting_monthly: roundCommercial(
+      basePriceBookUsd.hosting_monthly * rate,
+      currency,
+    ),
+  };
+}
+
+/** Localized commercial prices derived from USD × FX rate */
+export const priceBooksByCurrency: Record<CurrencyCode, PriceBook> =
+  Object.fromEntries(
+    (Object.keys(usdToLocalRate) as CurrencyCode[]).map((currency) => [
+      currency,
+      buildBookFromRate(usdToLocalRate[currency], currency),
+    ]),
+  ) as Record<CurrencyCode, PriceBook>;
 
 export const productPriceMeta: Record<
   ProductPriceId,
@@ -112,7 +157,7 @@ export function formatMoney(
   locale: string,
 ): string {
   try {
-    const fractionDigits = ["JPY", "KRW", "VND", "IDR"].includes(currency)
+    const fractionDigits = ZERO_DECIMAL.has(currency)
       ? 0
       : amount % 1 === 0
         ? 0

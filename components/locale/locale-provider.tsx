@@ -79,6 +79,8 @@ export function LocaleProvider({
     writePrefsCookie(normalized);
     if (typeof document !== "undefined") {
       document.documentElement.lang = normalized.language;
+      document.documentElement.dir =
+        normalized.language === "ar" ? "rtl" : "ltr";
     }
   }, []);
 

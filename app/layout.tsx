@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { Geist_Mono, Outfit } from "next/font/google";
+import { DM_Sans, Geist_Mono, Manrope } from "next/font/google";
 
 import { LocaleProvider } from "@/components/locale/locale-provider";
 import { LOCALE_COOKIE, parsePreferencesCookie } from "@/lib/i18n/preferences";
@@ -8,10 +8,18 @@ import { buildMetadata } from "@/lib/metadata";
 
 import "./globals.css";
 
-const outfit = Outfit({
+const manrope = Manrope({
   variable: "--font-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-heading",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -31,15 +39,17 @@ export default async function RootLayout({
   const initialPreferences = parsePreferencesCookie(
     cookieStore.get(LOCALE_COOKIE)?.value,
   );
+  const isRtl = initialPreferences.language === "ar";
 
   return (
     <html
       lang={initialPreferences.language}
+      dir={isRtl ? "rtl" : "ltr"}
       className="dark"
       suppressHydrationWarning
     >
       <body
-        className={`${outfit.variable} ${geistMono.variable} min-h-dvh bg-black font-sans text-white antialiased`}
+        className={`${manrope.variable} ${dmSans.variable} ${geistMono.variable} min-h-dvh bg-black font-sans text-white antialiased`}
       >
         <LocaleProvider initialPreferences={initialPreferences}>
           {children}
