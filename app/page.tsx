@@ -9,7 +9,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="min-h-dvh bg-[var(--hb-bg)]">
+    <div className="overflow-x-hidden bg-[var(--hb-bg)]">
       <SiteHeader
         navigation={sections.navigation}
         loginLabel={settings.loginLabel}

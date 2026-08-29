@@ -45,7 +45,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="rounded-lg px-3 py-2 text-[15px] font-medium tracking-[-0.01em] text-white/90 transition-colors duration-150 hover:text-white"
+        className="rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-[-0.015em] text-white/92 transition-colors duration-150 hover:text-white"
       >
         {label}
       </Link>
@@ -63,14 +63,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium tracking-[-0.01em] text-white/90 transition-colors duration-150 hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[18px] font-bold tracking-[-0.015em] text-white/92 transition-colors duration-150 hover:text-white"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
         {label}
         <ChevronDown
           className={cn(
-            "size-3.5 opacity-60 transition-transform duration-150",
+            "size-4 opacity-60 transition-transform duration-150",
             open && "rotate-180",
           )}
           aria-hidden
@@ -84,14 +84,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-[calc(100%+8px)] left-1/2 z-50 min-w-[220px] -translate-x-1/2"
+            className="absolute top-[calc(100%+10px)] left-1/2 z-50 min-w-[248px] -translate-x-1/2"
           >
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-[rgba(8,12,28,0.92)] p-1.5 shadow-[0_18px_50px_rgb(0_0_0_/_0.5)] backdrop-blur-xl">
+            <div className="overflow-hidden rounded-xl border border-white/10 bg-[rgba(8,12,28,0.94)] p-2 shadow-[0_18px_50px_rgb(0_0_0_/_0.5)] backdrop-blur-xl">
               {item.children.map((child) => (
                 <Link
                   key={child.href}
                   href={child.href}
-                  className="block rounded-lg px-3.5 py-2.5 text-[13px] font-medium text-white/70 transition-colors duration-150 hover:bg-white/[0.06] hover:text-white"
+                  className="block rounded-lg px-3.5 py-3 text-[16px] font-bold tracking-[-0.01em] text-white/88 transition-colors duration-150 hover:bg-white/[0.07] hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   {child.label}
@@ -167,7 +167,7 @@ export function SiteHeader({
 
         <nav
           aria-label="Primary"
-          className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 xl:flex"
+          className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-2.5 xl:flex"
         >
           {navigation.map((item) => (
             <NavDropdown
@@ -220,7 +220,7 @@ export function SiteHeader({
             transition={{ duration: 0.18 }}
             className="pointer-events-auto mx-auto mt-2 w-[96%] max-w-[1280px] overflow-hidden rounded-2xl border border-white/10 bg-[rgba(8,12,28,0.94)] shadow-[0_20px_60px_rgb(0_0_0_/_0.45)] backdrop-blur-xl xl:hidden"
           >
-            <nav className="flex flex-col gap-1 p-4" aria-label="Mobile">
+            <nav className="flex flex-col gap-1.5 p-4" aria-label="Mobile">
               {navigation.map((item) => {
                 const label = localizeNavLabel(item.label, t.nav);
                 return (
@@ -229,7 +229,7 @@ export function SiteHeader({
                       <>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-semibold text-white"
+                          className="flex w-full items-center justify-between rounded-xl px-3 py-3.5 text-left text-[17px] font-bold text-white"
                           onClick={() =>
                             setMobileSection((current) =>
                               current === item.label ? null : item.label,
@@ -256,7 +256,7 @@ export function SiteHeader({
                                 <Link
                                   key={child.href}
                                   href={child.href}
-                                  className="block rounded-lg px-3 py-2.5 text-sm text-white/65"
+                                  className="block rounded-lg px-3 py-3 text-[15px] font-bold text-white/85"
                                   onClick={() => setOpen(false)}
                                 >
                                   {child.label}
@@ -269,7 +269,7 @@ export function SiteHeader({
                     ) : (
                       <Link
                         href={item.href}
-                        className="block rounded-xl px-3 py-3 text-sm font-semibold text-white"
+                        className="block rounded-xl px-3 py-3.5 text-[17px] font-bold text-white"
                         onClick={() => setOpen(false)}
                       >
                         {label}

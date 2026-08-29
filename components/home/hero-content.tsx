@@ -83,25 +83,32 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         </motion.p>
       ) : null}
 
-      <motion.h1
-        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.04, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="text-[clamp(1.85rem,4.2vw+0.6rem,3.55rem)] leading-[1.08] tracking-[-0.04em] text-white"
-      >
-        <span className="font-heading block font-extrabold whitespace-nowrap text-white drop-shadow-[0_2px_24px_rgb(0_0_0_/_0.35)]">
+      <h1 className="text-[clamp(1.75rem,4vw+0.55rem,3.55rem)] leading-[1.08] tracking-[-0.04em] text-white">
+        <motion.span
+          initial={
+            reduceMotion ? false : { opacity: 0, y: 22, filter: "blur(6px)" }
+          }
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.05, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="font-heading block font-extrabold text-white drop-shadow-[0_2px_24px_rgb(0_0_0_/_0.35)] sm:whitespace-nowrap"
+        >
           {headline}
-        </span>
-        <span
+        </motion.span>
+        <motion.span
+          initial={
+            reduceMotion ? false : { opacity: 0, y: 22, filter: "blur(6px)" }
+          }
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.16, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className={
             reduceMotion
-              ? "font-heading mt-0.5 block bg-gradient-to-r from-[#5BA8FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-extrabold whitespace-nowrap text-transparent"
-              : "hb-hero-gradient font-heading mt-0.5 block bg-clip-text font-extrabold whitespace-nowrap text-transparent"
+              ? "font-heading mt-0.5 block bg-gradient-to-r from-[#5BA8FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-extrabold text-transparent sm:whitespace-nowrap"
+              : "hb-hero-gradient font-heading mt-0.5 block bg-clip-text font-extrabold text-transparent sm:whitespace-nowrap"
           }
         >
           {accent}
-        </span>
-      </motion.h1>
+        </motion.span>
+      </h1>
 
       <motion.p
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
