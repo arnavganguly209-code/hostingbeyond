@@ -44,7 +44,7 @@ export function HeroFeatures({ stats }: { stats?: CmsHeroContent["stats"] }) {
       initial={reduceMotion ? false : { opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.28, duration: 0.45 }}
-      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-4 sm:px-6 lg:px-8"
+      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-2 sm:px-6 sm:pb-3 lg:px-8"
     >
       <div className="grid grid-cols-2 gap-1 rounded-[24px] border border-[var(--hb-border-blue)]/70 bg-[rgba(10,16,35,0.42)] p-2 shadow-[0_16px_50px_rgb(0_0_0_/_0.28),0_0_24px_var(--hb-glow-blue),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[20px] lg:grid-cols-4 lg:gap-0 lg:p-3">
         {items.map((stat) => {

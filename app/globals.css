@@ -150,4 +150,35 @@
     background: rgba(255, 255, 255, 0.3);
     background-clip: padding-box;
   }
+
+  @keyframes hb-hero-gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .hb-hero-gradient {
+    background-image: linear-gradient(
+      105deg,
+      #5ba8ff 0%,
+      #8b7cff 45%,
+      #b06cff 75%,
+      #5ba8ff 100%
+    );
+    background-size: 200% 200%;
+    animation: hb-hero-gradient-shift 10s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hb-hero-gradient {
+      animation: none;
+      background-image: linear-gradient(105deg, #5ba8ff, #8b7cff, #b06cff);
+    }
+  }
 }

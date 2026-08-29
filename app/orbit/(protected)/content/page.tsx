@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import type { CmsHomeSections } from "@/lib/orbit/defaults";
+import { OrbitImageField } from "@/components/orbit/image-field";
+import type { CmsHomeSections, CmsProductOffer } from "@/lib/orbit/defaults";
 
 export default function OrbitContentPage() {
   const [sections, setSections] = useState<CmsHomeSections | null>(null);
@@ -30,6 +31,33 @@ export default function OrbitContentPage() {
     const json = await res.json();
     setSaving(false);
     setStatus(res.ok ? "Saved successfully" : json.error || "Save failed");
+    if (res.ok && json.sections) setSections(json.sections);
+  }
+
+  function updateOffer(index: number, patch: Partial<CmsProductOffer>) {
+    if (!sections) return;
+    const offers = [...sections.products.offers];
+    offers[index] = { ...offers[index], ...patch };
+    setSections({
+      ...sections,
+      products: { ...sections.products, offers },
+    });
+  }
+
+  function moveOffer(index: number, direction: -1 | 1) {
+    if (!sections) return;
+    const target = index + direction;
+    if (target < 0 || target >= sections.products.offers.length) return;
+    const offers = [...sections.products.offers];
+    const [item] = offers.splice(index, 1);
+    offers.splice(target, 0, item);
+    setSections({
+      ...sections,
+      products: {
+        ...sections.products,
+        offers: offers.map((offer, order) => ({ ...offer, order })),
+      },
+    });
   }
 
   if (!sections) {
@@ -42,7 +70,7 @@ export default function OrbitContentPage() {
         <div>
           <h1 className="text-2xl font-bold">Website Content</h1>
           <p className="mt-1 text-sm text-[var(--hb-muted)]">
-            Edit live homepage sections without touching code.
+            Full editor for homepage hero and service cards.
           </p>
         </div>
         <div className="flex gap-2">
@@ -67,6 +95,7 @@ export default function OrbitContentPage() {
 
       {status ? <p className="text-sm text-emerald-300">{status}</p> : null}
 
+      {/* HERO */}
       <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
         <div className="flex items-center justify-between">
           <h2 className="font-semibold">Hero section</h2>
@@ -84,8 +113,30 @@ export default function OrbitContentPage() {
             Visible
           </label>
         </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field
+            label="Eyebrow"
+            value={sections.hero.eyebrow ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, eyebrow: value },
+              })
+            }
+          />
+          <Field
+            label="Search button text"
+            value={sections.hero.searchButtonLabel ?? "Search"}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, searchButtonLabel: value },
+              })
+            }
+          />
+        </div>
         <Field
-          label="Headline"
+          label="Main heading"
           value={sections.hero.headline}
           onChange={(value) =>
             setSections({
@@ -95,7 +146,7 @@ export default function OrbitContentPage() {
           }
         />
         <Field
-          label="Headline accent"
+          label="Highlighted heading"
           value={sections.hero.headlineAccent}
           onChange={(value) =>
             setSections({
@@ -114,31 +165,44 @@ export default function OrbitContentPage() {
             })
           }
         />
-        <Field
-          label="Background image URL"
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field
+            label="Search placeholder"
+            value={sections.hero.searchPlaceholder}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, searchPlaceholder: value },
+              })
+            }
+          />
+          <Field
+            label="Bulk search label"
+            value={sections.hero.bulkSearchLabel}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, bulkSearchLabel: value },
+              })
+            }
+          />
+        </div>
+        <OrbitImageField
+          label="Hero background / visual image"
           value={sections.hero.backgroundImage}
-          onChange={(value) =>
+          onChange={(url) =>
             setSections({
               ...sections,
-              hero: { ...sections.hero, backgroundImage: value },
-            })
-          }
-        />
-        <Field
-          label="Search placeholder"
-          value={sections.hero.searchPlaceholder}
-          onChange={(value) =>
-            setSections({
-              ...sections,
-              hero: { ...sections.hero, searchPlaceholder: value },
+              hero: { ...sections.hero, backgroundImage: url },
             })
           }
         />
       </section>
 
+      {/* PRODUCTS */}
       <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold">Products section</h2>
+          <h2 className="font-semibold">Service cards section</h2>
           <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
             <input
               type="checkbox"
@@ -202,102 +266,219 @@ export default function OrbitContentPage() {
             key={offer.id}
             className="space-y-3 rounded-xl border border-white/10 p-4"
           >
-            <h3 className="text-sm font-semibold tracking-wide uppercase">
-              {offer.title} card
-            </h3>
-            <Field
-              label="Title"
-              value={offer.title}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, title: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold tracking-wide uppercase">
+                {offer.title || offer.id} card
+              </h3>
+              <div className="flex flex-wrap items-center gap-2">
+                <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+                  <input
+                    type="checkbox"
+                    checked={offer.visible !== false}
+                    onChange={(e) =>
+                      updateOffer(index, { visible: e.target.checked })
+                    }
+                  />
+                  Visible
+                </label>
+                <button
+                  type="button"
+                  onClick={() => moveOffer(index, -1)}
+                  className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveOffer(index, 1)}
+                  className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+                >
+                  ↓
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2">
+              <Field
+                label="Title"
+                value={offer.title}
+                onChange={(value) => updateOffer(index, { title: value })}
+              />
+              <Field
+                label="Badge"
+                value={offer.badge}
+                onChange={(value) => updateOffer(index, { badge: value })}
+              />
+              <Field
+                label="Subtitle"
+                value={offer.subtitle ?? ""}
+                onChange={(value) => updateOffer(index, { subtitle: value })}
+              />
+              <Field
+                label="Accent (blue / purple / cyan)"
+                value={offer.accent}
+                onChange={(value) =>
+                  updateOffer(index, {
+                    accent:
+                      value === "purple" || value === "cyan" ? value : "blue",
+                  })
+                }
+              />
+              <Field
+                label="Price override (optional USD display)"
+                value={offer.priceOverride ?? ""}
+                onChange={(value) =>
+                  updateOffer(index, { priceOverride: value })
+                }
+              />
+              <Field
+                label="Billing period / price suffix"
+                value={offer.priceSuffix}
+                onChange={(value) => updateOffer(index, { priceSuffix: value })}
+              />
+              <Field
+                label="Promotional text / highlight"
+                value={offer.highlight ?? ""}
+                onChange={(value) => updateOffer(index, { highlight: value })}
+              />
+              <Field
+                label="Small pricing label"
+                value={offer.priceLabel ?? ""}
+                onChange={(value) => updateOffer(index, { priceLabel: value })}
+              />
+              <Field
+                label="CTA text"
+                value={offer.ctaLabel}
+                onChange={(value) => updateOffer(index, { ctaLabel: value })}
+              />
+              <Field
+                label="CTA link"
+                value={offer.ctaHref}
+                onChange={(value) => updateOffer(index, { ctaHref: value })}
+              />
+            </div>
+
+            <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+              <input
+                type="checkbox"
+                checked={Boolean(offer.searchEnabled)}
+                onChange={(e) =>
+                  updateOffer(index, { searchEnabled: e.target.checked })
+                }
+              />
+              Show domain search under CTA
+            </label>
+
+            {offer.searchEnabled ? (
+              <div className="grid gap-3 md:grid-cols-2">
+                <Field
+                  label="Search placeholder"
+                  value={offer.searchPlaceholder ?? ""}
+                  onChange={(value) =>
+                    updateOffer(index, { searchPlaceholder: value })
+                  }
+                />
+                <Field
+                  label="Search button text"
+                  value={offer.searchButtonLabel ?? "Search"}
+                  onChange={(value) =>
+                    updateOffer(index, { searchButtonLabel: value })
+                  }
+                />
+              </div>
+            ) : null}
+
+            <FeatureEditor
+              features={offer.features}
+              onChange={(features) => updateOffer(index, { features })}
             />
-            <Field
-              label="Price"
-              value={offer.price}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, price: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
-            <Field
-              label="Price suffix"
-              value={offer.priceSuffix}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, priceSuffix: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
-            <Field
-              label="Badge"
-              value={offer.badge}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, badge: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
-            <TextArea
-              label="Features (one per line)"
-              value={offer.features.join("\n")}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = {
-                  ...offer,
-                  features: value
-                    .split("\n")
-                    .map((line) => line.trim())
-                    .filter(Boolean),
-                };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
-            <Field
-              label="CTA label"
-              value={offer.ctaLabel}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, ctaLabel: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
-            <Field
-              label="CTA URL"
-              value={offer.ctaHref}
-              onChange={(value) => {
-                const offers = [...sections.products.offers];
-                offers[index] = { ...offer, ctaHref: value };
-                setSections({
-                  ...sections,
-                  products: { ...sections.products, offers },
-                });
-              }}
-            />
+
+            <div className="grid gap-3 md:grid-cols-2">
+              <OrbitImageField
+                label="Card icon image"
+                value={offer.iconUrl ?? ""}
+                onChange={(url) => updateOffer(index, { iconUrl: url })}
+              />
+              <OrbitImageField
+                label="Card illustration image"
+                value={offer.illustrationUrl ?? ""}
+                onChange={(url) => updateOffer(index, { illustrationUrl: url })}
+              />
+            </div>
           </div>
         ))}
       </section>
+    </div>
+  );
+}
+
+function FeatureEditor({
+  features,
+  onChange,
+}: {
+  features: string[];
+  onChange: (features: string[]) => void;
+}) {
+  return (
+    <div className="space-y-2 rounded-xl border border-white/10 p-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold tracking-wide text-[var(--hb-muted)] uppercase">
+          Features
+        </p>
+        <button
+          type="button"
+          onClick={() => onChange([...features, "New feature"])}
+          className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+        >
+          Add feature
+        </button>
+      </div>
+      {features.map((feature, index) => (
+        <div key={`${index}-${feature.slice(0, 12)}`} className="flex gap-2">
+          <input
+            value={feature}
+            onChange={(event) => {
+              const next = [...features];
+              next[index] = event.target.value;
+              onChange(next);
+            }}
+            className="min-w-0 flex-1 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const next = [...features];
+              if (index > 0) {
+                [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                onChange(next);
+              }
+            }}
+            className="rounded-lg border border-white/10 px-2 text-xs"
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              const next = [...features];
+              if (index < next.length - 1) {
+                [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                onChange(next);
+              }
+            }}
+            className="rounded-lg border border-white/10 px-2 text-xs"
+          >
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(features.filter((_, i) => i !== index))}
+            className="rounded-lg border border-white/10 px-2 text-xs text-red-300"
+          >
+            ✕
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
@@ -338,7 +519,7 @@ function TextArea({
       <textarea
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        rows={4}
+        rows={3}
         className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm font-normal tracking-normal text-white normal-case outline-none focus:border-[var(--hb-blue)]/40"
       />
     </label>

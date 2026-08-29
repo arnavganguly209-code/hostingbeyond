@@ -21,6 +21,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
   const [domain, setDomain] = useState("");
 
   const useCmsCopy = preferences.language === "en" && Boolean(content);
+  const eyebrow = useCmsCopy ? (content?.eyebrow ?? "") : "";
   const headline = useCmsCopy
     ? (content?.headline ?? t.hero.headline)
     : t.hero.headline;
@@ -36,6 +37,9 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
   const bulkLabel = useCmsCopy
     ? (content?.bulkSearchLabel ?? t.hero.bulkSearch)
     : t.hero.bulkSearch;
+  const searchLabel = useCmsCopy
+    ? (content?.searchButtonLabel ?? t.hero.search)
+    : t.hero.search;
 
   const trustItems =
     useCmsCopy && content?.trustItems
@@ -68,34 +72,52 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
 
   return (
     <div className="relative z-20 w-full">
+      {eyebrow ? (
+        <motion.p
+          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="mb-4 text-[11px] font-bold tracking-[0.22em] text-white/55 uppercase"
+        >
+          {eyebrow}
+        </motion.p>
+      ) : null}
+
       <motion.h1
-        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05, duration: 0.45 }}
-        className="max-w-[15ch] text-[2.45rem] leading-[1.02] tracking-[-0.035em] text-white sm:max-w-none sm:text-[3rem] lg:text-[3.45rem] xl:text-[3.75rem]"
+        transition={{ delay: 0.04, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-[16ch] text-[2.55rem] leading-[1.02] tracking-[-0.04em] text-white sm:max-w-none sm:text-[3.15rem] lg:text-[3.55rem] xl:text-[3.85rem]"
       >
-        <span className="font-display font-bold text-white">{headline}</span>
-        <br />
-        <span className="mt-1 inline-block bg-gradient-to-r from-[#6BB4FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-sans text-[0.96em] font-extrabold tracking-[-0.03em] text-transparent">
+        <span className="block font-sans font-extrabold text-white drop-shadow-[0_2px_24px_rgb(0_0_0_/_0.35)]">
+          {headline}
+        </span>
+        <span
+          className={
+            reduceMotion
+              ? "mt-1 inline-block bg-gradient-to-r from-[#5BA8FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-sans font-extrabold text-transparent"
+              : "hb-hero-gradient mt-1 inline-block bg-clip-text font-sans font-extrabold text-transparent"
+          }
+        >
           {accent}
         </span>
       </motion.h1>
 
       <motion.p
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.4 }}
-        className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] font-medium tracking-[-0.01em] text-[var(--hb-muted)] sm:text-[16px]"
+        transition={{ delay: 0.12, duration: 0.45 }}
+        className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] font-medium tracking-[-0.01em] text-[#b7bfcf] sm:text-[16px]"
       >
         {description}
       </motion.p>
 
       <motion.form
         onSubmit={onSearch}
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15, duration: 0.4 }}
-        className="mt-8 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/12 bg-[rgba(8,12,28,0.72)] p-1.5 shadow-[0_12px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-xl"
+        transition={{ delay: 0.18, duration: 0.45 }}
+        className="mt-8 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/12 bg-[rgba(8,12,28,0.78)] p-1.5 shadow-[0_12px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-xl"
       >
         <label htmlFor="domain-search" className="sr-only">
           {placeholder}
@@ -116,17 +138,17 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         </Link>
         <button
           type="submit"
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-5 text-sm font-semibold text-white transition duration-150 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hb-blue)]"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-5 text-sm font-bold text-white transition duration-150 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hb-blue)]"
         >
           <Search className="size-4" aria-hidden />
-          {t.hero.search}
+          {searchLabel}
         </button>
       </motion.form>
 
       <motion.ul
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4 }}
+        transition={{ delay: 0.24, duration: 0.45 }}
         className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5"
       >
         {trustItems.map((item) => {
@@ -138,7 +160,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
                 <Icon className="size-3.5" strokeWidth={1.9} />
               </span>
               <span>
-                <span className="block text-[12px] font-semibold tracking-[-0.01em] text-white sm:text-[13px]">
+                <span className="block text-[12px] font-bold tracking-[-0.01em] text-white sm:text-[13px]">
                   {item.title}
                 </span>
                 <span className="mt-0.5 block text-[11px] leading-snug text-white/50">

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import {
   defaultHomeSections,
   defaultSiteSettings,
+  mergeHomeSections,
   type CmsHomeSections,
   type CmsSiteSettings,
 } from "@/lib/orbit/defaults";
@@ -32,16 +33,14 @@ export async function getHomeSections(): Promise<CmsHomeSections> {
       where: { slug: "home" },
     });
     if (!page) return defaultHomeSections();
-    return {
-      ...defaultHomeSections(),
-      ...(page.sections as CmsHomeSections),
-    };
+    return mergeHomeSections(page.sections as Partial<CmsHomeSections>);
   } catch {
     return defaultHomeSections();
   }
 }
 
 export async function saveHomeSections(sections: CmsHomeSections) {
+  const normalized = mergeHomeSections(sections);
   return prisma.pageContent.upsert({
     where: { slug: "home" },
     create: {
@@ -49,13 +48,13 @@ export async function saveHomeSections(sections: CmsHomeSections) {
       title: "Home",
       isPublished: true,
       isVisible: true,
-      sections,
+      sections: normalized,
       seo: {
         title: "HostingBeyond — Beyond Hosting, Beyond Possibilities",
         description: defaultSiteSettings().description,
       },
     },
-    update: { sections },
+    update: { sections: normalized },
   });
 }
 

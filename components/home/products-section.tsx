@@ -1,17 +1,17 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Check, Globe2, Mail, Server } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
-import { type ProductOffer, productOffers } from "@/config/products";
+import { priceIdForProduct } from "@/config/products";
 import { routes } from "@/config/routes";
 import { useLocale } from "@/components/locale/locale-provider";
 import { cn } from "@/lib/utils";
-import type { CmsProductsContent } from "@/lib/orbit/defaults";
+import type { CmsProductOffer, CmsProductsContent } from "@/lib/orbit/defaults";
 import { DomainVisual, EmailVisual, HostingVisual } from "./product-visuals";
-import { ProductsTrustBar } from "./products-trust-bar";
 
 const icons = {
   domain: Globe2,
@@ -19,9 +19,9 @@ const icons = {
   hosting: Server,
 } as const;
 
-const accent = {
+const accentStyles = {
   blue: {
-    card: "border-[#0a84ff]/40 shadow-[0_0_0_1px_rgb(10_132_255_/_0.14),0_20px_50px_rgb(0_0_0_/_0.4)] hover:border-[#0a84ff]/70",
+    card: "border-[#0a84ff]/40 shadow-[0_0_0_1px_rgb(10_132_255_/_0.12),0_18px_48px_rgb(0_0_0_/_0.42)] hover:border-[#0a84ff]/70 hover:shadow-[0_0_0_1px_rgb(10_132_255_/_0.28),0_22px_56px_rgb(0_0_0_/_0.48),0_0_40px_rgb(10_132_255_/_0.12)]",
     iconWrap: "border-[#0a84ff]/45 bg-[#0a84ff]/12 text-[#7cc4ff]",
     badge: "border-[#0a84ff]/45 bg-[#0a84ff]/10 text-[#9ad0ff]",
     title: "text-white",
@@ -32,7 +32,7 @@ const accent = {
     search: "bg-[#0a84ff]",
   },
   purple: {
-    card: "border-[#a855f7]/40 shadow-[0_0_0_1px_rgb(168_85_247_/_0.14),0_20px_50px_rgb(0_0_0_/_0.4)] hover:border-[#a855f7]/70",
+    card: "border-[#a855f7]/40 shadow-[0_0_0_1px_rgb(168_85_247_/_0.12),0_18px_48px_rgb(0_0_0_/_0.42)] hover:border-[#a855f7]/70 hover:shadow-[0_0_0_1px_rgb(168_85_247_/_0.28),0_22px_56px_rgb(0_0_0_/_0.48),0_0_40px_rgb(168_85_247_/_0.12)]",
     iconWrap: "border-[#a855f7]/45 bg-[#a855f7]/12 text-[#d8b4fe]",
     badge: "border-[#a855f7]/45 bg-[#a855f7]/10 text-[#d8b4fe]",
     title:
@@ -44,7 +44,7 @@ const accent = {
     search: "bg-[#a855f7]",
   },
   cyan: {
-    card: "border-[#22d3ee]/35 shadow-[0_0_0_1px_rgb(34_211_238_/_0.12),0_20px_50px_rgb(0_0_0_/_0.4)] hover:border-[#22d3ee]/65",
+    card: "border-[#22d3ee]/35 shadow-[0_0_0_1px_rgb(34_211_238_/_0.1),0_18px_48px_rgb(0_0_0_/_0.42)] hover:border-[#22d3ee]/65 hover:shadow-[0_0_0_1px_rgb(34_211_238_/_0.25),0_22px_56px_rgb(0_0_0_/_0.48),0_0_40px_rgb(34_211_238_/_0.1)]",
     iconWrap: "border-[#22d3ee]/40 bg-[#22d3ee]/10 text-[#67e8f9]",
     badge: "border-[#22d3ee]/45 bg-[#22d3ee]/8 text-[#67e8f9]",
     title:
@@ -57,65 +57,49 @@ const accent = {
   },
 } as const;
 
-type DisplayOffer = {
-  id: "domain" | "email" | "hosting";
-  priceId: ProductOffer["priceId"];
-  title: string;
-  subtitle?: string;
-  badge: string;
-  accent: ProductOffer["accent"];
-  priceSuffixKey: ProductOffer["priceSuffixKey"];
-  highlightKey?: ProductOffer["highlightKey"];
-  highlight?: string;
-  features: string[];
-  ctaLabel: string;
-  ctaHref: string;
-  searchEnabled?: boolean;
-};
-
 function ProductCard({
   offer,
   index,
   priceLabel,
-  priceSuffix,
-  highlight,
-  searchPlaceholder,
   searchLabel,
 }: {
-  offer: DisplayOffer;
+  offer: CmsProductOffer;
   index: number;
   priceLabel: string;
-  priceSuffix: string;
-  highlight?: string;
-  searchPlaceholder: string;
   searchLabel: string;
 }) {
   const reduceMotion = useReducedMotion();
   const [domain, setDomain] = useState("");
-  const styles = accent[offer.accent];
-  const Icon = icons[offer.id];
+  const styles = accentStyles[offer.accent] ?? accentStyles.blue;
+  const Icon =
+    icons[offer.id as keyof typeof icons] ??
+    (offer.accent === "purple"
+      ? Mail
+      : offer.accent === "cyan"
+        ? Server
+        : Globe2);
 
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const query = domain.trim();
     window.location.href = query
       ? `${routes.domains}?q=${encodeURIComponent(query)}`
-      : routes.domains;
+      : offer.ctaHref || routes.domains;
   };
 
   return (
     <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{
-        delay: 0.08 + index * 0.1,
-        duration: 0.5,
+        delay: 0.06 + index * 0.08,
+        duration: 0.48,
         ease: [0.22, 1, 0.36, 1],
       }}
       whileHover={reduceMotion ? undefined : { y: -6 }}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-[linear-gradient(165deg,rgba(10,14,28,0.96),rgba(4,8,18,0.98))] p-5 backdrop-blur-xl transition-[box-shadow,border-color,transform] duration-200 sm:p-6",
+        "group relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-[linear-gradient(165deg,rgba(10,14,28,0.97),rgba(4,8,18,0.99))] p-5 backdrop-blur-xl transition-[box-shadow,border-color,transform] duration-200 sm:p-6",
         styles.card,
       )}
     >
@@ -128,11 +112,21 @@ function ProductCard({
         <div className="flex min-w-0 items-center gap-3">
           <span
             className={cn(
-              "inline-flex size-12 shrink-0 items-center justify-center rounded-2xl border",
+              "inline-flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border",
               styles.iconWrap,
             )}
           >
-            <Icon className="size-5" strokeWidth={1.8} />
+            {offer.iconUrl ? (
+              <Image
+                src={offer.iconUrl}
+                alt=""
+                width={28}
+                height={28}
+                className="size-7 object-contain"
+              />
+            ) : (
+              <Icon className="size-5" strokeWidth={1.8} />
+            )}
           </span>
           <div className="min-w-0">
             <h3
@@ -150,38 +144,42 @@ function ProductCard({
             ) : null}
           </div>
         </div>
-        <span
-          className={cn(
-            "shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-bold tracking-[0.14em] uppercase",
-            styles.badge,
-          )}
-        >
-          {offer.badge}
-        </span>
+        {offer.badge ? (
+          <span
+            className={cn(
+              "shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-bold tracking-[0.14em] uppercase",
+              styles.badge,
+            )}
+          >
+            {offer.badge}
+          </span>
+        ) : null}
       </div>
 
       <div className="mt-5">
         <p className="flex flex-wrap items-baseline gap-x-2">
           <span
             className={cn(
-              "text-[2.4rem] leading-none font-extrabold tracking-tight tabular-nums transition-opacity duration-150",
+              "text-[2.45rem] leading-none font-extrabold tracking-tight tabular-nums",
               styles.price,
             )}
           >
             {priceLabel}
           </span>
-          <span className="text-sm font-semibold text-white/55">
-            {priceSuffix}
-          </span>
+          {offer.priceSuffix ? (
+            <span className="text-sm font-semibold text-white/55">
+              {offer.priceSuffix}
+            </span>
+          ) : null}
         </p>
-        {highlight ? (
+        {offer.highlight || offer.priceLabel ? (
           <span
             className={cn(
               "mt-3 inline-flex rounded-full border px-3 py-1 text-[10px] font-bold tracking-wide uppercase",
               styles.chip,
             )}
           >
-            {highlight}
+            {offer.highlight || offer.priceLabel}
           </span>
         ) : null}
       </div>
@@ -205,67 +203,76 @@ function ProductCard({
           ))}
         </ul>
         <div className="hidden sm:block">
-          {offer.id === "domain" ? <DomainVisual /> : null}
-          {offer.id === "email" ? <EmailVisual /> : null}
-          {offer.id === "hosting" ? <HostingVisual /> : null}
+          {offer.illustrationUrl ? (
+            <div className="relative mx-auto h-[160px] w-full max-w-[180px]">
+              <Image
+                src={offer.illustrationUrl}
+                alt=""
+                fill
+                className="object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+                sizes="180px"
+              />
+            </div>
+          ) : (
+            <div className="transition-transform duration-300 group-hover:scale-[1.03]">
+              {offer.id === "domain" ? <DomainVisual /> : null}
+              {offer.id === "email" ? <EmailVisual /> : null}
+              {offer.id === "hosting" ? <HostingVisual /> : null}
+              {!["domain", "email", "hosting"].includes(offer.id) ? (
+                offer.accent === "purple" ? (
+                  <EmailVisual />
+                ) : offer.accent === "cyan" ? (
+                  <HostingVisual />
+                ) : (
+                  <DomainVisual />
+                )
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="mt-5 space-y-3">
+      <div className="mt-auto space-y-3 pt-5">
+        <Link
+          href={offer.ctaHref}
+          className={cn(
+            "inline-flex h-11 w-full items-center justify-center rounded-2xl border text-sm font-bold transition-all duration-200",
+            styles.cta,
+          )}
+        >
+          {offer.ctaLabel}
+          <span aria-hidden className="ml-1">
+            →
+          </span>
+        </Link>
+
         {offer.searchEnabled ? (
-          <>
-            <Link
-              href={offer.ctaHref}
+          <form
+            onSubmit={onSearch}
+            className="flex items-center gap-1.5 rounded-2xl border border-white/10 bg-black/45 p-1.5"
+          >
+            <label htmlFor={`product-domain-${offer.id}`} className="sr-only">
+              {offer.searchPlaceholder || "Enter your domain name"}
+            </label>
+            <input
+              id={`product-domain-${offer.id}`}
+              type="text"
+              value={domain}
+              onChange={(event) => setDomain(event.target.value)}
+              placeholder={offer.searchPlaceholder || "Enter your domain name"}
+              className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/35"
+            />
+            <button
+              type="submit"
               className={cn(
-                "inline-flex h-11 w-full items-center justify-center rounded-2xl border text-sm font-semibold transition-all duration-200",
-                styles.cta,
+                "inline-flex h-10 shrink-0 items-center rounded-xl px-4 text-sm font-bold text-white transition hover:brightness-110",
+                styles.search,
               )}
             >
-              {offer.ctaLabel}
-              <span aria-hidden className="ml-1">
-                →
-              </span>
-            </Link>
-            <form
-              onSubmit={onSearch}
-              className="flex items-center gap-1.5 rounded-2xl border border-white/10 bg-black/45 p-1.5"
-            >
-              <label htmlFor={`product-domain-${offer.id}`} className="sr-only">
-                {searchPlaceholder}
-              </label>
-              <input
-                id={`product-domain-${offer.id}`}
-                type="text"
-                value={domain}
-                onChange={(event) => setDomain(event.target.value)}
-                placeholder={searchPlaceholder}
-                className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/35"
-              />
-              <button
-                type="submit"
-                className={cn(
-                  "inline-flex h-10 shrink-0 items-center rounded-xl px-4 text-sm font-bold text-white transition hover:brightness-110",
-                  styles.search,
-                )}
-              >
-                {searchLabel}
-              </button>
-            </form>
-          </>
-        ) : (
-          <Link
-            href={offer.ctaHref}
-            className={cn(
-              "inline-flex h-11 w-full items-center justify-center rounded-2xl border text-sm font-semibold transition-all duration-200",
-              styles.cta,
-            )}
-          >
-            {offer.ctaLabel}
-            <span aria-hidden className="ml-1">
-              →
-            </span>
-          </Link>
-        )}
+              {offer.searchButtonLabel || searchLabel}
+            </button>
+          </form>
+        ) : null}
       </div>
     </motion.article>
   );
@@ -289,92 +296,29 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
     ? (content?.description ?? t.products.description)
     : t.products.description;
 
-  const baseOffers: DisplayOffer[] = productOffers.map((offer) => {
-    const cmsOffer = content?.offers?.find((item) => item.id === offer.id);
-    const localizedTitle =
-      offer.id === "domain"
-        ? t.products.domainTitle
-        : offer.id === "email"
-          ? t.products.emailTitle
-          : t.products.hostingTitle;
-    const localizedSubtitle =
-      offer.id === "email"
-        ? t.products.emailSubtitle
-        : offer.id === "hosting"
-          ? t.products.hostingSubtitle
-          : undefined;
-    const baseSubtitle =
-      "subtitle" in offer && typeof offer.subtitle === "string"
-        ? offer.subtitle
-        : undefined;
-    const localizedBadge =
-      offer.id === "domain"
-        ? t.products.domainBadge
-        : offer.id === "email"
-          ? t.products.emailBadge
-          : t.products.hostingBadge;
-    const localizedCta =
-      offer.id === "domain"
-        ? t.products.domainCta
-        : offer.id === "email"
-          ? t.products.emailCta
-          : t.products.hostingCta;
-    const highlight =
-      offer.highlightKey === "domainHighlight"
-        ? t.products.domainHighlight
-        : offer.highlightKey === "perMailbox"
-          ? t.products.perMailbox
-          : offer.highlightKey === "startingPlan"
-            ? t.products.startingPlan
-            : undefined;
-
-    return {
-      id: offer.id,
-      priceId: offer.priceId,
-      accent: offer.accent,
-      priceSuffixKey: offer.priceSuffixKey,
-      highlightKey: offer.highlightKey,
-      ctaHref: offer.ctaHref,
-      searchEnabled: "searchEnabled" in offer ? offer.searchEnabled : false,
-      title: useCms && cmsOffer?.title ? cmsOffer.title : localizedTitle,
-      subtitle:
-        useCms && cmsOffer?.subtitle
-          ? cmsOffer.subtitle
-          : (localizedSubtitle ?? baseSubtitle),
-      badge: useCms && cmsOffer?.badge ? cmsOffer.badge : localizedBadge,
-      ctaLabel: useCms && cmsOffer?.ctaLabel ? cmsOffer.ctaLabel : localizedCta,
-      features:
-        useCms && cmsOffer?.features?.length
-          ? cmsOffer.features
-          : offer.id === "domain"
-            ? t.products.domainFeatures
-            : offer.id === "email"
-              ? t.products.emailFeatures
-              : t.products.hostingFeatures,
-      highlight: useCms && cmsOffer?.highlight ? cmsOffer.highlight : highlight,
-    };
-  });
-
-  const trustItems = content?.trustItems;
+  const offers = useMemo(() => {
+    const list = (content?.offers ?? []).filter(
+      (offer) => offer.visible !== false,
+    );
+    return [...list].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }, [content?.offers]);
 
   return (
     <section
       id="products"
-      className="relative isolate overflow-hidden bg-[var(--hb-bg)] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+      className="relative isolate overflow-hidden bg-[var(--hb-bg)] px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-20 lg:px-8 lg:pt-12 lg:pb-24"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 left-1/2 h-64 w-[70%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgb(10_132_255_/_0.1),transparent_70%)] blur-2xl" />
-        <div className="absolute top-[30%] left-[-8%] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgb(10_132_255_/_0.08),transparent_70%)] blur-3xl" />
-        <div className="absolute top-[35%] right-[-6%] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgb(168_85_247_/_0.08),transparent_70%)] blur-3xl" />
+        <div className="absolute top-0 left-1/2 h-48 w-[70%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgb(10_132_255_/_0.08),transparent_70%)] blur-2xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1280px]">
         <div className="mx-auto max-w-3xl text-center">
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-[10px] font-semibold tracking-[0.2em] text-white/80 uppercase backdrop-blur-md"
+            className="inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white/80 uppercase backdrop-blur-md"
           >
             {eyebrow}
           </motion.div>
@@ -383,52 +327,53 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.05, duration: 0.45 }}
-            className="mt-5 text-[2rem] leading-[1.06] font-bold tracking-[-0.035em] text-white sm:text-[2.55rem] lg:text-[3.05rem]"
+            transition={{ delay: 0.04, duration: 0.45 }}
+            className="mt-4 text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-white sm:text-[2.55rem] lg:text-[3.05rem]"
           >
-            <span className="font-display font-bold">{title}</span>
+            {title}
             <br />
             <span className="bg-gradient-to-r from-[#22d3ee] via-[#5b8cff] to-[#a855f7] bg-clip-text text-transparent">
               {titleAccent}
             </span>
           </motion.h2>
 
-          <motion.p
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.08, duration: 0.4 }}
-            className="mx-auto mt-4 max-w-2xl text-[14px] leading-relaxed text-[#aab2c5] sm:text-[15px]"
-          >
-            {description}
-          </motion.p>
+          {description ? (
+            <motion.p
+              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.08, duration: 0.4 }}
+              className="mx-auto mt-3 max-w-2xl text-[14px] leading-relaxed text-[#aab2c5] sm:text-[15px]"
+            >
+              {description}
+            </motion.p>
+          ) : null}
         </div>
 
         <div
           className={cn(
-            "mt-12 grid grid-cols-1 gap-5 transition-opacity duration-150 lg:grid-cols-3 lg:gap-6",
+            "mt-10 grid grid-cols-1 items-stretch gap-5 transition-opacity duration-150 lg:mt-12 lg:grid-cols-3 lg:gap-6",
             isPending && "opacity-70",
           )}
         >
-          {baseOffers.map((offer, index) => (
-            <ProductCard
-              key={offer.id}
-              offer={offer}
-              index={index}
-              priceLabel={formatPrice(offer.priceId)}
-              priceSuffix={
-                offer.priceSuffixKey === "perYear"
-                  ? t.products.perYear
-                  : t.products.perMonth
-              }
-              highlight={offer.highlight}
-              searchPlaceholder={t.products.domainSearchPlaceholder}
-              searchLabel={t.hero.search}
-            />
-          ))}
+          {offers.map((offer, index) => {
+            const priceId = priceIdForProduct(offer.id);
+            const localized = formatPrice(priceId);
+            const priceLabel =
+              offer.priceOverride?.trim() && preferences.currency === "USD"
+                ? offer.priceOverride.trim()
+                : localized;
+            return (
+              <ProductCard
+                key={offer.id}
+                offer={offer}
+                index={index}
+                priceLabel={priceLabel}
+                searchLabel={t.hero.search}
+              />
+            );
+          })}
         </div>
-
-        <ProductsTrustBar items={trustItems} />
       </div>
     </section>
   );
