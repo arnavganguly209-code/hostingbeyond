@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import {
   createAdminSession,
+  createJwtOnlySession,
   ensureOrbitAdmin,
   logActivity,
   ORBIT_SESSION_COOKIE,
@@ -13,7 +14,7 @@ export const runtime = "nodejs";
 
 /**
  * Orbit access via server enrollment secret (ORBIT_ENROLLMENT_SECRET).
- * This is the primary gate — not a public password, not WebAuthn.
+ * Primary gate for Super Admin — verified server-side only.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -25,31 +26,39 @@ export async function POST(request: NextRequest) {
         action: "LOGIN_FAILED",
         resource: "access-key",
         details: "Invalid Orbit access key",
-      });
+      }).catch(() => undefined);
       return NextResponse.json(
         { error: "Invalid access key" },
         { status: 401 },
       );
     }
 
-    const admin = await ensureOrbitAdmin();
-    const session = await createAdminSession(admin.id, {
-      userAgent: request.headers.get("user-agent"),
-      ipAddress:
-        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-        undefined,
-    });
+    let session: { token: string; expiresAt: Date };
+    let adminId = "orbit-super-admin";
 
-    await logActivity({
-      adminUserId: admin.id,
-      action: "LOGIN",
-      resource: "session",
-      details: "Access key login",
-    });
+    try {
+      const admin = await ensureOrbitAdmin();
+      adminId = admin.id;
+      session = await createAdminSession(admin.id, {
+        userAgent: request.headers.get("user-agent"),
+        ipAddress:
+          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+          undefined,
+      });
+      await logActivity({
+        adminUserId: admin.id,
+        action: "LOGIN",
+        resource: "session",
+        details: "Access key login",
+      });
+    } catch (dbError) {
+      console.error("[orbit] DB session unavailable, using JWT-only", dbError);
+      session = await createJwtOnlySession();
+    }
 
     const response = NextResponse.json({
       ok: true,
-      admin: { id: admin.id, displayName: admin.displayName },
+      admin: { id: adminId, displayName: "Super Admin" },
     });
 
     response.cookies.set(ORBIT_SESSION_COOKIE, session.token, {

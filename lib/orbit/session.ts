@@ -37,6 +37,17 @@ export async function ensureOrbitAdmin() {
   });
 }
 
+/** Signed session without DB — used when Postgres is unavailable. */
+export async function createJwtOnlySession() {
+  const sid = randomBytes(32).toString("base64url");
+  const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
+  const token = await signOrbitJwt({
+    sid,
+    adminUserId: "orbit-super-admin",
+  });
+  return { token, expiresAt };
+}
+
 export async function createAdminSession(
   adminUserId: string,
   meta?: {
@@ -74,20 +85,36 @@ export async function getSessionAdmin(token: string | undefined) {
   const verified = await verifyOrbitJwt(token);
   if (!verified) return null;
 
-  const session = await prisma.adminSession.findUnique({
-    where: { tokenHash: hashToken(verified.sid) },
-    include: { adminUser: true },
-  });
+  try {
+    const session = await prisma.adminSession.findUnique({
+      where: { tokenHash: hashToken(verified.sid) },
+      include: { adminUser: true },
+    });
 
-  if (!session) return null;
-  if (session.expiresAt.getTime() < Date.now()) {
-    await prisma.adminSession
-      .delete({ where: { id: session.id } })
-      .catch(() => undefined);
-    return null;
+    if (session) {
+      if (session.expiresAt.getTime() < Date.now()) {
+        await prisma.adminSession
+          .delete({ where: { id: session.id } })
+          .catch(() => undefined);
+        return null;
+      }
+      return session.adminUser;
+    }
+  } catch {
+    /* DB unavailable — fall through to JWT-only trust */
   }
 
-  return session.adminUser;
+  // Access-key JWT fallback (no DB row) or orphaned valid JWT
+  if (verified.adminUserId) {
+    return {
+      id: verified.adminUserId,
+      displayName: "Super Admin",
+      createdAt: new Date(0),
+      updatedAt: new Date(0),
+    };
+  }
+
+  return null;
 }
 
 export async function logActivity(input: {
