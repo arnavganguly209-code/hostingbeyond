@@ -44,24 +44,24 @@ export function HeroFeatures({ stats }: { stats?: CmsHeroContent["stats"] }) {
       initial={reduceMotion ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.28, duration: 0.45 }}
-      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-3 sm:px-6 sm:pb-4 lg:px-8 lg:pb-5"
+      className="relative z-20 mx-auto w-full max-w-[1280px] shrink-0 px-4 pb-2 sm:px-6 sm:pb-3 lg:px-8 lg:pb-3"
     >
-      <div className="grid grid-cols-2 gap-1 rounded-[22px] border border-[var(--hb-border-blue)]/70 bg-[rgba(10,16,35,0.42)] p-1.5 shadow-[0_16px_50px_rgb(0_0_0_/_0.28),0_0_24px_var(--hb-glow-blue),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[20px] lg:grid-cols-4 lg:gap-0 lg:p-2.5">
+      <div className="grid grid-cols-2 gap-1 rounded-[20px] border border-[var(--hb-border-blue)]/70 bg-[rgba(10,16,35,0.5)] p-1 shadow-[0_16px_50px_rgb(0_0_0_/_0.28),0_0_24px_var(--hb-glow-blue),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-[20px] lg:grid-cols-4 lg:gap-0 lg:p-2">
         {items.map((stat) => {
           const Icon = icons[stat.icon as keyof typeof icons] ?? Globe2;
           return (
             <div
               key={stat.label}
-              className="flex items-center gap-2.5 rounded-2xl px-2.5 py-2 sm:gap-3 sm:px-3.5 sm:py-2.5"
+              className="flex items-center gap-2 rounded-2xl px-2 py-1.5 sm:gap-2.5 sm:px-3 sm:py-2"
             >
-              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[var(--hb-purple)]/35 bg-gradient-to-br from-[var(--hb-blue)]/25 to-[var(--hb-purple)]/30 text-white shadow-[0_0_18px_var(--hb-glow-purple)] sm:size-10">
-                <Icon className="size-3.5 sm:size-4" strokeWidth={1.7} />
+              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--hb-purple)]/35 bg-gradient-to-br from-[var(--hb-blue)]/25 to-[var(--hb-purple)]/30 text-white shadow-[0_0_18px_var(--hb-glow-purple)] sm:size-9">
+                <Icon className="size-3.5" strokeWidth={1.7} />
               </span>
               <div className="min-w-0">
-                <p className="font-heading text-base font-extrabold text-white sm:text-lg lg:text-xl">
+                <p className="font-heading text-[15px] font-extrabold text-white sm:text-base lg:text-lg">
                   {stat.value}
                 </p>
-                <p className="truncate text-[10px] leading-snug text-[var(--hb-muted)] sm:text-[11px] lg:text-[12px]">
+                <p className="truncate text-[10px] leading-snug text-[var(--hb-muted)] sm:text-[11px]">
                   {stat.label}
                 </p>
               </div>

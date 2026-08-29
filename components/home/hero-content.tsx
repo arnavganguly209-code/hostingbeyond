@@ -83,7 +83,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         </motion.p>
       ) : null}
 
-      <h1 className="text-[clamp(1.75rem,4vw+0.55rem,3.55rem)] leading-[1.08] tracking-[-0.04em] text-white">
+      <h1 className="text-[clamp(1.65rem,3.4vw+0.5rem,3.15rem)] leading-[1.06] tracking-[-0.04em] text-white">
         <motion.span
           initial={
             reduceMotion ? false : { opacity: 0, y: 22, filter: "blur(6px)" }
@@ -114,7 +114,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.12, duration: 0.45 }}
-        className="mt-3 max-w-[34rem] text-[14px] leading-[1.55] font-medium tracking-[-0.01em] text-[#b7bfcf] sm:mt-4 sm:text-[15px] lg:text-[16px]"
+        className="mt-2.5 max-w-[34rem] text-[13px] leading-[1.5] font-medium tracking-[-0.01em] text-[#b7bfcf] sm:mt-3 sm:text-[14px] lg:text-[15px]"
       >
         {description}
       </motion.p>
@@ -124,7 +124,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.18, duration: 0.45 }}
-        className="mt-5 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/12 bg-[rgba(8,12,28,0.78)] p-1.5 shadow-[0_12px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-xl sm:mt-6"
+        className="mt-4 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/12 bg-[rgba(8,12,28,0.78)] p-1.5 shadow-[0_12px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-xl sm:mt-5"
       >
         <label htmlFor="domain-search" className="sr-only">
           {placeholder}
@@ -156,7 +156,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.24, duration: 0.45 }}
-        className="mt-5 grid grid-cols-1 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4"
+        className="mt-4 grid grid-cols-1 gap-2.5 sm:mt-4 sm:grid-cols-3 sm:gap-3"
       >
         {trustItems.map((item) => {
           const Icon =
