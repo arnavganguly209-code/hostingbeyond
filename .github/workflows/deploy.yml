@@ -54,23 +54,34 @@ jobs:
 
             echo "==> Ensuring Orbit env (HostingBeyond .env only)"
             touch .env
-            upsert_env() {
-              local key="$1"
-              local value="$2"
-              if grep -q "^${key}=" .env; then
-                sed -i "s|^${key}=.*|${key}=${value}|" .env
-              else
-                printf '%s=%s\n' "$key" "$value" >> .env
-              fi
-            }
-            upsert_env ORBIT_ENROLLMENT_SECRET "713304977"
-            if ! grep -q '^ORBIT_SESSION_SECRET=.\+' .env; then
-              upsert_env ORBIT_SESSION_SECRET "hb_orbit_$(openssl rand -hex 24)"
+            if grep -q '^ORBIT_ENROLLMENT_SECRET=' .env; then
+              sed -i 's|^ORBIT_ENROLLMENT_SECRET=.*|ORBIT_ENROLLMENT_SECRET=713304977|' .env
+            else
+              echo 'ORBIT_ENROLLMENT_SECRET=713304977' >> .env
             fi
-            upsert_env ORBIT_RP_ID "beyond.theglobalorbit.com"
-            upsert_env ORBIT_ORIGIN "https://beyond.theglobalorbit.com"
-            upsert_env NEXT_PUBLIC_SITE_URL "https://beyond.theglobalorbit.com"
-            upsert_env NEXT_PUBLIC_APP_URL "https://beyond.theglobalorbit.com"
+            if ! grep -q '^ORBIT_SESSION_SECRET=' .env; then
+              echo 'ORBIT_SESSION_SECRET=hb_orbit_prod_session_secret_v1' >> .env
+            fi
+            if grep -q '^ORBIT_RP_ID=' .env; then
+              sed -i 's|^ORBIT_RP_ID=.*|ORBIT_RP_ID=beyond.theglobalorbit.com|' .env
+            else
+              echo 'ORBIT_RP_ID=beyond.theglobalorbit.com' >> .env
+            fi
+            if grep -q '^ORBIT_ORIGIN=' .env; then
+              sed -i 's|^ORBIT_ORIGIN=.*|ORBIT_ORIGIN=https://beyond.theglobalorbit.com|' .env
+            else
+              echo 'ORBIT_ORIGIN=https://beyond.theglobalorbit.com' >> .env
+            fi
+            if grep -q '^NEXT_PUBLIC_SITE_URL=' .env; then
+              sed -i 's|^NEXT_PUBLIC_SITE_URL=.*|NEXT_PUBLIC_SITE_URL=https://beyond.theglobalorbit.com|' .env
+            else
+              echo 'NEXT_PUBLIC_SITE_URL=https://beyond.theglobalorbit.com' >> .env
+            fi
+            if grep -q '^NEXT_PUBLIC_APP_URL=' .env; then
+              sed -i 's|^NEXT_PUBLIC_APP_URL=.*|NEXT_PUBLIC_APP_URL=https://beyond.theglobalorbit.com|' .env
+            else
+              echo 'NEXT_PUBLIC_APP_URL=https://beyond.theglobalorbit.com' >> .env
+            fi
             echo "ORBIT_ENV_READY"
 
             echo "==> Installing dependencies"
