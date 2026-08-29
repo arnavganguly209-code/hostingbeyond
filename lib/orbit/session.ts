@@ -27,6 +27,16 @@ export function verifyEnrollmentSecret(candidate: string) {
   return safeEqualString(hashSecret(candidate), hashSecret(expected));
 }
 
+export async function ensureOrbitAdmin() {
+  const existing = await prisma.adminUser.findFirst({
+    orderBy: { createdAt: "asc" },
+  });
+  if (existing) return existing;
+  return prisma.adminUser.create({
+    data: { displayName: "Super Admin" },
+  });
+}
+
 export async function createAdminSession(
   adminUserId: string,
   meta?: {

@@ -74,9 +74,9 @@ export default function OrbitSettingsPage() {
       </div>
 
       <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-100/90">
-        Passkey credentials are managed via WebAuthn. Enrollment secret lives
-        only in server <code>.env</code> as <code>ORBIT_ENROLLMENT_SECRET</code>{" "}
-        and is never exposed to the client after enrollment.
+        Orbit opens with the server access key from{" "}
+        <code>ORBIT_ENROLLMENT_SECRET</code> in <code>.env</code>. The key is
+        verified server-side and never stored in the browser after login.
       </div>
     </div>
   );

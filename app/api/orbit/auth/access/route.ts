@@ -1,0 +1,72 @@
+import { NextRequest, NextResponse } from "next/server";
+
+import {
+  createAdminSession,
+  ensureOrbitAdmin,
+  logActivity,
+  ORBIT_SESSION_COOKIE,
+  SESSION_TTL_MS,
+  verifyEnrollmentSecret,
+} from "@/lib/orbit/session";
+
+export const runtime = "nodejs";
+
+/**
+ * Orbit access via server enrollment secret (ORBIT_ENROLLMENT_SECRET).
+ * This is the primary gate — not a public password, not WebAuthn.
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const body = (await request.json()) as { accessKey?: string };
+    const accessKey = body.accessKey?.trim() ?? "";
+
+    if (!verifyEnrollmentSecret(accessKey)) {
+      await logActivity({
+        action: "LOGIN_FAILED",
+        resource: "access-key",
+        details: "Invalid Orbit access key",
+      });
+      return NextResponse.json(
+        { error: "Invalid access key" },
+        { status: 401 },
+      );
+    }
+
+    const admin = await ensureOrbitAdmin();
+    const session = await createAdminSession(admin.id, {
+      userAgent: request.headers.get("user-agent"),
+      ipAddress:
+        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+        undefined,
+    });
+
+    await logActivity({
+      adminUserId: admin.id,
+      action: "LOGIN",
+      resource: "session",
+      details: "Access key login",
+    });
+
+    const response = NextResponse.json({
+      ok: true,
+      admin: { id: admin.id, displayName: admin.displayName },
+    });
+
+    response.cookies.set(ORBIT_SESSION_COOKIE, session.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: session.expiresAt,
+      maxAge: Math.floor(SESSION_TTL_MS / 1000),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("[orbit] access login", error);
+    return NextResponse.json(
+      { error: "Unable to open Orbit" },
+      { status: 500 },
+    );
+  }
+}

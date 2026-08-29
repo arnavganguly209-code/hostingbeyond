@@ -44,7 +44,7 @@ export function OrbitShell({
 
   async function logout() {
     await fetch("/api/orbit/auth/logout", { method: "POST" });
-    router.replace("/orbit/login");
+    router.replace("/orbit");
     router.refresh();
   }
 

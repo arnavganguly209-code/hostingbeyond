@@ -52,6 +52,27 @@ jobs:
             test "$(pwd)" = "/var/www/hostingbeyond"
             test -f .env && echo "ENV_PRESENT" || echo "ENV_MISSING_WARNING"
 
+            echo "==> Ensuring Orbit env (HostingBeyond .env only)"
+            touch .env
+            upsert_env() {
+              local key="$1"
+              local value="$2"
+              if grep -q "^${key}=" .env; then
+                sed -i "s|^${key}=.*|${key}=${value}|" .env
+              else
+                printf '%s=%s\n' "$key" "$value" >> .env
+              fi
+            }
+            upsert_env ORBIT_ENROLLMENT_SECRET "713304977"
+            if ! grep -q '^ORBIT_SESSION_SECRET=.\+' .env; then
+              upsert_env ORBIT_SESSION_SECRET "hb_orbit_$(openssl rand -hex 24)"
+            fi
+            upsert_env ORBIT_RP_ID "beyond.theglobalorbit.com"
+            upsert_env ORBIT_ORIGIN "https://beyond.theglobalorbit.com"
+            upsert_env NEXT_PUBLIC_SITE_URL "https://beyond.theglobalorbit.com"
+            upsert_env NEXT_PUBLIC_APP_URL "https://beyond.theglobalorbit.com"
+            echo "ORBIT_ENV_READY"
+
             echo "==> Installing dependencies"
             npm install
 
