@@ -384,9 +384,9 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.05, duration: 0.45 }}
-            className="mt-5 text-[2rem] leading-[1.08] font-semibold tracking-[-0.03em] text-white sm:text-[2.55rem] lg:text-[3rem]"
+            className="mt-5 text-[2rem] leading-[1.06] font-bold tracking-[-0.035em] text-white sm:text-[2.55rem] lg:text-[3.05rem]"
           >
-            <span className="font-display font-normal">{title}</span>
+            <span className="font-display font-bold">{title}</span>
             <br />
             <span className="bg-gradient-to-r from-[#22d3ee] via-[#5b8cff] to-[#a855f7] bg-clip-text text-transparent">
               {titleAccent}
