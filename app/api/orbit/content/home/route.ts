@@ -32,6 +32,7 @@ export async function PUT(request: NextRequest) {
   }
 
   await saveHomeSections(body.sections);
+  const sections = await getHomeSections();
   await logActivity({
     adminUserId: admin.id,
     action: "CONTENT_UPDATE",
@@ -39,5 +40,5 @@ export async function PUT(request: NextRequest) {
     details: "Updated home page sections",
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, sections });
 }
