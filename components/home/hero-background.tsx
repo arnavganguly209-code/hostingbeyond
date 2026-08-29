@@ -3,7 +3,8 @@
 import Image from "next/image";
 
 /**
- * Soft hosting ambience + speaker stage image.
+ * Soft hosting ambience + stage image with heavy edge feathering
+ * so the photo frame disappears into the hero background.
  */
 export function HeroBackground({
   imageSrc = "/images/hero-speaker.png",
@@ -17,7 +18,7 @@ export function HeroBackground({
     >
       <div className="absolute inset-0 bg-[var(--hb-bg)]" />
 
-      {/* Left — previous clean ambience (network + soft glow) */}
+      {/* Ambient glows */}
       <div className="absolute top-[-12%] left-[-8%] h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,rgb(10_132_255_/_0.18),transparent_68%)] blur-3xl" />
       <div className="absolute bottom-[-18%] left-[8%] h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgb(111_60_255_/_0.12),transparent_70%)] blur-3xl" />
       <div className="absolute top-[18%] right-[28%] h-[22rem] w-[22rem] rounded-full bg-[radial-gradient(circle,rgb(10_132_255_/_0.1),transparent_70%)] blur-3xl" />
@@ -26,45 +27,42 @@ export function HeroBackground({
       <div className="absolute top-[34%] left-0 h-px w-[40%] bg-gradient-to-r from-transparent via-[var(--hb-blue)]/40 to-transparent" />
       <div className="absolute top-[62%] left-[6%] h-px w-[26%] bg-gradient-to-r from-transparent via-[var(--hb-purple)]/30 to-transparent" />
 
-      {/* Right — blurred stage fill (matches photo tones, kills hard box) */}
-      <div className="absolute inset-y-0 right-0 w-[72%] overflow-hidden md:w-[68%] lg:w-[64%]">
+      {/* Soft blurred fill — no hard box */}
+      <div className="absolute inset-y-0 right-0 w-[78%] overflow-hidden md:w-[72%] lg:w-[68%]">
         <Image
           src={imageSrc}
           alt=""
           fill
           priority
-          sizes="68vw"
-          className="scale-[1.2] object-cover object-[70%_34%] opacity-70 blur-[42px] saturate-125"
+          sizes="70vw"
+          className="scale-[1.28] object-cover object-[72%_36%] opacity-55 blur-[48px] saturate-125"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_40%,rgb(10_132_255_/_0.2),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_62%_42%,rgb(10_132_255_/_0.18),transparent_62%)]" />
       </div>
 
-      {/* Soft beams (not at extreme right edge) */}
-      <div className="absolute top-[-4%] right-[14%] h-[50%] w-[32%] rotate-[-16deg] bg-[linear-gradient(180deg,rgb(10_132_255_/_0.16),transparent_72%)] opacity-40 blur-2xl" />
-      <div className="absolute inset-y-[12%] right-[8%] w-[46%] [background-image:radial-gradient(circle_at_center,rgb(124_196_255_/_0.55)_0.65px,transparent_0.8px)] [mask-image:radial-gradient(ellipse_at_60%_42%,black_5%,transparent_70%)] [background-size:46px_46px] opacity-[0.18]" />
+      <div className="absolute top-[-4%] right-[14%] h-[50%] w-[32%] rotate-[-16deg] bg-[linear-gradient(180deg,rgb(10_132_255_/_0.14),transparent_72%)] opacity-35 blur-2xl" />
 
       {/*
-        Sharp speaker with heavy feather on ALL edges —
-        radial + side fades so the photo rectangle disappears.
+        Sharp subject with aggressive multi-edge fade (L/R/T/B)
+        so the rectangular frame is invisible.
       */}
-      <div className="absolute top-[72px] right-0 bottom-[80px] w-full sm:w-[90%] md:w-[78%] lg:w-[68%] xl:w-[64%]">
+      <div className="absolute inset-y-[4%] right-[-2%] w-[92%] sm:w-[84%] md:w-[74%] lg:w-[66%] xl:w-[62%]">
         <Image
           src={imageSrc}
           alt=""
           fill
           priority
-          sizes="(max-width: 768px) 100vw, 65vw"
-          className="[mask-image:radial-gradient(ellipse_72%_78%_at_58%_46%,black_42%,rgba(0,0,0,0.55)_62%,transparent_78%),linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.35)_12%,black_28%,black_88%,rgba(0,0,0,0.4)_96%,transparent_100%)] [mask-composite:intersect] object-contain object-[center_40%] brightness-[1.04] contrast-[1.04] [-webkit-mask-composite:source-in] [-webkit-mask-image:radial-gradient(ellipse_72%_78%_at_58%_46%,black_42%,rgba(0,0,0,0.55)_62%,transparent_78%),linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.35)_12%,black_28%,black_88%,rgba(0,0,0,0.4)_96%,transparent_100%)]"
+          sizes="(max-width: 768px) 100vw, 62vw"
+          className="hb-hero-photo object-contain object-[center_42%] brightness-[1.03] contrast-[1.03]"
         />
       </div>
 
-      {/* Soft left→right dissolve into copy (keep image brighter, copy readable) */}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hb-bg)_0%,rgba(5,8,20,0.92)_20%,rgba(5,8,20,0.48)_36%,rgba(5,8,20,0.12)_50%,transparent_66%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,20,0.35)_0%,transparent_16%,transparent_80%,rgba(5,8,20,0.42)_100%)]" />
-
-      {/* Hide far-right hairline */}
-      <div className="absolute inset-y-0 right-0 w-5 bg-gradient-to-l from-[var(--hb-bg)] to-transparent" />
-      <div className="absolute inset-y-0 right-0 w-px bg-[var(--hb-bg)]" />
+      {/* Readability dissolve into copy + edge bleed into bg */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hb-bg)_0%,rgba(5,8,20,0.94)_18%,rgba(5,8,20,0.55)_34%,rgba(5,8,20,0.18)_48%,transparent_62%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,20,0.55)_0%,transparent_14%,transparent_78%,rgba(5,8,20,0.72)_100%)]" />
+      <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[var(--hb-bg)] via-[var(--hb-bg)]/70 to-transparent sm:w-24" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--hb-bg)] to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[var(--hb-bg)]/80 to-transparent" />
     </div>
   );
 }

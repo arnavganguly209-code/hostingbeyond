@@ -187,6 +187,62 @@
     animation: hb-hero-gradient-shift 10s ease-in-out infinite;
   }
 
+  /* Hero photo: dissolve all edges so the image frame is invisible */
+  .hb-hero-photo {
+    -webkit-mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.25) 10%,
+        black 26%,
+        black 78%,
+        rgba(0, 0, 0, 0.35) 90%,
+        transparent 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.4) 8%,
+        black 18%,
+        black 78%,
+        rgba(0, 0, 0, 0.35) 90%,
+        transparent 100%
+      ),
+      radial-gradient(
+        ellipse 78% 82% at 58% 46%,
+        black 38%,
+        rgba(0, 0, 0, 0.55) 58%,
+        transparent 76%
+      );
+    mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.25) 10%,
+        black 26%,
+        black 78%,
+        rgba(0, 0, 0, 0.35) 90%,
+        transparent 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.4) 8%,
+        black 18%,
+        black 78%,
+        rgba(0, 0, 0, 0.35) 90%,
+        transparent 100%
+      ),
+      radial-gradient(
+        ellipse 78% 82% at 58% 46%,
+        black 38%,
+        rgba(0, 0, 0, 0.55) 58%,
+        transparent 76%
+      );
+    -webkit-mask-composite: source-in, source-in;
+    mask-composite: intersect;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hb-hero-gradient {
       animation: none;
