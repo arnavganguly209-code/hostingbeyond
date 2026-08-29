@@ -25,11 +25,14 @@ jobs:
 
       - name: Deploy HostingBeyond to VPS
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          ORBIT_KEY: "713304977"
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
+          envs: ORBIT_KEY
           script_stop: true
           command_timeout: 15m
           script: |
@@ -54,34 +57,14 @@ jobs:
 
             echo "==> Ensuring Orbit env (HostingBeyond .env only)"
             touch .env
-            if grep -q '^ORBIT_ENROLLMENT_SECRET=' .env; then
-              sed -i 's|^ORBIT_ENROLLMENT_SECRET=.*|ORBIT_ENROLLMENT_SECRET=713304977|' .env
-            else
-              echo 'ORBIT_ENROLLMENT_SECRET=713304977' >> .env
-            fi
-            if ! grep -q '^ORBIT_SESSION_SECRET=' .env; then
-              echo 'ORBIT_SESSION_SECRET=hb_orbit_prod_session_secret_v1' >> .env
-            fi
-            if grep -q '^ORBIT_RP_ID=' .env; then
-              sed -i 's|^ORBIT_RP_ID=.*|ORBIT_RP_ID=beyond.theglobalorbit.com|' .env
-            else
-              echo 'ORBIT_RP_ID=beyond.theglobalorbit.com' >> .env
-            fi
-            if grep -q '^ORBIT_ORIGIN=' .env; then
-              sed -i 's|^ORBIT_ORIGIN=.*|ORBIT_ORIGIN=https://beyond.theglobalorbit.com|' .env
-            else
-              echo 'ORBIT_ORIGIN=https://beyond.theglobalorbit.com' >> .env
-            fi
-            if grep -q '^NEXT_PUBLIC_SITE_URL=' .env; then
-              sed -i 's|^NEXT_PUBLIC_SITE_URL=.*|NEXT_PUBLIC_SITE_URL=https://beyond.theglobalorbit.com|' .env
-            else
-              echo 'NEXT_PUBLIC_SITE_URL=https://beyond.theglobalorbit.com' >> .env
-            fi
-            if grep -q '^NEXT_PUBLIC_APP_URL=' .env; then
-              sed -i 's|^NEXT_PUBLIC_APP_URL=.*|NEXT_PUBLIC_APP_URL=https://beyond.theglobalorbit.com|' .env
-            else
-              echo 'NEXT_PUBLIC_APP_URL=https://beyond.theglobalorbit.com' >> .env
-            fi
+            awk '!/^ORBIT_ENROLLMENT_SECRET=/' .env > .env.hb.tmp
+            mv .env.hb.tmp .env
+            echo "ORBIT_ENROLLMENT_SECRET=${ORBIT_KEY}" >> .env
+            grep -q '^ORBIT_SESSION_SECRET=' .env || echo 'ORBIT_SESSION_SECRET=hb_orbit_prod_session_secret_v1' >> .env
+            awk '!/^ORBIT_RP_ID=/' .env > .env.hb.tmp && mv .env.hb.tmp .env
+            echo 'ORBIT_RP_ID=beyond.theglobalorbit.com' >> .env
+            awk '!/^ORBIT_ORIGIN=/' .env > .env.hb.tmp && mv .env.hb.tmp .env
+            echo 'ORBIT_ORIGIN=https://beyond.theglobalorbit.com' >> .env
             echo "ORBIT_ENV_READY"
 
             echo "==> Installing dependencies"
