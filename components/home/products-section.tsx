@@ -185,8 +185,8 @@ function ProductCard({
         ) : null}
       </div>
 
-      <div className="mt-5 grid flex-1 grid-cols-1 gap-4 sm:grid-cols-[1.05fr_0.95fr] sm:items-center">
-        <ul className="space-y-2.5">
+      <div className="relative mt-5 flex flex-1 flex-col gap-4 sm:flex-row sm:items-stretch">
+        <ul className="min-w-0 flex-1 space-y-2.5">
           {offer.features.map((feature) => (
             <li key={feature} className="flex items-start gap-2.5">
               <span
@@ -203,19 +203,19 @@ function ProductCard({
             </li>
           ))}
         </ul>
-        <div className="hidden sm:block">
+        <div className="pointer-events-none relative mx-auto w-full max-w-[200px] shrink-0 sm:mx-0 sm:w-[46%] sm:max-w-none sm:self-center">
           {offer.illustrationUrl ? (
-            <div className="relative mx-auto h-[160px] w-full max-w-[180px]">
+            <div className="relative mx-auto h-[170px] w-full max-w-[180px] sm:h-[190px]">
               <Image
                 src={offer.illustrationUrl}
                 alt=""
                 fill
                 className="object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-                sizes="180px"
+                sizes="200px"
               />
             </div>
           ) : (
-            <div className="transition-transform duration-300 group-hover:scale-[1.03]">
+            <div className="transition-transform duration-300 group-hover:scale-[1.04]">
               {offer.id === "domain" ? <DomainVisual /> : null}
               {offer.id === "email" ? <EmailVisual /> : null}
               {offer.id === "hosting" ? <HostingVisual /> : null}
