@@ -1,0 +1,173 @@
+"use client";
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  useTransition,
+  type ReactNode,
+} from "react";
+
+import { getCountry, languages, type LanguageCode } from "@/config/geo";
+import {
+  formatMoney,
+  getProductPrice,
+  type CurrencyCode,
+  type ProductPriceId,
+} from "@/config/pricing";
+import { getDictionary, type Dictionary } from "@/lib/i18n/dictionaries";
+import {
+  LOCALE_COOKIE,
+  normalizePreferences,
+  preferencesCookieOptions,
+  serializePreferences,
+  type UserPreferences,
+} from "@/lib/i18n/preferences";
+
+type LocaleContextValue = {
+  preferences: UserPreferences;
+  dictionary: Dictionary;
+  isPending: boolean;
+  setCountry: (
+    countryCode: string,
+    options?: { suggestLanguage?: boolean },
+  ) => void;
+  setLanguage: (language: LanguageCode) => void;
+  applySelection: (input: { country: string; language: LanguageCode }) => void;
+  formatPrice: (productId: ProductPriceId) => string;
+  t: {
+    nav: Dictionary["nav"];
+    locale: Dictionary["locale"];
+    hero: Dictionary["hero"];
+    products: Dictionary["products"];
+  };
+};
+
+const LocaleContext = createContext<LocaleContextValue | null>(null);
+
+function writePrefsCookie(prefs: UserPreferences) {
+  if (typeof document === "undefined") return;
+  const opts = preferencesCookieOptions();
+  const secure = opts.secure ? "; Secure" : "";
+  document.cookie = `${LOCALE_COOKIE}=${encodeURIComponent(serializePreferences(prefs))}; Path=${opts.path}; Max-Age=${opts.maxAge}; SameSite=${opts.sameSite}${secure}`;
+}
+
+export function LocaleProvider({
+  children,
+  initialPreferences,
+}: {
+  children: ReactNode;
+  initialPreferences: UserPreferences;
+}) {
+  const [preferences, setPreferences] = useState(() =>
+    normalizePreferences(initialPreferences),
+  );
+  const [isPending, startTransition] = useTransition();
+
+  const dictionary = useMemo(
+    () => getDictionary(preferences.language),
+    [preferences.language],
+  );
+
+  const commit = useCallback((next: UserPreferences) => {
+    const normalized = normalizePreferences(next);
+    startTransition(() => {
+      setPreferences(normalized);
+    });
+    writePrefsCookie(normalized);
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = normalized.language;
+    }
+  }, []);
+
+  const setCountry = useCallback(
+    (countryCode: string, options?: { suggestLanguage?: boolean }) => {
+      const country = getCountry(countryCode);
+      commit({
+        ...preferences,
+        country: country.code,
+        currency: country.currency,
+        language:
+          options?.suggestLanguage !== false && !preferences.languageLocked
+            ? country.defaultLanguage
+            : preferences.language,
+      });
+    },
+    [commit, preferences],
+  );
+
+  const setLanguage = useCallback(
+    (language: LanguageCode) => {
+      commit({
+        ...preferences,
+        language,
+        languageLocked: true,
+      });
+    },
+    [commit, preferences],
+  );
+
+  const applySelection = useCallback(
+    (input: { country: string; language: LanguageCode }) => {
+      const country = getCountry(input.country);
+      commit({
+        country: country.code,
+        currency: country.currency,
+        language: input.language,
+        languageLocked: true,
+      });
+    },
+    [commit],
+  );
+
+  const formatPrice = useCallback(
+    (productId: ProductPriceId) => {
+      const amount = getProductPrice(productId, preferences.currency);
+      const locale =
+        languages[preferences.language]?.locale ?? languages.en.locale;
+      return formatMoney(amount, preferences.currency as CurrencyCode, locale);
+    },
+    [preferences.currency, preferences.language],
+  );
+
+  const value = useMemo<LocaleContextValue>(
+    () => ({
+      preferences,
+      dictionary,
+      isPending,
+      setCountry,
+      setLanguage,
+      applySelection,
+      formatPrice,
+      t: {
+        nav: dictionary.nav,
+        locale: dictionary.locale,
+        hero: dictionary.hero,
+        products: dictionary.products,
+      },
+    }),
+    [
+      preferences,
+      dictionary,
+      isPending,
+      setCountry,
+      setLanguage,
+      applySelection,
+      formatPrice,
+    ],
+  );
+
+  return (
+    <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
+  );
+}
+
+export function useLocale() {
+  const ctx = useContext(LocaleContext);
+  if (!ctx) {
+    throw new Error("useLocale must be used within LocaleProvider");
+  }
+  return ctx;
+}

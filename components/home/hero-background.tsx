@@ -3,10 +3,13 @@
 import Image from "next/image";
 
 /**
- * Hero stage — left side keeps the earlier clean network look.
- * Right speaker dissolves into the stage (no visible photo frame).
+ * Soft hosting ambience + speaker stage image.
  */
-export function HeroBackground() {
+export function HeroBackground({
+  imageSrc = "/images/hero-speaker.png",
+}: {
+  imageSrc?: string;
+}) {
   return (
     <div
       aria-hidden
@@ -26,7 +29,7 @@ export function HeroBackground() {
       {/* Right — blurred stage fill (matches photo tones, kills hard box) */}
       <div className="absolute inset-y-0 right-0 w-[72%] overflow-hidden md:w-[68%] lg:w-[64%]">
         <Image
-          src="/images/hero-speaker.png"
+          src={imageSrc}
           alt=""
           fill
           priority
@@ -46,7 +49,7 @@ export function HeroBackground() {
       */}
       <div className="absolute top-[72px] right-0 bottom-[80px] w-full sm:w-[90%] md:w-[78%] lg:w-[68%] xl:w-[64%]">
         <Image
-          src="/images/hero-speaker.png"
+          src={imageSrc}
           alt=""
           fill
           priority
@@ -55,9 +58,9 @@ export function HeroBackground() {
         />
       </div>
 
-      {/* Soft left→right dissolve into copy (no hard vertical frame) */}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hb-bg)_0%,rgba(5,8,20,0.94)_22%,rgba(5,8,20,0.55)_38%,rgba(5,8,20,0.18)_52%,transparent_68%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,20,0.42)_0%,transparent_14%,transparent_78%,rgba(5,8,20,0.48)_100%)]" />
+      {/* Soft left→right dissolve into copy (keep image brighter, copy readable) */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hb-bg)_0%,rgba(5,8,20,0.92)_20%,rgba(5,8,20,0.48)_36%,rgba(5,8,20,0.12)_50%,transparent_66%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,20,0.35)_0%,transparent_16%,transparent_80%,rgba(5,8,20,0.42)_100%)]" />
 
       {/* Hide far-right hairline */}
       <div className="absolute inset-y-0 right-0 w-5 bg-gradient-to-l from-[var(--hb-bg)] to-transparent" />

@@ -1,0 +1,112 @@
+import { createHash, randomBytes, timingSafeEqual } from "crypto";
+
+import { prisma } from "@/lib/prisma";
+
+import { SESSION_TTL_MS, signOrbitJwt, verifyOrbitJwt } from "./jwt";
+
+export { ORBIT_SESSION_COOKIE, SESSION_TTL_MS, verifyOrbitJwt } from "./jwt";
+
+export function hashToken(token: string) {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+export function hashSecret(value: string) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+export function safeEqualString(a: string, b: string) {
+  const left = Buffer.from(a);
+  const right = Buffer.from(b);
+  if (left.length !== right.length) return false;
+  return timingSafeEqual(left, right);
+}
+
+export function verifyEnrollmentSecret(candidate: string) {
+  const expected = process.env.ORBIT_ENROLLMENT_SECRET;
+  if (!expected || !candidate) return false;
+  return safeEqualString(hashSecret(candidate), hashSecret(expected));
+}
+
+export async function createAdminSession(
+  adminUserId: string,
+  meta?: {
+    userAgent?: string | null;
+    ipAddress?: string | null;
+  },
+) {
+  const raw = randomBytes(32).toString("base64url");
+  const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
+
+  await prisma.adminSession.create({
+    data: {
+      adminUserId,
+      tokenHash: hashToken(raw),
+      expiresAt,
+      userAgent: meta?.userAgent ?? undefined,
+      ipAddress: meta?.ipAddress ?? undefined,
+    },
+  });
+
+  const jwt = await signOrbitJwt({ sid: raw, adminUserId });
+
+  return { token: jwt, expiresAt };
+}
+
+export async function destroyAdminSession(token: string | undefined) {
+  const verified = await verifyOrbitJwt(token);
+  if (!verified) return;
+  await prisma.adminSession.deleteMany({
+    where: { tokenHash: hashToken(verified.sid) },
+  });
+}
+
+export async function getSessionAdmin(token: string | undefined) {
+  const verified = await verifyOrbitJwt(token);
+  if (!verified) return null;
+
+  const session = await prisma.adminSession.findUnique({
+    where: { tokenHash: hashToken(verified.sid) },
+    include: { adminUser: true },
+  });
+
+  if (!session) return null;
+  if (session.expiresAt.getTime() < Date.now()) {
+    await prisma.adminSession
+      .delete({ where: { id: session.id } })
+      .catch(() => undefined);
+    return null;
+  }
+
+  return session.adminUser;
+}
+
+export async function logActivity(input: {
+  adminUserId?: string | null;
+  action:
+    | "LOGIN"
+    | "LOGOUT"
+    | "LOGIN_FAILED"
+    | "ENROLL"
+    | "CONTENT_UPDATE"
+    | "MEDIA_UPLOAD"
+    | "MEDIA_REPLACE"
+    | "MEDIA_DELETE"
+    | "SETTINGS_UPDATE"
+    | "NAV_UPDATE"
+    | "SEO_UPDATE";
+  resource?: string;
+  details?: string;
+}) {
+  try {
+    await prisma.activityLog.create({
+      data: {
+        adminUserId: input.adminUserId ?? undefined,
+        action: input.action,
+        resource: input.resource,
+        details: input.details,
+      },
+    });
+  } catch {
+    /* ignore logging failures */
+  }
+}

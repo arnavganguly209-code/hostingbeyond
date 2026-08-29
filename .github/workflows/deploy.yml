@@ -41,20 +41,29 @@ jobs:
 
             cd /var/www/hostingbeyond
 
-            echo "==> Syncing to origin/main (hard reset for clean deploy)"
+            echo "==> Syncing to origin/main (preserve .env)"
             git fetch origin main
             git checkout main
             git reset --hard origin/main
-            git clean -fd
+            git clean -fd -e .env -e .env.local -e .env.production -e public/uploads
+
+            echo "==> Safety checks"
+            pwd
+            test "$(pwd)" = "/var/www/hostingbeyond"
+            test -f .env && echo "ENV_PRESENT" || echo "ENV_MISSING_WARNING"
 
             echo "==> Installing dependencies"
             npm install
 
+            echo "==> Prisma generate + migrate deploy (HostingBeyond DB only)"
+            npx prisma generate
+            npx prisma migrate deploy
+
             echo "==> Building production bundle"
             npm run build
 
-            echo "==> Restarting PM2 process: hostingbeyond"
-            pm2 restart hostingbeyond --update-env || pm2 start npm --name hostingbeyond -- start
+            echo "==> Restarting ONLY PM2 process: hostingbeyond on PORT 3005"
+            PORT=3005 pm2 restart hostingbeyond --update-env || PORT=3005 pm2 start npm --name hostingbeyond -- start
             pm2 save || true
 
             echo "==> PM2 status for hostingbeyond"

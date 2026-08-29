@@ -31,6 +31,12 @@ yarn-error.log*
 # Env
 .env
 .env*.local
+.env.production
+.env.development
+
+# Uploads (runtime media — keep folder, ignore files)
+/public/uploads/*
+!/public/uploads/.gitkeep
 
 # Vercel / Netlify
 .vercel
@@ -40,5 +46,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Prisma
-/prisma/migrations/**/migration_lock.toml
+# Prisma — commit migrations; do not ignore lock file

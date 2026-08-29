@@ -1,11 +1,27 @@
 import { SiteHeader } from "@/components/layout";
-import { HeroSection } from "@/components/home";
+import { HeroSection, ProductsSection } from "@/components/home";
+import { getHomeSections, getSiteSettings } from "@/lib/orbit/content";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [sections, settings] = await Promise.all([
+    getHomeSections(),
+    getSiteSettings(),
+  ]);
+
   return (
-    <div className="h-[100svh] overflow-hidden bg-[#050814]">
-      <SiteHeader />
-      <HeroSection />
+    <div className="min-h-dvh bg-[var(--hb-bg)]">
+      <SiteHeader
+        navigation={sections.navigation}
+        loginLabel={settings.loginLabel}
+        loginHref={settings.loginHref}
+        getStartedLabel={settings.getStartedLabel}
+        getStartedHref={settings.getStartedHref}
+        logoPath={settings.logoPath}
+      />
+      {sections.hero.visible ? <HeroSection content={sections.hero} /> : null}
+      {sections.products.visible ? (
+        <ProductsSection content={sections.products} />
+      ) : null}
     </div>
   );
 }

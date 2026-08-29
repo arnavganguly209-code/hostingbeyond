@@ -7,7 +7,10 @@ export const siteConfig = {
   tagline: "Beyond Hosting, Beyond Possibilities",
   description:
     "Premium domains, blazing-fast hosting, and secure business email — everything you need to build, grow, and succeed online.",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "https://beyond.theglobalorbit.com",
   locale: "en_US",
   twitterHandle: "@hostingbeyond",
 } as const;

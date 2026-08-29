@@ -19,4 +19,7 @@
   --hb-logo-width: 264px;
   --hb-header-radius: 24px;
   --hb-header-blur: 24px;
+  --font-display:
+    "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
 }

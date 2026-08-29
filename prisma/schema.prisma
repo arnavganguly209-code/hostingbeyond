@@ -1,5 +1,5 @@
-// HostingBeyond — Prisma schema (PostgreSQL ready)
-// Add models when product data requirements are defined.
+// HostingBeyond — Prisma schema (PostgreSQL)
+// Orbit Super Admin CMS + WebAuthn credentials
 
 generator client {
   provider = "prisma-client-js"
@@ -8,4 +8,116 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum ActivityAction {
+  LOGIN
+  LOGOUT
+  LOGIN_FAILED
+  ENROLL
+  CONTENT_UPDATE
+  MEDIA_UPLOAD
+  MEDIA_REPLACE
+  MEDIA_DELETE
+  SETTINGS_UPDATE
+  NAV_UPDATE
+  SEO_UPDATE
+}
+
+model AdminUser {
+  id           String              @id @default(cuid())
+  displayName  String              @default("Super Admin")
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  credentials  WebAuthnCredential[]
+  sessions     AdminSession[]
+  activityLogs ActivityLog[]
+}
+
+model WebAuthnCredential {
+  id           String    @id @default(cuid())
+  adminUserId  String
+  adminUser    AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  credentialId String    @unique
+  publicKey    Bytes
+  counter      BigInt    @default(0)
+  transports   String[]  @default([])
+  deviceType   String?
+  backedUp     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  lastUsedAt   DateTime?
+
+  @@index([adminUserId])
+}
+
+model AdminSession {
+  id          String    @id @default(cuid())
+  adminUserId String
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  tokenHash   String    @unique
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  userAgent   String?
+  ipAddress   String?
+
+  @@index([adminUserId])
+  @@index([expiresAt])
+}
+
+model WebAuthnChallenge {
+  id        String   @id @default(cuid())
+  challenge String   @unique
+  type      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
+model SiteSettings {
+  id        String   @id @default("default")
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+model PageContent {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  isPublished Boolean  @default(true)
+  isVisible   Boolean  @default(true)
+  seo         Json?
+  sections    Json
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  alt          String   @default("")
+  url          String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([mimeType])
+}
+
+model ActivityLog {
+  id          String         @id @default(cuid())
+  adminUserId String?
+  adminUser   AdminUser?     @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+  action      ActivityAction
+  resource    String?
+  details     String?
+  createdAt   DateTime       @default(now())
+
+  @@index([createdAt])
+  @@index([action])
 }

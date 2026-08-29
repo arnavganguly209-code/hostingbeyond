@@ -6,16 +6,21 @@ import { cn } from "@/lib/utils";
 type LogoProps = {
   className?: string;
   href?: string;
+  src?: string;
 };
 
 /**
  * Official HostingBeyond wordmark — transparent PNG,
  * vertically centered in the header glass frame.
  */
-export function Logo({ className, href = "/" }: LogoProps) {
+export function Logo({
+  className,
+  href = "/",
+  src = "/logo/hostingbeyond-logo-transparent.png",
+}: LogoProps) {
   const content = (
     <Image
-      src="/logo/hostingbeyond-logo-transparent.png"
+      src={src}
       alt="HostingBeyond"
       width={264}
       height={92}

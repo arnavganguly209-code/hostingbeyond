@@ -6,28 +6,57 @@ import { Headphones, Lock, Search, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { routes } from "@/config/routes";
+import { useLocale } from "@/components/locale/locale-provider";
+import type { CmsHeroContent } from "@/lib/orbit/defaults";
 
-const trustItems = [
-  {
-    title: "99.99% Uptime",
-    subtitle: "Network Guarantee",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Secure & Trusted",
-    subtitle: "Your data is safe",
-    icon: Lock,
-  },
-  {
-    title: "24/7 Expert Support",
-    subtitle: "We're here for you",
-    icon: Headphones,
-  },
-] as const;
+const trustIcons = {
+  shield: ShieldCheck,
+  lock: Lock,
+  support: Headphones,
+} as const;
 
-export function HeroContent() {
+export function HeroContent({ content }: { content?: CmsHeroContent }) {
   const reduceMotion = useReducedMotion();
+  const { t, preferences } = useLocale();
   const [domain, setDomain] = useState("");
+
+  const useCmsCopy = preferences.language === "en" && Boolean(content);
+  const headline = useCmsCopy
+    ? (content?.headline ?? t.hero.headline)
+    : t.hero.headline;
+  const accent = useCmsCopy
+    ? (content?.headlineAccent ?? t.hero.headlineAccent)
+    : t.hero.headlineAccent;
+  const description = useCmsCopy
+    ? (content?.description ?? t.hero.description)
+    : t.hero.description;
+  const placeholder = useCmsCopy
+    ? (content?.searchPlaceholder ?? t.hero.searchPlaceholder)
+    : t.hero.searchPlaceholder;
+  const bulkLabel = useCmsCopy
+    ? (content?.bulkSearchLabel ?? t.hero.bulkSearch)
+    : t.hero.bulkSearch;
+
+  const trustItems =
+    useCmsCopy && content?.trustItems
+      ? content.trustItems
+      : [
+          {
+            title: t.hero.trustUptime,
+            subtitle: t.hero.trustUptimeSub,
+            icon: "shield",
+          },
+          {
+            title: t.hero.trustSecure,
+            subtitle: t.hero.trustSecureSub,
+            icon: "lock",
+          },
+          {
+            title: t.hero.trustSupport,
+            subtitle: t.hero.trustSupportSub,
+            icon: "support",
+          },
+        ];
 
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,82 +69,87 @@ export function HeroContent() {
   return (
     <div className="relative z-20 w-full">
       <motion.h1
-        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.06, duration: 0.5 }}
-        className="text-[2.2rem] leading-[1.08] font-extrabold tracking-tight text-white sm:text-[2.7rem] lg:text-[3.05rem] xl:text-[3.3rem]"
+        transition={{ delay: 0.05, duration: 0.45 }}
+        className="max-w-[14ch] text-[2.35rem] leading-[1.05] font-semibold tracking-[-0.03em] text-white sm:max-w-none sm:text-[2.85rem] lg:text-[3.25rem] xl:text-[3.55rem]"
       >
-        Everything You Need.
+        <span className="font-display font-normal tracking-[-0.02em]">
+          {headline}
+        </span>
         <br />
-        <span className="bg-gradient-to-r from-[var(--hb-blue)] via-[#5B6CFF] to-[var(--hb-purple)] bg-clip-text text-transparent">
-          Beyond Expectations.
+        <span className="mt-1 inline-block bg-gradient-to-r from-[#5BA8FF] via-[#7B8CFF] to-[#9B6CFF] bg-clip-text font-semibold tracking-[-0.025em] text-transparent">
+          {accent}
         </span>
       </motion.h1>
 
       <motion.p
-        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.12, duration: 0.45 }}
-        className="mt-4 max-w-md text-[14px] leading-relaxed text-[var(--hb-muted)] sm:text-[15px]"
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] font-normal tracking-[-0.01em] text-[var(--hb-muted)] sm:text-[16px]"
       >
-        Premium domains, blazing-fast hosting, and secure business email —
-        everything you need to build, grow, and succeed online.
+        {description}
       </motion.p>
 
       <motion.form
         onSubmit={onSearch}
-        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.18, duration: 0.45 }}
-        className="mt-7 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-[var(--hb-border-blue)] bg-[var(--hb-glass-strong)] p-1.5 shadow-[0_12px_40px_rgb(0_0_0_/_0.35),0_0_28px_var(--hb-glow-blue),inset_0_1px_0_rgb(255_255_255_/_0.08)] backdrop-blur-xl"
+        transition={{ delay: 0.15, duration: 0.4 }}
+        className="mt-8 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-white/12 bg-[rgba(8,12,28,0.72)] p-1.5 shadow-[0_12px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-xl"
       >
         <label htmlFor="domain-search" className="sr-only">
-          Find your perfect domain
+          {placeholder}
         </label>
         <input
           id="domain-search"
           type="text"
           value={domain}
           onChange={(event) => setDomain(event.target.value)}
-          placeholder="Find your perfect domain"
-          className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-[var(--hb-muted)]/80"
+          placeholder={placeholder}
+          className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm tracking-[-0.01em] text-white outline-none placeholder:text-white/40"
         />
         <Link
           href={routes.domains}
-          className="hidden shrink-0 px-2 text-sm font-medium text-[var(--hb-muted)] transition-colors hover:text-white sm:inline"
+          className="hidden shrink-0 px-2 text-sm font-medium text-white/55 transition-colors duration-150 hover:text-white sm:inline"
         >
-          Bulk Search
+          {bulkLabel}
         </Link>
         <button
           type="submit"
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-5 text-sm font-semibold text-white shadow-[0_0_22px_var(--hb-glow-blue)] transition hover:brightness-110"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-5 text-sm font-semibold text-white transition duration-150 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hb-blue)]"
         >
           <Search className="size-4" aria-hidden />
-          Search
+          {t.hero.search}
         </button>
       </motion.form>
 
       <motion.ul
-        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.24, duration: 0.45 }}
-        className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5"
+        transition={{ delay: 0.2, duration: 0.4 }}
+        className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5"
       >
-        {trustItems.map((item) => (
-          <li key={item.title} className="flex items-start gap-2.5">
-            <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--hb-blue)]/35 bg-[var(--hb-blue)]/10 text-[#7CC4FF] shadow-[0_0_16px_rgb(10_132_255_/_0.25)]">
-              <item.icon className="size-3.5" strokeWidth={1.9} />
-            </span>
-            <span>
-              <span className="block text-[12px] font-semibold text-white sm:text-[13px]">
-                {item.title}
+        {trustItems.map((item) => {
+          const Icon =
+            trustIcons[item.icon as keyof typeof trustIcons] ?? ShieldCheck;
+          return (
+            <li key={item.title} className="flex items-start gap-2.5">
+              <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-[#8ec5ff]">
+                <Icon className="size-3.5" strokeWidth={1.9} />
               </span>
-              <span className="mt-0.5 block text-[11px] text-[var(--hb-muted)]">
-                {item.subtitle}
+              <span>
+                <span className="block text-[12px] font-semibold tracking-[-0.01em] text-white sm:text-[13px]">
+                  {item.title}
+                </span>
+                <span className="mt-0.5 block text-[11px] leading-snug text-white/50">
+                  {item.subtitle}
+                </span>
               </span>
-            </span>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </motion.ul>
     </div>
   );
