@@ -259,85 +259,123 @@ export function HostingVisual() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="relative mx-auto flex h-[190px] w-full max-w-[200px] items-center justify-center">
-      <div className="absolute bottom-1 left-1/2 h-12 w-44 -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgb(34_211_238_/_0.5),transparent_70%)] blur-xl" />
-      <div className="absolute inset-2 rounded-full bg-[radial-gradient(circle,rgb(34_211_238_/_0.22),transparent_68%)] blur-2xl" />
+    <div className="relative mx-auto flex h-[200px] w-full max-w-[210px] items-end justify-center pb-1">
+      {/* Soft ambient bloom */}
+      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_70%,rgb(0_170_255_/_0.28),transparent_62%)] blur-2xl" />
+
+      {/* Neon circular floor platform */}
+      <div className="absolute bottom-0 left-1/2 z-0 h-[52px] w-[168px] -translate-x-1/2">
+        <div className="absolute inset-x-[8%] bottom-2 h-[18px] rounded-[100%] bg-[radial-gradient(ellipse,rgb(0_170_255_/_0.75),rgb(0_120_255_/_0.15)_55%,transparent_72%)] blur-[2px]" />
+        <div className="absolute inset-x-[4%] bottom-3 h-[22px] rounded-[100%] border border-[#3db8ff]/70 shadow-[0_0_28px_rgb(0_170_255_/_0.55),inset_0_0_18px_rgb(0_170_255_/_0.35)]" />
+        <div className="absolute inset-x-[18%] bottom-4 h-[10px] rounded-[100%] bg-[radial-gradient(ellipse,rgb(120_210_255_/_0.85),transparent_70%)] blur-md" />
+      </div>
 
       <motion.div
-        className="relative z-10"
-        animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
+        className="relative z-10 mb-7"
+        animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
         transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
       >
-        {/* Neon cloud */}
+        {/* Neon cloud outline behind racks */}
         <svg
           aria-hidden
-          viewBox="0 0 160 70"
-          className="absolute -top-7 left-1/2 h-[58px] w-[132px] -translate-x-1/2 drop-shadow-[0_0_20px_rgb(34_211_238_/_0.65)]"
+          viewBox="0 0 200 90"
+          className="absolute -top-9 left-1/2 h-[68px] w-[168px] -translate-x-1/2 drop-shadow-[0_0_18px_rgb(0_170_255_/_0.85)]"
           fill="none"
         >
           <defs>
             <linearGradient
-              id="hb-cloud-stroke"
+              id="hb-host-cloud"
               x1="0%"
               y1="0%"
               x2="100%"
               y2="0%"
             >
-              <stop offset="0%" stopColor="#67e8f9" />
-              <stop offset="100%" stopColor="#22d3ee" />
+              <stop offset="0%" stopColor="#7dd3ff" />
+              <stop offset="50%" stopColor="#2f9bff" />
+              <stop offset="100%" stopColor="#00aaff" />
             </linearGradient>
+            <filter
+              id="hb-host-cloud-glow"
+              x="-20%"
+              y="-40%"
+              width="140%"
+              height="180%"
+            >
+              <feGaussianBlur stdDeviation="2.2" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
           <path
-            d="M38 48c-10 0-18-8-18-18 0-9 6-16 15-18 3-12 14-20 27-20 11 0 21 6 25 15 3-2 7-3 11-3 12 0 22 10 22 22 0 1 0 2-.2 3H38z"
-            stroke="url(#hb-cloud-stroke)"
-            strokeWidth="3.2"
-            fill="rgb(34 211 238 / 0.1)"
+            d="M46 62c-12 0-22-9-22-21 0-11 8-20 18-21C46 8 58 2 72 2c14 0 26 8 30 20 4-3 9-5 15-5 16 0 28 12 28 28 0 1.5-.1 3-.4 4.5H46z"
+            stroke="url(#hb-host-cloud)"
+            strokeWidth="3.5"
+            fill="rgb(0 140 255 / 0.08)"
             strokeLinejoin="round"
+            filter="url(#hb-host-cloud-glow)"
           />
         </svg>
 
-        <div className="relative z-10 mt-6 flex items-end justify-center gap-2.5">
+        {/* Three premium dark server racks */}
+        <div className="relative z-10 flex items-end justify-center gap-[7px] [perspective:520px]">
           {[
-            { h: 78, rows: 4, delay: 0 },
-            { h: 98, rows: 5, delay: 0.15 },
-            { h: 86, rows: 4, delay: 0.3 },
+            { h: 92, rows: 7, skew: -4, delay: 0 },
+            { h: 118, rows: 9, skew: 0, delay: 0.12 },
+            { h: 100, rows: 8, skew: 4, delay: 0.24 },
           ].map((rack, i) => (
-            <motion.div
+            <div
               key={i}
-              animate={
-                reduceMotion
-                  ? undefined
-                  : {
-                      boxShadow: [
-                        "0 0 18px rgb(34 211 238 / 0.25)",
-                        "0 0 28px rgb(34 211 238 / 0.45)",
-                        "0 0 18px rgb(34 211 238 / 0.25)",
-                      ],
-                    }
-              }
-              transition={{
-                duration: 2.4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: rack.delay,
+              className="relative overflow-hidden rounded-[8px] border border-[#2f9bff]/50 bg-[linear-gradient(180deg,#121a2e_0%,#070b14_45%,#03060c_100%)] shadow-[0_10px_28px_rgb(0_0_0_/_0.55),0_0_22px_rgb(0_140_255_/_0.28),inset_0_1px_0_rgb(255_255_255_/_0.12)]"
+              style={{
+                width: i === 1 ? 48 : 42,
+                height: rack.h,
+                transform: `rotateY(${rack.skew}deg)`,
               }}
-              className="relative w-[42px] overflow-hidden rounded-[10px] border border-[#22d3ee]/55 bg-[linear-gradient(180deg,#0f3a4d_0%,#061820_55%,#030b10_100%)]"
-              style={{ height: rack.h }}
             >
-              <div className="absolute inset-x-0 top-0 h-px bg-white/25" />
-              <div className="flex h-full flex-col justify-between gap-1 p-1.5">
+              {/* Top bezel */}
+              <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-white/15 to-transparent" />
+              <div className="absolute inset-x-[18%] top-[5px] h-[2px] rounded-full bg-[#5ec8ff]/70 shadow-[0_0_8px_#2f9bff]" />
+
+              {/* Drive / LED rows */}
+              <div className="flex h-full flex-col justify-end gap-[3px] px-[5px] pt-3 pb-[6px]">
                 {Array.from({ length: rack.rows }).map((_, row) => (
                   <div
                     key={row}
-                    className="flex items-center gap-1 rounded-[3px] bg-black/40 px-1 py-[3px]"
+                    className="flex items-center gap-[3px] rounded-[2px] bg-black/55 px-[3px] py-[2px] shadow-[inset_0_0_0_1px_rgb(47_155_255_/_0.12)]"
                   >
-                    <span className="size-[5px] shrink-0 rounded-full bg-[#22d3ee] shadow-[0_0_8px_#22d3ee]" />
-                    <span className="h-[3px] flex-1 rounded-full bg-[#22d3ee]/45" />
-                    <span className="size-[3px] shrink-0 rounded-full bg-[#67e8f9]/80" />
+                    <motion.span
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : {
+                              opacity: [0.45, 1, 0.55, 1],
+                              boxShadow: [
+                                "0 0 4px #2f9bff",
+                                "0 0 10px #5ec8ff",
+                                "0 0 4px #2f9bff",
+                                "0 0 10px #5ec8ff",
+                              ],
+                            }
+                      }
+                      transition={{
+                        duration: 1.8 + (row % 3) * 0.25,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: rack.delay + row * 0.08,
+                      }}
+                      className="size-[4px] shrink-0 rounded-full bg-[#5ec8ff]"
+                    />
+                    <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-[#1a8fff] via-[#5ec8ff] to-[#1a8fff]/40 opacity-90 shadow-[0_0_6px_rgb(47_155_255_/_0.55)]" />
                   </div>
                 ))}
               </div>
-            </motion.div>
+
+              {/* Side edge highlight */}
+              <div className="absolute inset-y-2 left-0 w-px bg-gradient-to-b from-transparent via-[#5ec8ff]/35 to-transparent" />
+              <div className="absolute inset-y-2 right-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+            </div>
           ))}
         </div>
       </motion.div>

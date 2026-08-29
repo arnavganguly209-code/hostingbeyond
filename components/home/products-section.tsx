@@ -3,7 +3,7 @@
 import { type FormEvent, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, Globe2, Mail, Server } from "lucide-react";
+import { Check, Cloud, Globe2, Mail, Server } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { priceIdForProduct } from "@/config/products";
@@ -14,10 +14,31 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { CmsProductOffer, CmsProductsContent } from "@/lib/orbit/defaults";
 import { DomainVisual, EmailVisual, HostingVisual } from "./product-visuals";
 
+function HostingCardIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      className={className}
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M7.5 16.5a4 4 0 0 1 .4-8 5.2 5.2 0 0 1 10.1 1.4 3.3 3.3 0 0 1 1.5 6.1H7.5z" />
+      <path d="M8.2 12.2h7.6M8.2 14.2h7.6M8.2 16.2h7.6" />
+      <circle cx="9.1" cy="12.2" r="0.55" fill="currentColor" stroke="none" />
+      <circle cx="9.1" cy="14.2" r="0.55" fill="currentColor" stroke="none" />
+      <circle cx="9.1" cy="16.2" r="0.55" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 const icons = {
   domain: Globe2,
   email: Mail,
-  hosting: Server,
+  hosting: Cloud,
 } as const;
 
 const accentStyles = {
@@ -45,16 +66,16 @@ const accentStyles = {
     search: "bg-[#a855f7]",
   },
   cyan: {
-    card: "border-[#22d3ee]/35 shadow-[0_0_0_1px_rgb(34_211_238_/_0.1),0_18px_48px_rgb(0_0_0_/_0.42)] hover:border-[#22d3ee]/65 hover:shadow-[0_0_0_1px_rgb(34_211_238_/_0.25),0_22px_56px_rgb(0_0_0_/_0.48),0_0_40px_rgb(34_211_238_/_0.1)]",
-    iconWrap: "border-[#22d3ee]/40 bg-[#22d3ee]/10 text-[#67e8f9]",
-    badge: "border-[#22d3ee]/45 bg-[#22d3ee]/8 text-[#67e8f9]",
-    title:
-      "bg-gradient-to-r from-white to-[#22d3ee] bg-clip-text text-transparent",
-    price: "text-[#22d3ee]",
-    chip: "border-[#22d3ee]/40 bg-[#071820] text-[#67e8f9]",
-    check: "text-[#22d3ee]",
-    cta: "border-[#22d3ee]/50 text-[#67e8f9] hover:bg-[#22d3ee]/8",
-    search: "bg-[#22d3ee] text-[#041018]",
+    card: "border-[#2f9bff]/45 shadow-[0_0_0_1px_rgb(47_155_255_/_0.14),0_18px_48px_rgb(0_0_0_/_0.42)] hover:border-[#2f9bff]/75 hover:shadow-[0_0_0_1px_rgb(47_155_255_/_0.3),0_22px_56px_rgb(0_0_0_/_0.48),0_0_40px_rgb(47_155_255_/_0.14)]",
+    iconWrap:
+      "border-[#2f9bff]/50 bg-[#2f9bff]/12 text-[#7cc4ff] shadow-[0_0_18px_rgb(47_155_255_/_0.25)]",
+    badge: "border-[#2f9bff]/50 bg-[#2f9bff]/10 text-[#9ad0ff]",
+    title: "text-white",
+    price: "text-[#2f9bff]",
+    chip: "border-[#2f9bff]/45 bg-[#071428] text-[#9ad0ff]",
+    check: "text-[#2f9bff]",
+    cta: "border-[#2f9bff]/55 text-[#7cc4ff] hover:bg-[#2f9bff]/10",
+    search: "bg-[#2f9bff]",
   },
 } as const;
 
@@ -73,12 +94,14 @@ function ProductCard({
   const [domain, setDomain] = useState("");
   const styles = accentStyles[offer.accent] ?? accentStyles.blue;
   const Icon =
-    icons[offer.id as keyof typeof icons] ??
-    (offer.accent === "purple"
-      ? Mail
-      : offer.accent === "cyan"
-        ? Server
-        : Globe2);
+    offer.id === "hosting"
+      ? HostingCardIcon
+      : (icons[offer.id as keyof typeof icons] ??
+        (offer.accent === "purple"
+          ? Mail
+          : offer.accent === "cyan"
+            ? Server
+            : Globe2));
 
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -87,6 +110,15 @@ function ProductCard({
       ? `${routes.domains}?q=${encodeURIComponent(query)}`
       : offer.ctaHref || routes.domains;
   };
+
+  const titleParts = offer.title.trim().split(/\s+/);
+  const splitHostingTitle =
+    offer.id === "hosting" && titleParts.length >= 2
+      ? {
+          first: titleParts.slice(0, -1).join(" "),
+          last: titleParts[titleParts.length - 1],
+        }
+      : null;
 
   return (
     <motion.article
@@ -136,7 +168,16 @@ function ProductCard({
                 styles.title,
               )}
             >
-              {offer.title}
+              {splitHostingTitle ? (
+                <>
+                  <span className="text-white">{splitHostingTitle.first} </span>
+                  <span className="text-[#2f9bff] drop-shadow-[0_0_12px_rgb(47_155_255_/_0.55)]">
+                    {splitHostingTitle.last}
+                  </span>
+                </>
+              ) : (
+                offer.title
+              )}
             </h3>
             {offer.subtitle ? (
               <p className="mt-1 text-[11px] leading-snug text-[var(--hb-muted)]">
