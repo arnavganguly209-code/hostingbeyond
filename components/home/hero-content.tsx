@@ -72,13 +72,11 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05, duration: 0.45 }}
-        className="max-w-[14ch] text-[2.35rem] leading-[1.05] font-semibold tracking-[-0.03em] text-white sm:max-w-none sm:text-[2.85rem] lg:text-[3.25rem] xl:text-[3.55rem]"
+        className="max-w-[15ch] text-[2.45rem] leading-[1.02] tracking-[-0.035em] text-white sm:max-w-none sm:text-[3rem] lg:text-[3.45rem] xl:text-[3.75rem]"
       >
-        <span className="font-display font-normal tracking-[-0.02em]">
-          {headline}
-        </span>
+        <span className="font-display font-bold text-white">{headline}</span>
         <br />
-        <span className="mt-1 inline-block bg-gradient-to-r from-[#5BA8FF] via-[#7B8CFF] to-[#9B6CFF] bg-clip-text font-semibold tracking-[-0.025em] text-transparent">
+        <span className="mt-1 inline-block bg-gradient-to-r from-[#6BB4FF] via-[#8B7CFF] to-[#B06CFF] bg-clip-text font-sans text-[0.96em] font-extrabold tracking-[-0.03em] text-transparent">
           {accent}
         </span>
       </motion.h1>
@@ -87,7 +85,7 @@ export function HeroContent({ content }: { content?: CmsHeroContent }) {
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
-        className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] font-normal tracking-[-0.01em] text-[var(--hb-muted)] sm:text-[16px]"
+        className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] font-medium tracking-[-0.01em] text-[var(--hb-muted)] sm:text-[16px]"
       >
         {description}
       </motion.p>
