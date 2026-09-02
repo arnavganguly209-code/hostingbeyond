@@ -190,24 +190,44 @@
     animation: hb-hero-gradient-shift 10s ease-in-out infinite;
   }
 
-  /* Soft vignette — subject dissolves into hero bg (no rectangular frame) */
+  /* Soft vignette — left edge dissolves into dark hero (no hard frame) */
   .hb-hero-subject {
-    -webkit-mask-image: radial-gradient(
-      ellipse 78% 88% at 62% 40%,
-      #000 22%,
-      rgba(0, 0, 0, 0.95) 42%,
-      rgba(0, 0, 0, 0.55) 62%,
-      rgba(0, 0, 0, 0.15) 78%,
-      transparent 92%
-    );
-    mask-image: radial-gradient(
-      ellipse 78% 88% at 62% 40%,
-      #000 22%,
-      rgba(0, 0, 0, 0.95) 42%,
-      rgba(0, 0, 0, 0.55) 62%,
-      rgba(0, 0, 0, 0.15) 78%,
-      transparent 92%
-    );
+    -webkit-mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 8%,
+        rgba(0, 0, 0, 0.75) 22%,
+        #000 38%,
+        #000 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        #000 6%,
+        #000 88%,
+        rgba(0, 0, 0, 0.35) 96%,
+        transparent 100%
+      );
+    mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 8%,
+        rgba(0, 0, 0, 0.75) 22%,
+        #000 38%,
+        #000 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        #000 6%,
+        #000 88%,
+        rgba(0, 0, 0, 0.35) 96%,
+        transparent 100%
+      );
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -285,7 +285,14 @@ export function mergeHomeSections(
   const storedHero: Partial<CmsHeroContent> = stored.hero ?? {};
   const legacyHeadline =
     storedHero.headline === "Everything You Need." ||
-    storedHero.headline === "Everything You Need";
+    storedHero.headline === "Everything You Need" ||
+    storedHero.headline === "Built for Speed." ||
+    storedHero.headline?.includes("Built for Speed") ||
+    storedHero.headline?.includes("Secured for You");
+  const legacyAccent =
+    storedHero.headlineAccent === "Beyond Expectations." ||
+    storedHero.headlineAccent === "Beyond Limits." ||
+    storedHero.headlineAccent?.includes("Beyond Limits");
   const hero = {
     ...defaults.hero,
     ...storedHero,
@@ -297,12 +304,15 @@ export function mergeHomeSections(
       ? defaults.hero.headline
       : (storedHero.headline ?? defaults.hero.headline),
     headlineAccent:
-      legacyHeadline || storedHero.headlineAccent === "Beyond Expectations."
+      legacyHeadline || legacyAccent
         ? defaults.hero.headlineAccent
         : (storedHero.headlineAccent ?? defaults.hero.headlineAccent),
     description:
       legacyHeadline ||
-      storedHero.description?.includes("Premium domains, blazing-fast")
+      storedHero.description?.includes("Premium domains, blazing-fast") ||
+      storedHero.description?.includes(
+        "Premium hosting infrastructure for ambitious",
+      )
         ? defaults.hero.description
         : (storedHero.description ?? defaults.hero.description),
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
