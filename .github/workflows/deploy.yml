@@ -100,7 +100,7 @@ jobs:
             exit 1
           fi
 
-          if ! grep -qi "HostingBeyond\|HOSTINGBEYOND\|Everything You Need\|translate-y-\\[4px\\]" /tmp/hostingbeyond-verify.html; then
+          if ! grep -qi "HostingBeyond\|HOSTINGBEYOND\|Built for Speed\|Find your perfect domain\|hero-speaker" /tmp/hostingbeyond-verify.html; then
             echo "Deployment verification failed: expected homepage content was not found"
             exit 1
           fi
