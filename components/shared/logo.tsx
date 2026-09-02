@@ -37,7 +37,7 @@ export function Logo({
   return (
     <Link
       href={href}
-      className="relative inline-flex shrink-0 translate-y-[4px] items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
+      className="relative inline-flex shrink-0 items-center justify-center leading-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--hb-purple)]/60"
       aria-label="HostingBeyond home"
     >
       {content}

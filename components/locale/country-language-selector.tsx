@@ -10,7 +10,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import { Check, ChevronDown, Search, X } from "lucide-react";
+import { Check, ChevronDown, Globe2, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import {
@@ -320,6 +320,14 @@ export function CountryLanguageSelector({
       )
     : null;
 
+  const languageMeta = languages[preferences.language];
+  const languageButtonLabel =
+    preferences.language === "en"
+      ? "English (US)"
+      : (languageMeta?.nativeLabel ??
+        languageMeta?.label ??
+        preferences.language.toUpperCase());
+
   return (
     <>
       <button
@@ -331,15 +339,21 @@ export function CountryLanguageSelector({
           "inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-white transition-colors duration-150 hover:border-white/20 hover:bg-white/[0.07] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--hb-blue)]",
           compact
             ? "h-9 px-2.5 text-[13px] font-semibold"
-            : "h-10 px-3 text-[14px] font-semibold tracking-tight",
+            : "h-11 px-3.5 text-[13px] font-bold tracking-tight",
           className,
         )}
       >
-        <span aria-hidden className="text-base leading-none">
-          {countryFlagEmoji(country.code)}
+        {compact ? (
+          <span aria-hidden className="text-base leading-none">
+            {countryFlagEmoji(country.code)}
+          </span>
+        ) : (
+          <Globe2 className="size-3.5 shrink-0 opacity-80" aria-hidden />
+        )}
+        <span className={cn("truncate", compact && "uppercase")}>
+          {compact ? preferences.language : languageButtonLabel}
         </span>
-        <span className="uppercase">{preferences.language}</span>
-        <ChevronDown className="size-3.5 opacity-60" aria-hidden />
+        <ChevronDown className="size-3.5 shrink-0 opacity-60" aria-hidden />
       </button>
       {panel}
     </>

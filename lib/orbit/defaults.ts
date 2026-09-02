@@ -87,8 +87,8 @@ export function defaultSiteSettings(): CmsSiteSettings {
     twitterHandle: siteConfig.twitterHandle,
     logoPath: "/logo/hostingbeyond-logo-transparent.png",
     ogImagePath: "/images/hero-speaker.png",
-    loginLabel: "Login",
-    getStartedLabel: "GET STARTED",
+    loginLabel: "Log In",
+    getStartedLabel: "Get Started",
     getStartedHref: "/get-started",
     loginHref: "/login",
     contactEmail: "hello@hostingbeyond.com",
@@ -173,13 +173,13 @@ export function defaultHomeSections(): CmsHomeSections {
   return {
     hero: {
       visible: true,
-      eyebrow: "Next-Gen Hosting Infrastructure",
-      headline: "HOST SMARTER.",
-      headlineAccent: "GROW BEYOND.",
+      eyebrow: "",
+      headline: "Built for Speed.",
+      headlineAccent: "Beyond Limits.",
       description:
-        "High-performance hosting, secure infrastructure and expert support — built for everything you want to grow online.",
-      searchPlaceholder: "Enter your domain name",
-      searchButtonLabel: "Search Domain",
+        "Premium hosting infrastructure for ambitious ideas and growing businesses.",
+      searchPlaceholder: "Find your perfect domain name",
+      searchButtonLabel: "SEARCH DOMAIN",
       bulkSearchLabel: "Bulk Search",
       backgroundImage: "/images/hero-speaker.png",
       trustItems: [
@@ -286,35 +286,33 @@ export function mergeHomeSections(
   const legacyHeadline =
     storedHero.headline === "Everything You Need." ||
     storedHero.headline === "Everything You Need" ||
+    storedHero.headline === "HOST SMARTER." ||
     storedHero.headline === "Built for Speed." ||
     storedHero.headline?.includes("Built for Speed") ||
-    storedHero.headline?.includes("Secured for You");
+    storedHero.headline?.includes("Secured for You") ||
+    storedHero.headline?.includes("HOST SMARTER");
   const legacyAccent =
     storedHero.headlineAccent === "Beyond Expectations." ||
+    storedHero.headlineAccent === "GROW BEYOND." ||
     storedHero.headlineAccent === "Beyond Limits." ||
-    storedHero.headlineAccent?.includes("Beyond Limits");
+    storedHero.headlineAccent?.includes("Beyond Limits") ||
+    storedHero.headlineAccent?.includes("GROW BEYOND");
   const hero = {
     ...defaults.hero,
     ...storedHero,
-    eyebrow:
-      !storedHero.eyebrow || legacyHeadline
-        ? defaults.hero.eyebrow
-        : storedHero.eyebrow,
-    headline: legacyHeadline
-      ? defaults.hero.headline
-      : (storedHero.headline ?? defaults.hero.headline),
-    headlineAccent:
-      legacyHeadline || legacyAccent
-        ? defaults.hero.headlineAccent
-        : (storedHero.headlineAccent ?? defaults.hero.headlineAccent),
+    eyebrow: "",
+    headline: defaults.hero.headline,
+    headlineAccent: defaults.hero.headlineAccent,
     description:
       legacyHeadline ||
       storedHero.description?.includes("Premium domains, blazing-fast") ||
       storedHero.description?.includes(
         "Premium hosting infrastructure for ambitious",
-      )
+      ) ||
+      storedHero.description?.includes("High-performance hosting")
         ? defaults.hero.description
         : (storedHero.description ?? defaults.hero.description),
+    searchPlaceholder: defaults.hero.searchPlaceholder,
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
     stats: storedHero.stats ?? defaults.hero.stats,
   };
