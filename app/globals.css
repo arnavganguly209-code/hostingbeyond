@@ -193,27 +193,21 @@
   /* Soft vignette — subject dissolves into hero bg (no rectangular frame) */
   .hb-hero-subject {
     -webkit-mask-image: radial-gradient(
-      ellipse 68% 72% at 58% 42%,
-      #000 18%,
-      rgba(0, 0, 0, 0.92) 36%,
-      rgba(0, 0, 0, 0.55) 54%,
-      rgba(0, 0, 0, 0.18) 70%,
-      transparent 86%
+      ellipse 78% 88% at 62% 40%,
+      #000 22%,
+      rgba(0, 0, 0, 0.95) 42%,
+      rgba(0, 0, 0, 0.55) 62%,
+      rgba(0, 0, 0, 0.15) 78%,
+      transparent 92%
     );
     mask-image: radial-gradient(
-      ellipse 68% 72% at 58% 42%,
-      #000 18%,
-      rgba(0, 0, 0, 0.92) 36%,
-      rgba(0, 0, 0, 0.55) 54%,
-      rgba(0, 0, 0, 0.18) 70%,
-      transparent 86%
+      ellipse 78% 88% at 62% 40%,
+      #000 22%,
+      rgba(0, 0, 0, 0.95) 42%,
+      rgba(0, 0, 0, 0.55) 62%,
+      rgba(0, 0, 0, 0.15) 78%,
+      transparent 92%
     );
-  }
-
-  .hb-hero-photo-wrap,
-  .hb-hero-photo {
-    -webkit-mask-image: none;
-    mask-image: none;
   }
 
   @media (prefers-reduced-motion: reduce) {

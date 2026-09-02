@@ -23,19 +23,25 @@ export const mainNavigation: NavItem[] = [
     ],
   },
   {
-    label: "Business Email",
-    href: routes.businessEmail,
-  },
-  {
-    label: "Hosting",
+    label: "Web Hosting",
     href: routes.hosting,
     children: [
       { label: "Shared Hosting", href: `${routes.hosting}/shared` },
       { label: "WordPress Hosting", href: `${routes.hosting}/wordpress` },
-      { label: "Cloud Hosting", href: routes.cloud },
-      { label: "VPS Hosting", href: routes.vps },
       { label: "Reseller Hosting", href: `${routes.hosting}/reseller` },
     ],
+  },
+  {
+    label: "Cloud & VPS",
+    href: routes.cloud,
+    children: [
+      { label: "Cloud Hosting", href: routes.cloud },
+      { label: "VPS Hosting", href: routes.vps },
+    ],
+  },
+  {
+    label: "Business Email",
+    href: routes.businessEmail,
   },
   {
     label: "Resources",

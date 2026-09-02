@@ -403,7 +403,7 @@ export function ProductsSection({ content }: { content?: CmsProductsContent }) {
   return (
     <section
       id="products"
-      className="relative isolate overflow-hidden bg-[var(--hb-bg)] px-4 pt-3 pb-10 sm:px-6 sm:pt-4 sm:pb-12 lg:px-8 lg:pt-5 lg:pb-14"
+      className="relative isolate overflow-hidden bg-[var(--hb-bg)] px-4 pt-10 pb-14 sm:px-6 sm:pt-12 sm:pb-16 lg:px-8 lg:pt-14 lg:pb-20"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 left-1/2 h-48 w-[70%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgb(10_132_255_/_0.08),transparent_70%)] blur-2xl" />

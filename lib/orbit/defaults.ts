@@ -88,7 +88,7 @@ export function defaultSiteSettings(): CmsSiteSettings {
     logoPath: "/logo/hostingbeyond-logo-transparent.png",
     ogImagePath: "/images/hero-speaker.png",
     loginLabel: "Login",
-    getStartedLabel: "Get Started",
+    getStartedLabel: "GET STARTED",
     getStartedHref: "/get-started",
     loginHref: "/login",
     contactEmail: "hello@hostingbeyond.com",
@@ -173,13 +173,13 @@ export function defaultHomeSections(): CmsHomeSections {
   return {
     hero: {
       visible: true,
-      eyebrow: "",
-      headline: "Everything You Need.",
-      headlineAccent: "Beyond Expectations.",
+      eyebrow: "Next-Gen Hosting Infrastructure",
+      headline: "HOST SMARTER.",
+      headlineAccent: "GROW BEYOND.",
       description:
-        "Premium domains, blazing-fast hosting, and secure business email — everything you need to build, grow, and succeed online.",
-      searchPlaceholder: "Find your perfect domain",
-      searchButtonLabel: "Search",
+        "High-performance hosting, secure infrastructure and expert support — built for everything you want to grow online.",
+      searchPlaceholder: "Enter your domain name",
+      searchButtonLabel: "Search Domain",
       bulkSearchLabel: "Bulk Search",
       backgroundImage: "/images/hero-speaker.png",
       trustItems: [
@@ -189,8 +189,8 @@ export function defaultHomeSections(): CmsHomeSections {
           icon: "shield",
         },
         {
-          title: "Secure & Trusted",
-          subtitle: "Your data is safe",
+          title: "NVMe Performance",
+          subtitle: "Ultra-fast storage",
           icon: "lock",
         },
         {
@@ -282,20 +282,51 @@ export function mergeHomeSections(
     }
   }
 
+  const storedHero: Partial<CmsHeroContent> = stored.hero ?? {};
+  const legacyHeadline =
+    storedHero.headline === "Everything You Need." ||
+    storedHero.headline === "Everything You Need";
+  const hero = {
+    ...defaults.hero,
+    ...storedHero,
+    eyebrow:
+      !storedHero.eyebrow || legacyHeadline
+        ? defaults.hero.eyebrow
+        : storedHero.eyebrow,
+    headline: legacyHeadline
+      ? defaults.hero.headline
+      : (storedHero.headline ?? defaults.hero.headline),
+    headlineAccent:
+      legacyHeadline || storedHero.headlineAccent === "Beyond Expectations."
+        ? defaults.hero.headlineAccent
+        : (storedHero.headlineAccent ?? defaults.hero.headlineAccent),
+    description:
+      legacyHeadline ||
+      storedHero.description?.includes("Premium domains, blazing-fast")
+        ? defaults.hero.description
+        : (storedHero.description ?? defaults.hero.description),
+    trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
+    stats: storedHero.stats ?? defaults.hero.stats,
+  };
+
+  const storedNav = stored.navigation;
+  const hasCloudNav =
+    Array.isArray(storedNav) &&
+    storedNav.some(
+      (item) =>
+        typeof item?.label === "string" &&
+        item.label.toLowerCase().includes("cloud"),
+    );
+
   return {
     ...defaults,
     ...stored,
-    hero: {
-      ...defaults.hero,
-      ...stored.hero,
-      trustItems: stored.hero?.trustItems ?? defaults.hero.trustItems,
-      stats: stored.hero?.stats ?? defaults.hero.stats,
-    },
+    hero,
     products: {
       ...defaults.products,
       ...stored.products,
       offers: offers.sort((a, b) => a.order - b.order),
     },
-    navigation: stored.navigation ?? defaults.navigation,
+    navigation: hasCloudNav ? storedNav! : defaults.navigation,
   };
 }

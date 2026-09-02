@@ -3,22 +3,22 @@
  */
 
 :root {
-  --hb-bg: #050814;
-  --hb-navy: #0a1023;
-  --hb-blue: #0a84ff;
-  --hb-purple: #6f3cff;
-  --hb-white: #ffffff;
-  --hb-muted: #aab2c5;
-  --hb-glass: rgba(10, 16, 35, 0.55);
-  --hb-glass-strong: rgba(10, 16, 35, 0.72);
+  --hb-bg: #050816;
+  --hb-navy: #070b18;
+  --hb-blue: #2563eb;
+  --hb-purple: #7c3aed;
+  --hb-white: #f8fafc;
+  --hb-muted: #aab4c8;
+  --hb-glass: rgba(7, 11, 24, 0.62);
+  --hb-glass-strong: rgba(5, 8, 22, 0.82);
   --hb-border: rgba(255, 255, 255, 0.08);
-  --hb-border-blue: rgba(10, 132, 255, 0.35);
-  --hb-glow-blue: rgba(10, 132, 255, 0.35);
-  --hb-glow-purple: rgba(111, 60, 255, 0.28);
-  --hb-gradient: linear-gradient(105deg, #0a84ff 0%, #6f3cff 100%);
-  --hb-logo-width: 264px;
-  --hb-header-radius: 24px;
-  --hb-header-blur: 24px;
+  --hb-border-blue: rgba(37, 99, 235, 0.35);
+  --hb-glow-blue: rgba(37, 99, 235, 0.32);
+  --hb-glow-purple: rgba(124, 58, 237, 0.28);
+  --hb-gradient: linear-gradient(105deg, #2563eb 0%, #7c3aed 100%);
+  --hb-logo-width: 288px;
+  --hb-header-radius: 26px;
+  --hb-header-blur: 28px;
   --font-display:
     "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
     "Times New Roman", serif;
