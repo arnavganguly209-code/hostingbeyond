@@ -29,12 +29,6 @@ export const mainNavigation: NavItem[] = [
       { label: "Shared Hosting", href: `${routes.hosting}/shared` },
       { label: "WordPress Hosting", href: `${routes.hosting}/wordpress` },
       { label: "Reseller Hosting", href: `${routes.hosting}/reseller` },
-    ],
-  },
-  {
-    label: "Cloud & VPS",
-    href: routes.cloud,
-    children: [
       { label: "Cloud Hosting", href: routes.cloud },
       { label: "VPS Hosting", href: routes.vps },
     ],

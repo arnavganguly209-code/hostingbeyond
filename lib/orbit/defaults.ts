@@ -318,12 +318,13 @@ export function mergeHomeSections(
   };
 
   const storedNav = stored.navigation;
-  const hasCloudNav =
+  const hasLegacyCloudTopNav =
     Array.isArray(storedNav) &&
     storedNav.some(
       (item) =>
         typeof item?.label === "string" &&
-        item.label.toLowerCase().includes("cloud"),
+        (item.label === "Cloud & VPS" ||
+          /^cloud\s*&\s*vps$/i.test(item.label.trim())),
     );
 
   return {
@@ -335,6 +336,10 @@ export function mergeHomeSections(
       ...stored.products,
       offers: offers.sort((a, b) => a.order - b.order),
     },
-    navigation: hasCloudNav ? storedNav! : defaults.navigation,
+    // Drop legacy top-level Cloud & VPS — those live under Web Hosting now
+    navigation:
+      hasLegacyCloudTopNav || !Array.isArray(storedNav)
+        ? defaults.navigation
+        : storedNav,
   };
 }

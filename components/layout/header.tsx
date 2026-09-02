@@ -21,7 +21,6 @@ function localizeNavLabel(
     Domains: nav.domains,
     "Web Hosting": nav.hosting,
     Hosting: nav.hosting,
-    "Cloud & VPS": "Cloud & VPS",
     "Business Email": nav.businessEmail,
     Resources: nav.resources,
   };
@@ -133,6 +132,14 @@ export function SiteHeader({
       ? getStartedLabel || "Get Started"
       : t.nav.getStarted;
 
+  // Safety: never render a top-level Cloud & VPS item (lives under Web Hosting)
+  const navItems = navigation.filter(
+    (item) =>
+      item.label !== "Cloud & VPS" &&
+      !/^cloud\s*&\s*vps$/i.test(item.label.trim()),
+  );
+  const resolvedNav = navItems.length >= 4 ? navItems : mainNavigation;
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -148,7 +155,7 @@ export function SiteHeader({
 
   return (
     <header className="relative z-50 w-full shrink-0 px-[3%] pt-3 pb-1.5 lg:pt-3.5 lg:pb-2">
-      <div className="mx-auto flex h-[72px] w-full max-w-[1520px] items-center gap-4 rounded-[20px] border border-[rgba(100,130,255,0.2)] bg-[rgba(6,9,22,0.78)] px-5 shadow-[0_10px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-[22px] sm:h-[76px] sm:px-6 lg:h-[80px] lg:gap-6 lg:px-7 xl:px-8">
+      <div className="mx-auto flex h-[72px] w-full max-w-[1520px] items-center gap-5 rounded-[20px] border border-[rgba(100,130,255,0.2)] bg-[rgba(6,9,22,0.78)] px-5 shadow-[0_10px_36px_rgb(0_0_0_/_0.35),inset_0_1px_0_rgb(255_255_255_/_0.06)] backdrop-blur-[22px] sm:h-[76px] sm:px-6 lg:h-[80px] lg:gap-7 lg:px-7 xl:gap-8 xl:px-8">
         <div className="flex shrink-0 items-center">
           <Logo
             src={logoPath}
@@ -158,9 +165,9 @@ export function SiteHeader({
 
         <nav
           aria-label="Primary"
-          className="hidden min-w-0 flex-1 items-center justify-center gap-6 xl:flex xl:gap-7 2xl:gap-8"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-8 lg:flex xl:gap-10 2xl:gap-11"
         >
-          {navigation.map((item) => (
+          {resolvedNav.map((item) => (
             <NavDropdown
               key={item.label}
               item={item}
@@ -169,11 +176,11 @@ export function SiteHeader({
           ))}
         </nav>
 
-        <div className="ml-auto hidden shrink-0 items-center gap-3 xl:ml-0 xl:flex xl:pl-10">
+        <div className="ml-auto hidden shrink-0 items-center gap-3.5 lg:ml-0 lg:flex lg:pl-8 xl:pl-10">
           <CountryLanguageSelector className="h-10 rounded-[14px] border border-white/12 bg-white/[0.04] px-3.5 text-[12.5px] font-bold" />
           <Link
             href={loginHref}
-            className="inline-flex h-10 items-center px-2 text-[14px] font-bold text-white/90 transition hover:text-white"
+            className="inline-flex h-10 items-center px-2.5 text-[14px] font-bold text-white/90 transition hover:text-white"
           >
             {resolvedLogin}
           </Link>
@@ -187,7 +194,7 @@ export function SiteHeader({
           </GlowButton>
         </div>
 
-        <div className="ml-auto flex items-center gap-2 xl:hidden">
+        <div className="ml-auto flex items-center gap-2 lg:hidden">
           <CountryLanguageSelector compact />
           <button
             type="button"
@@ -209,10 +216,10 @@ export function SiteHeader({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mx-auto mt-2 w-full max-w-[1520px] overflow-hidden rounded-2xl border border-white/10 bg-[rgba(5,8,22,0.96)] shadow-[0_24px_60px_rgb(0_0_0_/_0.5)] backdrop-blur-2xl xl:hidden"
+            className="mx-auto mt-2 w-full max-w-[1520px] overflow-hidden rounded-2xl border border-white/10 bg-[rgba(5,8,22,0.96)] shadow-[0_24px_60px_rgb(0_0_0_/_0.5)] backdrop-blur-2xl lg:hidden"
           >
             <nav className="flex flex-col gap-1 p-4" aria-label="Mobile">
-              {navigation.map((item) => {
+              {resolvedNav.map((item) => {
                 const label = localizeNavLabel(item.label, t.nav);
                 return (
                   <div key={item.label}>
