@@ -53,13 +53,13 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
 
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      {/* Copy + CTAs — always fully visible above domain search */}
-      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-center px-[3.5%] py-3 lg:py-4">
-        <div className="relative z-10 max-w-[540px]">
+      {/* Copy + CTAs — pulled slightly higher so buttons sit above domain search */}
+      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-start px-[3.5%] pt-5 pb-2 lg:justify-center lg:pt-2 lg:pb-1 xl:pt-0">
+        <div className="relative z-10 max-w-[540px] lg:-translate-y-3 xl:-translate-y-5">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-[#07122a]/70 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.14em] text-white uppercase shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:mb-4"
+            className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-[#07122a]/70 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.14em] text-white uppercase shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-xl"
           >
             <Zap className="size-3.5 text-[#60a5fa]" aria-hidden />
             Powerful. Reliable. Secure.
@@ -97,7 +97,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.14 }}
-            className="mt-4 max-w-[480px] text-[15px] leading-[1.55] font-medium text-white [text-shadow:0_1px_12px_rgba(7,18,42,0.8)] sm:text-[16px] lg:mt-5"
+            className="mt-3.5 max-w-[480px] text-[15px] leading-[1.55] font-medium text-white [text-shadow:0_1px_12px_rgba(7,18,42,0.8)] sm:text-[16px] lg:mt-4"
           >
             {description}
           </motion.p>
@@ -106,7 +106,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 }}
-            className="mt-5 flex flex-wrap items-center gap-3 lg:mt-6"
+            className="mt-4 flex flex-wrap items-center gap-3 lg:mt-5"
           >
             <Link
               href={routes.getStarted}

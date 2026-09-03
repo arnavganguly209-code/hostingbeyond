@@ -24,19 +24,22 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-[#07122a]" />
 
           {/* Soft blue stage glow behind subject */}
-          <div className="absolute top-[12%] right-[4%] h-[70%] w-[48%] rounded-full bg-[radial-gradient(ellipse,rgba(47,107,255,0.22),transparent_70%)] blur-3xl max-lg:hidden" />
-          <div className="absolute right-[10%] bottom-[10%] h-[40%] w-[35%] rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.14),transparent_70%)] blur-3xl max-lg:hidden" />
+          <div className="absolute top-[18%] right-[6%] h-[60%] w-[42%] rounded-full bg-[radial-gradient(ellipse,rgba(47,107,255,0.2),transparent_70%)] blur-3xl max-lg:hidden" />
+          <div className="absolute right-[12%] bottom-[12%] h-[36%] w-[30%] rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.12),transparent_70%)] blur-3xl max-lg:hidden" />
 
-          {/* Desktop subject — masked so left edge dissolves into navy */}
-          <div className="hb-hero-subject absolute inset-y-0 right-0 hidden w-[62%] lg:block">
+          {/*
+            Desktop subject: starts BELOW header so cap/head never crops.
+            object-contain + slight scale-down = ~20% less zoom, full head visible.
+          */}
+          <div className="hb-hero-subject absolute top-[92px] right-0 bottom-[6%] hidden w-[56%] lg:block xl:w-[54%]">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
               quality={93}
-              sizes="62vw"
-              className="object-cover object-[68%_18%]"
+              sizes="56vw"
+              className="scale-[0.92] object-contain object-bottom object-right"
             />
           </div>
 
@@ -49,15 +52,15 @@ export default async function HomePage() {
               priority
               quality={80}
               sizes="100vw"
-              className="object-cover object-[75%_15%] opacity-35"
+              className="object-contain object-[85%_30%] opacity-30"
             />
-            <div className="absolute inset-0 bg-[#07122a]/55" />
+            <div className="absolute inset-0 bg-[#07122a]/60" />
           </div>
 
-          {/* Left readability wash — soft, not a hard cut */}
-          <div className="absolute inset-y-0 left-0 hidden w-[48%] bg-gradient-to-r from-[#07122a] from-40% via-[#07122a]/75 to-transparent lg:block" />
-          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#07122a]/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07122a] via-[#07122a]/70 to-transparent" />
+          {/* Left readability wash — soft dissolve into navy */}
+          <div className="absolute inset-y-0 left-0 hidden w-[50%] bg-gradient-to-r from-[#07122a] from-45% via-[#07122a]/80 to-transparent lg:block" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#07122a]/85 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#07122a] via-[#07122a]/75 to-transparent" />
         </div>
 
         <SiteHeader

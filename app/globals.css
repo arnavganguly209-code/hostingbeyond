@@ -190,24 +190,24 @@
     animation: hb-hero-gradient-shift 10s ease-in-out infinite;
   }
 
-  /* Soft vignette — photo dissolves into navy (no hard pasted edge) */
+  /* Soft vignette — left edge dissolves; top stays fully visible (cap/head) */
   .hb-hero-subject {
     -webkit-mask-image: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(0, 0, 0, 0.15) 12%,
-      rgba(0, 0, 0, 0.55) 28%,
-      rgba(0, 0, 0, 0.9) 42%,
-      #000 55%,
+      rgba(0, 0, 0, 0.2) 10%,
+      rgba(0, 0, 0, 0.6) 26%,
+      rgba(0, 0, 0, 0.92) 40%,
+      #000 52%,
       #000 100%
     );
     mask-image: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(0, 0, 0, 0.15) 12%,
-      rgba(0, 0, 0, 0.55) 28%,
-      rgba(0, 0, 0, 0.9) 42%,
-      #000 55%,
+      rgba(0, 0, 0, 0.2) 10%,
+      rgba(0, 0, 0, 0.6) 26%,
+      rgba(0, 0, 0, 0.92) 40%,
+      #000 52%,
       #000 100%
     );
   }
