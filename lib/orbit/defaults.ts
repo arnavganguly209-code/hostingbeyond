@@ -124,9 +124,34 @@ export type CmsHostingPlansContent = {
   guarantees: CmsHostingGuarantee[];
 };
 
+export type CmsHostingTypeCard = {
+  id: string;
+  visible: boolean;
+  order: number;
+  title: string;
+  description: string;
+  href: string;
+  accent: "blue" | "purple";
+  icon: "cloud" | "cart" | "wordpress" | "user";
+  ctaLabel: string;
+  imageUrl: string;
+  imageAlt: string;
+  /** Bottom visual chrome over the photo */
+  overlayStyle: "cloud" | "shop" | "gallery" | "studio";
+  overlayCaption: string;
+  overlayStat: string;
+  overlayPills: string[];
+};
+
+export type CmsHostingTypesContent = {
+  visible: boolean;
+  cards: CmsHostingTypeCard[];
+};
+
 export type CmsHomeSections = {
   hero: CmsHeroContent;
   products: CmsProductsContent;
+  hostingTypes: CmsHostingTypesContent;
   hostingPlans: CmsHostingPlansContent;
   navigation: typeof mainNavigation;
 };
@@ -175,7 +200,7 @@ export type CmsLoginPage = {
 export function defaultLoginPage(): CmsLoginPage {
   return {
     logoPath: "/logo/hostingbeyond-logo-transparent.png",
-    tagline: "— BEYOND HOSTING, BEYOND POSSIBILITIES —",
+    tagline: "",
     copyright: "© 2025 HostingBeyond. All rights reserved.",
     badge: "Everything You Need, All in One Place",
     headline: "Power Your Online Success with",
@@ -273,6 +298,12 @@ export function mergeLoginPage(
           ? ""
           : stored.backgroundImage
         : defaults.backgroundImage,
+    tagline:
+      !stored.tagline ||
+      stored.tagline.includes("BEYOND HOSTING") ||
+      stored.tagline.includes("BEYOND POSSIBILITIES")
+        ? ""
+        : stored.tagline,
     google: {
       ...defaults.google,
       ...stored.google,
@@ -463,6 +494,86 @@ function defaultHostingPlansSection(): CmsHostingPlansContent {
   };
 }
 
+function defaultHostingTypesSection(): CmsHostingTypesContent {
+  return {
+    visible: true,
+    cards: [
+      {
+        id: "cloud",
+        visible: true,
+        order: 0,
+        title: "Cloud Hosting",
+        description:
+          "Run your heavy sites on a highly stable, multi-server network architecture.",
+        href: routes.cloud,
+        accent: "blue",
+        icon: "cloud",
+        ctaLabel: "View Plans",
+        imageUrl: "/images/hosting/cloud.jpg",
+        imageAlt: "Earth from space — cloud hosting network",
+        overlayStyle: "cloud",
+        overlayCaption: "www",
+        overlayStat: "↑ 85.2%",
+        overlayPills: ["UPTIME", "RELIABILITY", "SECURITY"],
+      },
+      {
+        id: "ecommerce",
+        visible: true,
+        order: 1,
+        title: "eCommerce Hosting",
+        description:
+          "Get high-speed performance and top security for your e-commerce operations.",
+        href: `${routes.hosting}/ecommerce`,
+        accent: "purple",
+        icon: "cart",
+        ctaLabel: "View Plans",
+        imageUrl: "/images/hosting/ecommerce.jpg",
+        imageAlt: "Ceramic product photography for online store",
+        overlayStyle: "shop",
+        overlayCaption: "",
+        overlayStat: "109.00",
+        overlayPills: [],
+      },
+      {
+        id: "wordpress",
+        visible: true,
+        order: 2,
+        title: "WordPress Hosting",
+        description:
+          "Experience high speeds with specialized staging tools and smart optimization.",
+        href: `${routes.hosting}/wordpress`,
+        accent: "blue",
+        icon: "wordpress",
+        ctaLabel: "View Plans",
+        imageUrl: "/images/hosting/wordpress.jpg",
+        imageAlt: "Mountain landscape in WordPress editor",
+        overlayStyle: "gallery",
+        overlayCaption: "",
+        overlayStat: "",
+        overlayPills: [],
+      },
+      {
+        id: "reseller",
+        visible: true,
+        order: 3,
+        title: "Reseller Hosting",
+        description:
+          "Create custom packages to sell hosting directly under your white-label brand.",
+        href: `${routes.hosting}/reseller`,
+        accent: "purple",
+        icon: "user",
+        ctaLabel: "View Plans",
+        imageUrl: "/images/hosting/reseller.jpg",
+        imageAlt: "Botanical studio plant photography",
+        overlayStyle: "studio",
+        overlayCaption: "Sage. Botanical Studio",
+        overlayStat: "",
+        overlayPills: ["Aa", "Aa", "Aa"],
+      },
+    ],
+  };
+}
+
 function defaultOffers(): CmsProductOffer[] {
   return [
     {
@@ -588,6 +699,7 @@ export function defaultHomeSections(): CmsHomeSections {
         "Get premium domains, professional email, and blazing-fast hosting at unbeatable prices.",
       offers: defaultOffers(),
     },
+    hostingTypes: defaultHostingTypesSection(),
     hostingPlans: defaultHostingPlansSection(),
     navigation: mainNavigation.map((item) => ({
       ...item,
@@ -711,6 +823,61 @@ export function mergeHomeSections(
         })
       : defaults.hostingPlans.guarantees;
 
+  const storedTypeCards = Array.isArray(stored.hostingTypes?.cards)
+    ? stored.hostingTypes!.cards
+    : [];
+
+  const hostingTypeCards = defaults.hostingTypes.cards
+    .map((fallback) => {
+      const match = storedTypeCards.find((item) => item.id === fallback.id);
+      if (!match) return fallback;
+      const accent: CmsHostingTypeCard["accent"] =
+        match.accent === "purple" ? "purple" : "blue";
+      const icon: CmsHostingTypeCard["icon"] =
+        match.icon === "cart" ||
+        match.icon === "wordpress" ||
+        match.icon === "user"
+          ? match.icon
+          : "cloud";
+      const overlayStyle: CmsHostingTypeCard["overlayStyle"] =
+        match.overlayStyle === "shop" ||
+        match.overlayStyle === "gallery" ||
+        match.overlayStyle === "studio"
+          ? match.overlayStyle
+          : "cloud";
+      return {
+        ...fallback,
+        ...match,
+        accent,
+        icon,
+        overlayStyle,
+        overlayPills: Array.isArray(match.overlayPills)
+          ? match.overlayPills.filter(Boolean)
+          : fallback.overlayPills,
+        visible: match.visible ?? true,
+        order: typeof match.order === "number" ? match.order : fallback.order,
+      } satisfies CmsHostingTypeCard;
+    })
+    .sort((a, b) => a.order - b.order);
+
+  for (const extra of storedTypeCards) {
+    if (!hostingTypeCards.some((c) => c.id === extra.id)) {
+      hostingTypeCards.push({
+        ...defaults.hostingTypes.cards[0],
+        ...extra,
+        id: extra.id || `hosting-type-${hostingTypeCards.length}`,
+        overlayPills: Array.isArray(extra.overlayPills)
+          ? extra.overlayPills
+          : [],
+        visible: extra.visible ?? true,
+        order:
+          typeof extra.order === "number"
+            ? extra.order
+            : hostingTypeCards.length,
+      });
+    }
+  }
+
   const storedHero: Partial<CmsHeroContent> = stored.hero ?? {};
   const legacyHeadline =
     storedHero.headline === "Everything You Need." ||
@@ -765,6 +932,12 @@ export function mergeHomeSections(
       ...defaults.products,
       ...stored.products,
       offers: offers.sort((a, b) => a.order - b.order),
+    },
+    hostingTypes: {
+      ...defaults.hostingTypes,
+      ...stored.hostingTypes,
+      visible: stored.hostingTypes?.visible !== false,
+      cards: hostingTypeCards.sort((a, b) => a.order - b.order),
     },
     hostingPlans: {
       ...defaults.hostingPlans,

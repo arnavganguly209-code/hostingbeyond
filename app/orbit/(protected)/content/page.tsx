@@ -8,6 +8,7 @@ import type {
   CmsHomeSections,
   CmsHostingGuarantee,
   CmsHostingPlan,
+  CmsHostingTypeCard,
   CmsLoginFeature,
   CmsLoginPage,
   CmsProductOffer,
@@ -474,6 +475,119 @@ export default function OrbitContentPage() {
             </div>
           </div>
         ))}
+      </section>
+
+      {/* HOSTING TYPES — 4 glass cards */}
+      <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-semibold">Hosting types (4 glass cards)</h2>
+            <p className="mt-0.5 text-xs text-[var(--hb-muted)]">
+              Full A–Z editor for Cloud / eCommerce / WordPress / Reseller cards
+              — titles, links, icons, and in-card images.
+            </p>
+          </div>
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={sections.hostingTypes?.visible !== false}
+              onChange={(e) =>
+                setSections({
+                  ...sections,
+                  hostingTypes: {
+                    ...sections.hostingTypes,
+                    cards: sections.hostingTypes?.cards ?? [],
+                    visible: e.target.checked,
+                  },
+                })
+              }
+            />
+            Visible
+          </label>
+        </div>
+
+        {(sections.hostingTypes?.cards ?? []).map((card, index) => (
+          <HostingTypeCardEditor
+            key={card.id}
+            card={card}
+            onChange={(patch) => {
+              const cards = [...(sections.hostingTypes?.cards ?? [])];
+              cards[index] = { ...cards[index], ...patch };
+              setSections({
+                ...sections,
+                hostingTypes: {
+                  ...sections.hostingTypes,
+                  visible: sections.hostingTypes?.visible !== false,
+                  cards,
+                },
+              });
+            }}
+            onMove={(direction) => {
+              const target = index + direction;
+              const cards = [...(sections.hostingTypes?.cards ?? [])];
+              if (target < 0 || target >= cards.length) return;
+              const [item] = cards.splice(index, 1);
+              cards.splice(target, 0, item);
+              setSections({
+                ...sections,
+                hostingTypes: {
+                  ...sections.hostingTypes,
+                  visible: sections.hostingTypes?.visible !== false,
+                  cards: cards.map((c, order) => ({ ...c, order })),
+                },
+              });
+            }}
+            onRemove={() => {
+              setSections({
+                ...sections,
+                hostingTypes: {
+                  ...sections.hostingTypes,
+                  visible: sections.hostingTypes?.visible !== false,
+                  cards: (sections.hostingTypes?.cards ?? []).filter(
+                    (_, i) => i !== index,
+                  ),
+                },
+              });
+            }}
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={() => {
+            const cards = sections.hostingTypes?.cards ?? [];
+            setSections({
+              ...sections,
+              hostingTypes: {
+                ...sections.hostingTypes,
+                visible: sections.hostingTypes?.visible !== false,
+                cards: [
+                  ...cards,
+                  {
+                    id: `type-${Date.now()}`,
+                    visible: true,
+                    order: cards.length,
+                    title: "New Hosting Type",
+                    description: "Describe this hosting product.",
+                    href: "/hosting",
+                    accent: cards.length % 2 === 0 ? "blue" : "purple",
+                    icon: "cloud",
+                    ctaLabel: "View Plans",
+                    imageUrl: "/images/hosting/cloud.jpg",
+                    imageAlt: "Hosting visual",
+                    overlayStyle: "cloud",
+                    overlayCaption: "www",
+                    overlayStat: "↑ 85.2%",
+                    overlayPills: ["UPTIME", "RELIABILITY", "SECURITY"],
+                  },
+                ],
+              },
+            });
+          }}
+          className="rounded-xl border border-dashed border-white/20 px-4 py-2 text-xs font-semibold text-white/70 hover:border-white/40 hover:text-white"
+        >
+          + Add hosting type card
+        </button>
       </section>
 
       {/* HOSTING PLANS */}
@@ -1057,6 +1171,147 @@ export default function OrbitContentPage() {
           </div>
         </section>
       ) : null}
+    </div>
+  );
+}
+
+function HostingTypeCardEditor({
+  card,
+  onChange,
+  onMove,
+  onRemove,
+}: {
+  card: CmsHostingTypeCard;
+  onChange: (patch: Partial<CmsHostingTypeCard>) => void;
+  onMove: (direction: -1 | 1) => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="space-y-3 rounded-xl border border-white/10 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          {card.title || card.id} card
+        </h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={card.visible !== false}
+              onChange={(e) => onChange({ visible: e.target.checked })}
+            />
+            Visible
+          </label>
+          <button
+            type="button"
+            onClick={() => onMove(-1)}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={() => onMove(1)}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+          >
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs text-red-300"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <Field
+          label="Title"
+          value={card.title}
+          onChange={(value) => onChange({ title: value })}
+        />
+        <Field
+          label="CTA text"
+          value={card.ctaLabel}
+          onChange={(value) => onChange({ ctaLabel: value })}
+        />
+        <Field
+          label="CTA link"
+          value={card.href}
+          onChange={(value) => onChange({ href: value })}
+        />
+        <Field
+          label="Accent (blue / purple)"
+          value={card.accent}
+          onChange={(value) =>
+            onChange({ accent: value === "purple" ? "purple" : "blue" })
+          }
+        />
+        <Field
+          label="Icon (cloud / cart / wordpress / user)"
+          value={card.icon}
+          onChange={(value) =>
+            onChange({
+              icon:
+                value === "cart" || value === "wordpress" || value === "user"
+                  ? value
+                  : "cloud",
+            })
+          }
+        />
+        <Field
+          label="Overlay style (cloud / shop / gallery / studio)"
+          value={card.overlayStyle}
+          onChange={(value) =>
+            onChange({
+              overlayStyle:
+                value === "shop" || value === "gallery" || value === "studio"
+                  ? value
+                  : "cloud",
+            })
+          }
+        />
+        <Field
+          label="Overlay caption"
+          value={card.overlayCaption}
+          onChange={(value) => onChange({ overlayCaption: value })}
+        />
+        <Field
+          label="Overlay stat (e.g. ↑ 85.2% / 109.00)"
+          value={card.overlayStat}
+          onChange={(value) => onChange({ overlayStat: value })}
+        />
+        <Field
+          label="Overlay pills (comma-separated)"
+          value={card.overlayPills.join(", ")}
+          onChange={(value) =>
+            onChange({
+              overlayPills: value
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean),
+            })
+          }
+        />
+        <Field
+          label="Image alt text"
+          value={card.imageAlt}
+          onChange={(value) => onChange({ imageAlt: value })}
+        />
+      </div>
+
+      <TextArea
+        label="Description"
+        value={card.description}
+        onChange={(value) => onChange({ description: value })}
+      />
+
+      <OrbitImageField
+        label="In-card image (fills bottom of glass box)"
+        value={card.imageUrl}
+        onChange={(url) => onChange({ imageUrl: url })}
+      />
     </div>
   );
 }

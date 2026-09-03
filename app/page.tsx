@@ -98,7 +98,9 @@ export default async function HomePage() {
       {sections.products.visible ? (
         <ProductsSection content={sections.products} />
       ) : null}
-      <HostingTypesSection />
+      {sections.hostingTypes?.visible !== false ? (
+        <HostingTypesSection content={sections.hostingTypes} />
+      ) : null}
       {sections.hostingPlans?.visible !== false ? (
         <HostingPlansSection content={sections.hostingPlans} />
       ) : null}

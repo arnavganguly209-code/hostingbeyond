@@ -1,91 +1,59 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Cloud, ShoppingCart, UserRound } from "lucide-react";
+import {
+  ArrowUpRight,
+  Cloud,
+  Globe2,
+  Lock,
+  Shield,
+  ShoppingBag,
+  ShoppingCart,
+  UserRound,
+  Zap,
+} from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
-import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
+import type {
+  CmsHostingTypeCard,
+  CmsHostingTypesContent,
+} from "@/lib/orbit/defaults";
 
 type Accent = "blue" | "purple";
-
-type HostingTypeCard = {
-  id: string;
-  title: string;
-  description: string;
-  href: string;
-  accent: Accent;
-  icon: "cloud" | "cart" | "wordpress" | "user";
-  visual: "cloud" | "shop" | "gallery" | "studio";
-};
-
-const cards: HostingTypeCard[] = [
-  {
-    id: "cloud",
-    title: "Cloud Hosting",
-    description:
-      "Run your heavy sites on a highly stable, multi-server network architecture.",
-    href: routes.cloud,
-    accent: "blue",
-    icon: "cloud",
-    visual: "cloud",
-  },
-  {
-    id: "ecommerce",
-    title: "eCommerce Hosting",
-    description:
-      "Get high-speed performance and top security for your e-commerce operations.",
-    href: `${routes.hosting}/ecommerce`,
-    accent: "purple",
-    icon: "cart",
-    visual: "shop",
-  },
-  {
-    id: "wordpress",
-    title: "WordPress Hosting",
-    description:
-      "Experience high speeds with specialized staging tools and smart optimization.",
-    href: `${routes.hosting}/wordpress`,
-    accent: "blue",
-    icon: "wordpress",
-    visual: "gallery",
-  },
-  {
-    id: "reseller",
-    title: "Reseller Hosting",
-    description:
-      "Create custom packages to sell hosting directly under your white-label brand.",
-    href: `${routes.hosting}/reseller`,
-    accent: "purple",
-    icon: "user",
-    visual: "studio",
-  },
-];
 
 const accentMap = {
   blue: {
     border:
-      "border-[#3b82f6]/40 shadow-[0_0_0_1px_rgba(59,130,246,0.12),0_0_40px_rgba(59,130,246,0.08)] hover:border-[#60a5fa]/60",
-    icon: "border-[#3b82f6]/45 bg-[#3b82f6]/12 text-[#93c5fd]",
+      "border-[#3b82f6]/45 shadow-[0_0_0_1px_rgba(59,130,246,0.14),0_0_42px_rgba(59,130,246,0.12)] hover:border-[#60a5fa]/70",
+    icon: "border-[#3b82f6]/55 bg-[#3b82f6]/15 text-white shadow-[0_0_22px_rgba(59,130,246,0.35)]",
     cta: "text-[#60a5fa]",
+    flare: "via-[#60a5fa]/85",
   },
   purple: {
     border:
-      "border-[#a855f7]/40 shadow-[0_0_0_1px_rgba(168,85,247,0.12),0_0_40px_rgba(168,85,247,0.08)] hover:border-[#c084fc]/60",
-    icon: "border-[#a855f7]/45 bg-[#a855f7]/12 text-[#d8b4fe]",
+      "border-[#a855f7]/45 shadow-[0_0_0_1px_rgba(168,85,247,0.14),0_0_42px_rgba(168,85,247,0.12)] hover:border-[#c084fc]/70",
+    icon: "border-[#a855f7]/55 bg-[#a855f7]/15 text-white shadow-[0_0_22px_rgba(168,85,247,0.35)]",
     cta: "text-[#c084fc]",
+    flare: "via-[#c084fc]/85",
   },
 } as const;
 
+/** Official WordPress logo (circle + W) */
 function WordPressMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 122.52 122.523"
       className={className}
       aria-hidden
       fill="currentColor"
     >
-      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-1.1 15.4-2.9-8.6a6.6 6.6 0 0 1 2.9 8.6Zm1.1 1.1a7.4 7.4 0 0 1-2.2-.3l2.4-7 2.3 7a7.5 7.5 0 0 1-2.5.3Zm3.2-1.2-1-3h2.3l.7 2a6.5 6.5 0 0 1-2 .999ZM7.2 7.8l4.1 11.7A7.5 7.5 0 0 1 4.5 12a7.4 7.4 0 0 1 2.7-4.2Zm9.1-.2A7.4 7.4 0 0 1 19.5 12a7.5 7.5 0 0 1-1.6 4.6l-2.7-8.1a3.5 3.5 0 0 0 1.1-.9Z" />
+      <path d="M8.708 61.26c0 20.802 12.089 38.779 29.619 47.298l-25.069-68.686c-2.916 6.536-4.55 13.769-4.55 21.388z" />
+      <path d="M96.97 58.608c0-6.495-2.333-10.993-4.334-14.494-2.664-4.329-5.161-7.995-5.161-12.324 0-4.831 3.664-9.328 8.825-9.328.233 0 .454.029.675.044-9.35-8.566-21.807-13.796-35.489-13.796-18.36 0-34.513 9.42-43.91 23.688 1.384.043 2.683.074 3.788.074 6.163 0 15.685-.748 15.685-.748 3.174-.187 3.55 4.475.376 4.86 0 0-3.188.376-6.737.55l21.423 63.69 12.865-38.608-9.158-25.081c-3.175-.175-6.174-.55-6.174-.55-3.174-.187-2.797-5.049.375-4.86 0 0 9.703.748 15.486.748 6.162 0 15.685-.748 15.685-.748 3.176-.187 3.55 4.475.377 4.86 0 0-3.202.376-6.737.55l21.272 63.244 5.879-19.64c2.548-8.164 4.334-14.034 4.334-19.088z" />
+      <path d="M62.184 65.508l-17.647 51.266c5.264 1.55 10.837 2.403 16.59 2.403 6.865 0 13.439-1.18 19.551-3.316.145-.104.274-.229.394-.364z" />
+      <path d="M107.376 36.046c.226 1.674.354 3.471.354 5.404 0 5.333-.996 11.328-3.996 18.824l-16.028 46.328c15.563-9.08 26.039-26.003 26.039-45.345.002-9.137-2.333-17.729-6.369-25.211z" />
+      <path d="M61.262 0C27.465 0 0 27.461 0 61.26c0 33.802 27.465 61.262 61.262 61.262 33.798 0 61.26-27.46 61.26-61.262C122.523 27.461 95.06 0 61.262 0zm0 119.715c-32.256 0-58.452-26.201-58.452-58.455 0-32.252 26.196-58.45 58.452-58.45 32.248 0 58.452 26.198 58.452 58.45 0 32.254-26.204 58.455-58.452 58.455z" />
     </svg>
   );
 }
@@ -94,7 +62,7 @@ function CardIcon({
   type,
   className,
 }: {
-  type: HostingTypeCard["icon"];
+  type: CmsHostingTypeCard["icon"];
   className?: string;
 }) {
   if (type === "cloud")
@@ -105,133 +73,154 @@ function CardIcon({
   return <UserRound className={className} strokeWidth={1.8} />;
 }
 
-function CardVisual({
-  type,
-  accent,
-}: {
-  type: HostingTypeCard["visual"];
-  accent: Accent;
-}) {
-  const isBlue = accent === "blue";
-  const line = isBlue
-    ? "border-[#3b82f6]/35 bg-[#0b1730]"
-    : "border-[#a855f7]/35 bg-[#160b28]";
+function CardImageVisual({ card }: { card: CmsHostingTypeCard }) {
+  const isBlue = card.accent === "blue";
   const soft = isBlue
-    ? "bg-[#3b82f6]/20 text-[#93c5fd]"
-    : "bg-[#a855f7]/20 text-[#d8b4fe]";
+    ? "border-[#3b82f6]/40 bg-[#0b1730]/85 text-[#93c5fd]"
+    : "border-[#a855f7]/40 bg-[#160b28]/85 text-[#d8b4fe]";
 
-  if (type === "cloud") {
-    return (
-      <div className="mt-5 space-y-2.5">
-        <div className="flex items-center gap-2">
-          <span
-            className={cn(
-              "rounded-full border px-3 py-1 text-[11px] font-bold",
-              line,
-              soft,
-            )}
-          >
-            www
-          </span>
-          <span
-            className={cn(
-              "rounded-xl border px-3 py-2 text-[12px] font-extrabold text-white",
-              line,
-            )}
-          >
-            ↑ 85.2%
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {["UPTIME", "RELIABILITY", "SECURITY"].map((label) => (
+  return (
+    <div className="relative mt-5 h-[148px] overflow-hidden rounded-2xl border border-white/10 bg-black/30 sm:h-[156px]">
+      {card.imageUrl ? (
+        <Image
+          src={card.imageUrl}
+          alt={card.imageAlt || card.title}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover object-center"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+      )}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-t from-[#07122a]/55 via-transparent to-[#07122a]/20"
+      />
+
+      {card.overlayStyle === "cloud" ? (
+        <div className="absolute inset-0 flex flex-col justify-end gap-2 p-2.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span
-              key={label}
               className={cn(
-                "rounded-full border px-2.5 py-1 text-[9px] font-bold tracking-wide uppercase",
-                line,
+                "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-extrabold backdrop-blur-md",
                 soft,
               )}
             >
-              {label}
+              <Globe2 className="size-3" aria-hidden />
+              {card.overlayCaption || "www"}
             </span>
-          ))}
+            <span
+              className={cn(
+                "rounded-xl border px-2.5 py-1.5 text-[11px] font-extrabold text-white backdrop-blur-md",
+                soft,
+              )}
+            >
+              {card.overlayStat || "↑ 85.2%"}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {(card.overlayPills.length
+              ? card.overlayPills
+              : ["UPTIME", "RELIABILITY", "SECURITY"]
+            ).map((label, i) => {
+              const Icon = i === 0 ? Zap : i === 1 ? Shield : Lock;
+              return (
+                <span
+                  key={`${label}-${i}`}
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[8px] font-extrabold tracking-wide uppercase backdrop-blur-md",
+                    soft,
+                  )}
+                >
+                  <Icon className="size-2.5" aria-hidden />
+                  {label}
+                </span>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    );
-  }
+      ) : null}
 
-  if (type === "shop") {
-    return (
-      <div className={cn("mt-5 overflow-hidden rounded-2xl border p-3", line)}>
-        <div className="mb-2 flex items-center justify-between">
-          <span className="h-2 w-16 rounded-full bg-white/20" />
-          <span
-            className={cn(
-              "rounded-md px-1.5 py-0.5 text-[10px] font-bold",
-              soft,
-            )}
-          >
-            1
+      {card.overlayStyle === "shop" ? (
+        <>
+          <span className="absolute top-2.5 right-2.5 inline-flex size-8 items-center justify-center rounded-xl border border-[#a855f7]/50 bg-[#160b28]/80 text-[#d8b4fe] shadow-[0_0_16px_rgba(168,85,247,0.35)] backdrop-blur-md">
+            <ShoppingBag className="size-3.5" aria-hidden />
+            <span className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-[#a855f7] text-[8px] font-extrabold text-white">
+              1
+            </span>
+          </span>
+          <span className="absolute right-2.5 bottom-2.5 rounded-lg border border-white/15 bg-black/55 px-2.5 py-1 text-[12px] font-extrabold text-white backdrop-blur-md">
+            {card.overlayStat || "109.00"}
+          </span>
+        </>
+      ) : null}
+
+      {card.overlayStyle === "gallery" ? (
+        <div className="absolute top-2 right-2 bottom-2 flex w-9 flex-col items-center gap-1.5 rounded-xl border border-white/15 bg-[#0b1730]/75 p-1.5 backdrop-blur-md">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <span
+              key={i}
+              className="size-5 rounded-md border border-[#3b82f6]/35 bg-[#3b82f6]/20"
+            />
+          ))}
+          <span className="mt-auto grid size-6 place-items-center rounded-full bg-white text-[#21759b]">
+            <WordPressMark className="size-3.5" />
           </span>
         </div>
-        <div className="grid h-20 place-items-center rounded-xl bg-gradient-to-br from-white/10 to-transparent">
-          <span className="text-[13px] font-bold text-white/70">109.00</span>
-        </div>
-      </div>
-    );
-  }
+      ) : null}
 
-  if (type === "gallery") {
-    return (
-      <div className={cn("mt-5 overflow-hidden rounded-2xl border p-2", line)}>
-        <div className="flex gap-2">
-          <div className="h-24 flex-1 rounded-xl bg-[linear-gradient(160deg,#1e3a5f,#0b1730)]" />
-          <div className="flex w-8 flex-col items-center gap-1.5 py-1">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <span key={i} className={cn("size-5 rounded-md", soft)} />
+      {card.overlayStyle === "studio" ? (
+        <div className="absolute inset-0 flex flex-col justify-between p-2.5">
+          <p className="text-[11px] font-extrabold tracking-wide text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.65)]">
+            {card.overlayCaption || "Sage. Botanical Studio"}
+          </p>
+          <div className="flex gap-1.5 self-end">
+            {(card.overlayPills.length
+              ? card.overlayPills
+              : ["Aa", "Aa", "Aa"]
+            ).map((label, i) => (
+              <span
+                key={`${label}-${i}`}
+                className={cn(
+                  "rounded-full border px-2 py-1 text-[10px] font-extrabold backdrop-blur-md",
+                  i === 0 && "border-white/20 bg-white/15 text-white",
+                  i === 1 && "border-white/10 bg-black/55 text-white",
+                  i >= 2 && soft,
+                )}
+              >
+                {label}
+              </span>
             ))}
           </div>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={cn("mt-5 overflow-hidden rounded-2xl border p-3", line)}>
-      <p className="mb-2 text-[11px] font-bold tracking-wide text-white/80 uppercase">
-        Botanical Studio
-      </p>
-      <div className="mb-2 h-16 rounded-xl bg-[linear-gradient(160deg,#1a3d2e,#0b1730)]" />
-      <div className="flex gap-1.5">
-        {["Aa", "Aa", "Aa"].map((label, i) => (
-          <span
-            key={`${label}-${i}`}
-            className={cn(
-              "rounded-full px-2.5 py-1 text-[10px] font-bold",
-              soft,
-            )}
-          >
-            {label}
-          </span>
-        ))}
-      </div>
+      ) : null}
     </div>
   );
 }
 
-export function HostingTypesSection() {
+export function HostingTypesSection({
+  content,
+}: {
+  content?: CmsHostingTypesContent;
+}) {
   const reduceMotion = useReducedMotion();
+  const cards = (content?.cards ?? [])
+    .filter((card) => card.visible !== false)
+    .sort((a, b) => a.order - b.order);
+
+  if (content?.visible === false || cards.length === 0) return null;
 
   return (
     <section className="relative isolate overflow-hidden bg-[#07122a] px-4 pt-4 pb-4 sm:px-6 sm:pt-5 sm:pb-5 lg:px-8 lg:pt-6 lg:pb-6">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 left-1/2 h-40 w-[60%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(59,130,246,0.1),transparent_70%)] blur-2xl" />
+        <div className="absolute top-0 left-1/2 h-40 w-[60%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(59,130,246,0.12),transparent_70%)] blur-2xl" />
+        <div className="absolute right-[8%] bottom-0 h-32 w-[40%] bg-[radial-gradient(ellipse,rgba(168,85,247,0.1),transparent_70%)] blur-2xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
           {cards.map((card, index) => {
-            const styles = accentMap[card.accent];
+            const styles = accentMap[card.accent as Accent] ?? accentMap.blue;
             return (
               <motion.article
                 key={card.id}
@@ -245,7 +234,7 @@ export function HostingTypesSection() {
                 }}
                 whileHover={reduceMotion ? undefined : { y: -4 }}
                 className={cn(
-                  "group relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-[rgba(12,20,40,0.55)] p-5 backdrop-blur-2xl transition-[border-color,box-shadow,transform] duration-200",
+                  "group relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-[rgba(10,18,38,0.48)] p-5 backdrop-blur-2xl transition-[border-color,box-shadow,transform] duration-200",
                   styles.border,
                 )}
               >
@@ -253,10 +242,12 @@ export function HostingTypesSection() {
                   aria-hidden
                   className={cn(
                     "pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent to-transparent",
-                    card.accent === "blue"
-                      ? "via-[#60a5fa]/80"
-                      : "via-[#c084fc]/80",
+                    styles.flare,
                   )}
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -top-8 -right-6 size-24 rounded-full bg-white/10 blur-2xl"
                 />
 
                 <span
@@ -265,7 +256,12 @@ export function HostingTypesSection() {
                     styles.icon,
                   )}
                 >
-                  <CardIcon type={card.icon} className="size-5" />
+                  <CardIcon
+                    type={card.icon}
+                    className={
+                      card.icon === "wordpress" ? "size-[22px]" : "size-5"
+                    }
+                  />
                 </span>
 
                 <h3 className="mt-4 text-[18px] font-extrabold tracking-tight text-white">
@@ -282,12 +278,12 @@ export function HostingTypesSection() {
                     styles.cta,
                   )}
                 >
-                  View Plans
+                  {card.ctaLabel || "View Plans"}
                   <ArrowUpRight className="size-3.5" aria-hidden />
                 </Link>
 
                 <div className="mt-auto">
-                  <CardVisual type={card.visual} accent={card.accent} />
+                  <CardImageVisual card={card} />
                 </div>
               </motion.article>
             );
