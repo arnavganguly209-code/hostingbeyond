@@ -233,7 +233,7 @@ export function defaultLoginPage(): CmsLoginPage {
       label: "Continue with GitHub",
       href: "#",
     },
-    backgroundImage: "/images/login-bg.jpg",
+    backgroundImage: "",
   };
 }
 
@@ -267,7 +267,12 @@ export function mergeLoginPage(
     ...defaults,
     ...stored,
     features,
-    backgroundImage: stored.backgroundImage || defaults.backgroundImage,
+    backgroundImage:
+      typeof stored.backgroundImage === "string"
+        ? stored.backgroundImage === "/images/login-bg.jpg"
+          ? ""
+          : stored.backgroundImage
+        : defaults.backgroundImage,
     google: {
       ...defaults.google,
       ...stored.google,

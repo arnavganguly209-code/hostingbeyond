@@ -236,13 +236,14 @@
     mask-composite: intersect;
   }
 
-  /* Login card — cyan → purple glowing border */
+  /* Login card — cream-blue frosted glass border */
   .hb-login-glass {
     background: linear-gradient(
       135deg,
-      rgba(56, 189, 248, 0.95),
-      rgba(99, 102, 241, 0.75) 45%,
-      rgba(192, 38, 211, 0.95)
+      rgba(224, 242, 254, 0.85),
+      rgba(125, 211, 252, 0.55) 40%,
+      rgba(147, 197, 253, 0.75) 70%,
+      rgba(255, 251, 235, 0.45)
     );
   }
 

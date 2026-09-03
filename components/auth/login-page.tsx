@@ -105,27 +105,38 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
     setMessage("Login will connect to your account system soon.");
   }
 
-  const bgSrc = content.backgroundImage || "/images/login-bg.jpg";
+  const customBg =
+    content.backgroundImage &&
+    content.backgroundImage !== "/images/login-bg.jpg"
+      ? content.backgroundImage
+      : "";
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-[#07101f] text-white">
-      {/* Full scenic background — datacenter / theme image */}
+    <div className="relative min-h-dvh overflow-hidden bg-[#0a1628] text-white">
+      {/* CSS atmosphere only — no pasted mockup image */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <Image
-          src={bgSrc}
-          alt=""
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-          className="scale-105 object-cover object-[72%_center] opacity-90 max-lg:object-[80%_center] max-lg:opacity-40"
-        />
-        {/* Soft left wash so copy stays readable — not a flat black wall */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_45%,transparent_18%,rgba(7,16,31,0.35)_45%,rgba(7,16,31,0.82)_78%)]" />
-        <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-[#07101f]/92 via-[#07101f]/55 to-transparent max-lg:w-full max-lg:from-[#07101f]/88 max-lg:via-[#07101f]/70" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#07101f]/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07101f]/85 to-transparent" />
-        <div className="absolute top-[20%] right-[18%] h-[50%] w-[40%] rounded-full bg-[radial-gradient(ellipse,rgba(99,102,241,0.2),transparent_70%)] blur-3xl max-lg:hidden" />
+        <div className="absolute inset-0 bg-[#0a1628]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(186,230,253,0.16),transparent_50%),radial-gradient(ellipse_at_85%_30%,rgba(96,165,250,0.28),transparent_45%),radial-gradient(ellipse_at_75%_75%,rgba(147,197,253,0.18),transparent_50%),radial-gradient(ellipse_at_40%_90%,rgba(224,242,254,0.1),transparent_45%)]" />
+        <div className="absolute top-[-10%] right-[-5%] h-[70%] w-[55%] rounded-full bg-[radial-gradient(ellipse,rgba(125,211,252,0.22),transparent_68%)] blur-3xl" />
+        <div className="absolute right-[5%] bottom-[-15%] h-[55%] w-[45%] rounded-full bg-[radial-gradient(ellipse,rgba(59,130,246,0.2),transparent_70%)] blur-3xl" />
+        <div className="absolute top-[35%] left-[10%] h-[40%] w-[35%] rounded-full bg-[radial-gradient(ellipse,rgba(255,251,235,0.08),transparent_70%)] blur-3xl" />
+        {/* Soft cream-blue glass panels in depth */}
+        <div className="absolute top-[12%] right-[8%] hidden h-[62%] w-[38%] rounded-[40px] border border-sky-200/15 bg-[linear-gradient(145deg,rgba(224,242,254,0.12),rgba(186,230,253,0.05)_40%,rgba(255,255,255,0.03))] shadow-[0_0_80px_rgba(125,211,252,0.12)] backdrop-blur-sm lg:block" />
+        <div className="absolute top-[22%] right-[18%] hidden h-[48%] w-[28%] rounded-[32px] border border-white/10 bg-sky-100/[0.04] backdrop-blur-md lg:block" />
+        {customBg ? (
+          <div className="absolute inset-y-[8%] right-0 hidden w-[48%] opacity-35 lg:block">
+            <Image
+              src={customBg}
+              alt=""
+              fill
+              priority
+              quality={80}
+              sizes="48vw"
+              className="object-cover object-center blur-[1px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#0a1628]/40 to-[#0a1628]" />
+          </div>
+        ) : null}
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[1440px] flex-col px-5 py-5 sm:px-8 lg:px-10">
@@ -198,14 +209,14 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
           <div className="relative mx-auto w-full max-w-[440px] lg:mx-0 lg:justify-self-end">
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-6 rounded-[36px] bg-[radial-gradient(ellipse,rgba(59,130,246,0.28),transparent_60%)] blur-2xl"
+              className="pointer-events-none absolute -inset-8 rounded-[40px] bg-[radial-gradient(ellipse,rgba(186,230,253,0.35),transparent_65%)] blur-2xl"
             />
-            <div className="hb-login-glass relative overflow-hidden rounded-[26px] p-[1.5px] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_24px_80px_rgba(0,0,0,0.45),0_0_60px_rgba(99,102,241,0.28)]">
-              <div className="rounded-[24.5px] border border-white/15 bg-[rgba(10,18,40,0.42)] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] backdrop-blur-2xl sm:p-8">
+            <div className="hb-login-glass relative overflow-hidden rounded-[26px] p-[1.5px] shadow-[0_24px_80px_rgba(14,60,110,0.35),0_0_50px_rgba(125,211,252,0.2)]">
+              <div className="rounded-[24.5px] border border-sky-100/25 bg-[linear-gradient(160deg,rgba(248,250,252,0.18),rgba(186,230,253,0.14)_45%,rgba(224,242,254,0.1))] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-2xl sm:p-8">
                 <h2 className="text-[28px] font-extrabold tracking-tight text-white">
                   {content.cardTitle}
                 </h2>
-                <p className="mt-2 text-[13px] leading-relaxed text-white/60">
+                <p className="mt-2 text-[13px] leading-relaxed text-sky-50/70">
                   {content.cardSubtitle}
                 </p>
 
@@ -214,7 +225,7 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                     {content.google.visible ? (
                       <a
                         href={content.google.href || "#"}
-                        className="inline-flex h-12 items-center justify-center gap-2.5 rounded-xl border border-white/18 bg-white/[0.07] px-3 text-[12.5px] font-bold whitespace-nowrap text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md transition hover:border-white/30 hover:bg-white/[0.12]"
+                        className="inline-flex h-12 items-center justify-center gap-2.5 rounded-xl border border-sky-100/25 bg-white/[0.12] px-3 text-[12.5px] font-bold whitespace-nowrap text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md transition hover:bg-white/[0.18]"
                       >
                         <GoogleMark className="size-[18px] shrink-0" />
                         <span>{content.google.label}</span>
@@ -223,7 +234,7 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                     {content.github.visible ? (
                       <a
                         href={content.github.href || "#"}
-                        className="inline-flex h-12 items-center justify-center gap-2.5 rounded-xl border border-white/18 bg-white/[0.07] px-3 text-[12.5px] font-bold whitespace-nowrap text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md transition hover:border-white/30 hover:bg-white/[0.12]"
+                        className="inline-flex h-12 items-center justify-center gap-2.5 rounded-xl border border-sky-100/25 bg-white/[0.12] px-3 text-[12.5px] font-bold whitespace-nowrap text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md transition hover:bg-white/[0.18]"
                       >
                         <GitHubMark className="size-[18px] shrink-0 text-white" />
                         <span>{content.github.label}</span>
@@ -234,22 +245,22 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
 
                 {(content.google.visible || content.github.visible) && (
                   <div className="my-5 flex items-center gap-3">
-                    <span className="h-px flex-1 bg-white/15" />
-                    <span className="text-[11px] font-bold tracking-[0.18em] text-white/45 uppercase">
+                    <span className="h-px flex-1 bg-sky-100/20" />
+                    <span className="text-[11px] font-bold tracking-[0.18em] text-sky-50/50 uppercase">
                       {content.dividerLabel}
                     </span>
-                    <span className="h-px flex-1 bg-white/15" />
+                    <span className="h-px flex-1 bg-sky-100/20" />
                   </div>
                 )}
 
                 <form onSubmit={onSubmit} className="space-y-4">
                   <label className="block">
-                    <span className="text-[12px] font-semibold text-white/75">
+                    <span className="text-[12px] font-semibold text-sky-50/80">
                       {content.emailLabel}
                     </span>
-                    <span className="mt-1.5 flex items-center gap-2.5 rounded-xl border border-white/14 bg-black/25 px-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md focus-within:border-[#60a5fa]/55">
+                    <span className="mt-1.5 flex items-center gap-2.5 rounded-xl border border-sky-100/20 bg-[#0b1a2e]/35 px-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-md focus-within:border-sky-300/50">
                       <Mail
-                        className="size-4 shrink-0 text-white/45"
+                        className="size-4 shrink-0 text-sky-100/55"
                         aria-hidden
                       />
                       <input
@@ -259,18 +270,18 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={content.emailPlaceholder}
-                        className="min-w-0 flex-1 bg-transparent py-3.5 text-[14px] text-white outline-none placeholder:text-white/35"
+                        className="min-w-0 flex-1 bg-transparent py-3.5 text-[14px] text-white outline-none placeholder:text-sky-100/35"
                       />
                     </span>
                   </label>
 
                   <label className="block">
-                    <span className="text-[12px] font-semibold text-white/75">
+                    <span className="text-[12px] font-semibold text-sky-50/80">
                       {content.passwordLabel}
                     </span>
-                    <span className="mt-1.5 flex items-center gap-2.5 rounded-xl border border-white/14 bg-black/25 px-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md focus-within:border-[#60a5fa]/55">
+                    <span className="mt-1.5 flex items-center gap-2.5 rounded-xl border border-sky-100/20 bg-[#0b1a2e]/35 px-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-md focus-within:border-sky-300/50">
                       <Lock
-                        className="size-4 shrink-0 text-white/45"
+                        className="size-4 shrink-0 text-sky-100/55"
                         aria-hidden
                       />
                       <input
@@ -280,12 +291,12 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={content.passwordPlaceholder}
-                        className="min-w-0 flex-1 bg-transparent py-3.5 text-[14px] text-white outline-none placeholder:text-white/35"
+                        className="min-w-0 flex-1 bg-transparent py-3.5 text-[14px] text-white outline-none placeholder:text-sky-100/35"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword((v) => !v)}
-                        className="shrink-0 text-white/45 transition hover:text-white/80"
+                        className="shrink-0 text-sky-100/55 transition hover:text-white"
                         aria-label={
                           showPassword ? "Hide password" : "Show password"
                         }
@@ -300,18 +311,18 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                   </label>
 
                   <div className="flex items-center justify-between gap-3 pt-0.5">
-                    <label className="inline-flex cursor-pointer items-center gap-2 text-[12px] font-medium text-white/65">
+                    <label className="inline-flex cursor-pointer items-center gap-2 text-[12px] font-medium text-sky-50/70">
                       <input
                         type="checkbox"
                         checked={remember}
                         onChange={(e) => setRemember(e.target.checked)}
-                        className="size-3.5 rounded border-white/25 bg-black/40 text-[#3b82f6]"
+                        className="size-3.5 rounded border-sky-200/30 bg-[#0b1a2e]/50 text-[#38bdf8]"
                       />
                       {content.rememberLabel}
                     </label>
                     <Link
                       href={content.forgotHref || "#"}
-                      className="text-[12px] font-semibold text-[#60a5fa] transition hover:text-[#93c5fd]"
+                      className="text-[12px] font-semibold text-sky-300 transition hover:text-sky-200"
                     >
                       {content.forgotLabel}
                     </Link>
@@ -319,7 +330,7 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
 
                   <button
                     type="submit"
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563eb] via-[#6366f1] to-[#a855f7] text-[14px] font-bold text-white shadow-[0_12px_32px_rgba(99,102,241,0.4)] transition hover:brightness-110"
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#38bdf8] via-[#3b82f6] to-[#6366f1] text-[14px] font-bold text-white shadow-[0_12px_32px_rgba(56,189,248,0.35)] transition hover:brightness-110"
                   >
                     {content.loginCtaLabel}
                     <ArrowRight className="size-4" aria-hidden />
@@ -332,11 +343,11 @@ export function LoginPageView({ content }: { content: CmsLoginPage }) {
                   ) : null}
                 </form>
 
-                <p className="mt-5 text-center text-[13px] text-white/55">
+                <p className="mt-5 text-center text-[13px] text-sky-50/60">
                   {content.signupPrompt}{" "}
                   <Link
                     href={content.signupHref || "/get-started"}
-                    className="font-semibold text-[#60a5fa] transition hover:text-[#93c5fd]"
+                    className="font-semibold text-sky-300 transition hover:text-sky-200"
                   >
                     {content.signupLabel}
                   </Link>
