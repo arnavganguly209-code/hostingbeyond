@@ -2,14 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, User, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { mainNavigation, type NavItem } from "@/config/navigation";
 import { routes } from "@/config/routes";
 import { CountryLanguageSelector } from "@/components/locale/country-language-selector";
 import { useLocale } from "@/components/locale/locale-provider";
-import { GlowButton } from "@/components/shared/glow-button";
 import { Logo } from "@/components/shared/logo";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +44,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="text-[14px] font-semibold whitespace-nowrap text-[rgba(255,255,255,0.82)] transition-colors duration-150 hover:text-white"
+        className="text-[15px] font-bold whitespace-nowrap text-white/80 transition-colors duration-150 hover:text-white"
       >
         {label}
       </Link>
@@ -63,14 +62,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[14px] font-semibold whitespace-nowrap text-[rgba(255,255,255,0.82)] transition-colors duration-150 hover:text-white"
+        className="inline-flex items-center gap-1 text-[15px] font-bold whitespace-nowrap text-white/80 transition-colors duration-150 hover:text-white"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
         <ChevronDown
           className={cn(
-            "mt-px size-[10px] shrink-0 opacity-45 transition-transform duration-200",
+            "mt-px size-[11px] shrink-0 opacity-50 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -84,14 +83,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 3 }}
             transition={{ duration: 0.13, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-[calc(100%+10px)] left-1/2 z-50 min-w-[210px] -translate-x-1/2"
+            className="absolute top-[calc(100%+10px)] left-1/2 z-50 min-w-[220px] -translate-x-1/2"
           >
-            <div className="overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.08)] bg-[rgba(5,8,20,0.98)] py-1 shadow-[0_16px_48px_rgb(0,0,0,0.55)] backdrop-blur-2xl">
+            <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-[rgba(5,8,20,0.98)] py-1 shadow-[0_16px_48px_rgb(0,0,0,0.55)] backdrop-blur-2xl">
               {item.children.map((child) => (
                 <Link
                   key={child.href}
                   href={child.href}
-                  className="block px-4 py-[10px] text-[13px] font-medium text-[rgba(255,255,255,0.68)] transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:text-white"
+                  className="block px-4 py-[10px] text-[13.5px] font-medium text-white/65 transition-colors hover:bg-white/[0.05] hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   {child.label}
@@ -103,6 +102,25 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
       </AnimatePresence>
     </div>
   );
+}
+
+// ─── Fixed nav order ──────────────────────────────────────────────────────────
+const NAV_ORDER = [
+  "Domains",
+  "Hosting",
+  "Web Hosting",
+  "Business Email",
+  "Resources",
+];
+
+function sortNav(items: NavItem[]): NavItem[] {
+  return [...items].sort((a, b) => {
+    const ai = NAV_ORDER.indexOf(a.label);
+    const bi = NAV_ORDER.indexOf(b.label);
+    const aIdx = ai === -1 ? 99 : ai;
+    const bIdx = bi === -1 ? 99 : bi;
+    return aIdx - bIdx;
+  });
 }
 
 export function SiteHeader({
@@ -131,7 +149,7 @@ export function SiteHeader({
       ? getStartedLabel || "Get Started"
       : t.nav.getStarted;
 
-  // Remove any legacy top-level "Cloud & VPS" — it lives under Hosting dropdown now.
+  // Remove Cloud & VPS top-level, deduplicate Hosting/Web Hosting, enforce order
   const filteredNav = (() => {
     const cleaned = navigation.filter(
       (item) => !/^cloud\s*&\s*vps$/i.test(item.label.trim()),
@@ -139,9 +157,9 @@ export function SiteHeader({
     const hasHosting = cleaned.some(
       (item) => item.label === "Hosting" || item.label === "Web Hosting",
     );
-    if (!hasHosting) return mainNavigation;
+    if (!hasHosting) return sortNav(mainNavigation);
     const seen = new Set<string>();
-    return cleaned.filter((item) => {
+    const deduped = cleaned.filter((item) => {
       const key =
         item.label === "Web Hosting" || item.label === "Hosting"
           ? "hosting"
@@ -150,6 +168,7 @@ export function SiteHeader({
       seen.add(key);
       return true;
     });
+    return sortNav(deduped);
   })();
 
   useEffect(() => {
@@ -167,14 +186,14 @@ export function SiteHeader({
 
   return (
     <header className="relative z-50 w-full shrink-0 bg-[#050816] px-[2.5%] pt-3 pb-1.5">
-      {/* ─── Glass nav bar ─────────────────────────────────── */}
-      <div className="mx-auto flex h-[72px] w-full max-w-[1500px] items-center rounded-[16px] border border-[rgba(255,255,255,0.09)] bg-[rgba(6,9,22,0.82)] px-5 shadow-[0_6px_28px_rgb(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[20px] lg:px-7 xl:px-8">
-        {/* Logo */}
-        <div className="flex w-[190px] shrink-0 items-center xl:w-[210px]">
-          <Logo src={logoPath} className="w-[170px] xl:w-[190px]" />
+      {/* ─── Glass pill nav bar ─────────────────────────────────────────────── */}
+      <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center rounded-[16px] border border-white/[0.09] bg-[rgba(6,9,22,0.82)] px-5 shadow-[0_6px_28px_rgb(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[20px] lg:px-7 xl:px-8">
+        {/* Logo — 10% larger than previous */}
+        <div className="flex w-[210px] shrink-0 items-center xl:w-[230px]">
+          <Logo src={logoPath} className="w-[188px] xl:w-[208px]" />
         </div>
 
-        {/* Desktop nav — centered */}
+        {/* Desktop nav — centered, bigger + bolder */}
         <nav
           aria-label="Primary navigation"
           className="hidden min-w-0 flex-1 items-center justify-center gap-8 lg:flex xl:gap-9"
@@ -188,23 +207,20 @@ export function SiteHeader({
           ))}
         </nav>
 
-        {/* Right controls */}
-        <div className="hidden w-[210px] shrink-0 items-center justify-end gap-2 lg:flex xl:w-[240px]">
-          <CountryLanguageSelector className="h-[36px] rounded-[10px] border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-3 text-[13px] font-semibold hover:border-[rgba(255,255,255,0.18)] hover:bg-[rgba(255,255,255,0.07)]" />
+        {/* Right: language selector + login icon */}
+        <div className="hidden w-[160px] shrink-0 items-center justify-end gap-3 lg:flex xl:w-[180px]">
+          {/* Language / Country selector — compact pill */}
+          <CountryLanguageSelector className="h-[38px] rounded-[10px] border-white/[0.10] bg-white/[0.05] px-3 text-[13.5px] font-semibold hover:border-white/[0.20] hover:bg-white/[0.08]" />
+
+          {/* Login — person icon with tooltip */}
           <Link
             href={loginHref}
-            className="px-1 text-[13.5px] font-semibold whitespace-nowrap text-[rgba(255,255,255,0.78)] transition-colors duration-150 hover:text-white"
+            aria-label={resolvedLogin}
+            title={resolvedLogin}
+            className="group inline-flex size-[38px] shrink-0 items-center justify-center rounded-[10px] border border-white/[0.10] bg-white/[0.04] text-white/70 transition-colors duration-150 hover:border-white/[0.22] hover:bg-white/[0.08] hover:text-white"
           >
-            {resolvedLogin}
+            <User className="size-[17px]" aria-hidden />
           </Link>
-          <GlowButton
-            href={getStartedHref}
-            size="md"
-            className="h-[36px] min-w-[118px] shrink-0 rounded-[10px] px-4 text-[13px] font-semibold"
-          >
-            {resolvedGetStarted}
-            <ArrowRight className="size-3.5" aria-hidden />
-          </GlowButton>
         </div>
 
         {/* Mobile: compact controls + hamburger */}
@@ -212,7 +228,7 @@ export function SiteHeader({
           <CountryLanguageSelector compact />
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-[rgba(255,255,255,0.10)] bg-[rgba(255,255,255,0.04)] text-white"
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-white/[0.10] bg-white/[0.04] text-white"
             aria-expanded={open}
             aria-controls="hb-mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -227,7 +243,7 @@ export function SiteHeader({
         </div>
       </div>
 
-      {/* ─── Mobile drawer ─────────────────────────────────── */}
+      {/* ─── Mobile drawer ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -236,7 +252,7 @@ export function SiteHeader({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.17 }}
-            className="mx-auto mt-2 w-full max-w-[1500px] overflow-hidden rounded-[16px] border border-[rgba(255,255,255,0.08)] bg-[rgba(5,8,20,0.97)] shadow-[0_20px_56px_rgb(0,0,0,0.5)] backdrop-blur-2xl lg:hidden"
+            className="mx-auto mt-2 w-full max-w-[1500px] overflow-hidden rounded-[16px] border border-white/[0.08] bg-[rgba(5,8,20,0.97)] shadow-[0_20px_56px_rgb(0,0,0,0.5)] backdrop-blur-2xl lg:hidden"
           >
             <nav
               className="flex flex-col gap-0.5 p-4"
@@ -251,7 +267,7 @@ export function SiteHeader({
                       <>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[15px] font-semibold text-white"
+                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[15px] font-bold text-white"
                           onClick={() =>
                             setMobileSection((s) =>
                               s === item.label ? null : item.label,
@@ -261,7 +277,7 @@ export function SiteHeader({
                           {label}
                           <ChevronDown
                             className={cn(
-                              "size-4 opacity-45 transition-transform duration-200",
+                              "size-4 opacity-50 transition-transform duration-200",
                               mobileSection === item.label && "rotate-180",
                             )}
                           />
@@ -279,7 +295,7 @@ export function SiteHeader({
                                 <Link
                                   key={child.href}
                                   href={child.href}
-                                  className="block rounded-lg px-3 py-2.5 text-[13.5px] text-[rgba(255,255,255,0.65)] hover:text-white"
+                                  className="block rounded-lg px-3 py-2.5 text-[13.5px] text-white/60 hover:text-white"
                                   onClick={() => setOpen(false)}
                                 >
                                   {child.label}
@@ -292,7 +308,7 @@ export function SiteHeader({
                     ) : (
                       <Link
                         href={item.href}
-                        className="block rounded-xl px-3 py-3 text-[15px] font-semibold text-white"
+                        className="block rounded-xl px-3 py-3 text-[15px] font-bold text-white"
                         onClick={() => setOpen(false)}
                       >
                         {label}
@@ -301,22 +317,22 @@ export function SiteHeader({
                   </div>
                 );
               })}
-              <div className="mt-3 flex flex-col gap-2 border-t border-[rgba(255,255,255,0.07)] pt-3">
+              <div className="mt-3 flex flex-col gap-2 border-t border-white/[0.07] pt-3">
                 <Link
                   href={loginHref}
-                  className="rounded-xl border border-[rgba(255,255,255,0.10)] px-3 py-2.5 text-center text-[14px] font-semibold text-[rgba(255,255,255,0.78)]"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.10] px-3 py-2.5 text-[14px] font-semibold text-white/75"
                   onClick={() => setOpen(false)}
                 >
+                  <User className="size-4" aria-hidden />
                   {resolvedLogin}
                 </Link>
-                <GlowButton
+                <Link
                   href={getStartedHref}
-                  className="w-full rounded-xl font-semibold"
-                  size="lg"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#7c3aed] px-3 py-2.5 text-[14px] font-semibold text-white shadow-[0_0_18px_rgba(37,99,235,0.28)]"
+                  onClick={() => setOpen(false)}
                 >
                   {resolvedGetStarted}
-                  <ArrowRight className="size-4" aria-hidden />
-                </GlowButton>
+                </Link>
               </div>
             </nav>
           </motion.div>

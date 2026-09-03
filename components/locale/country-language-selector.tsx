@@ -10,7 +10,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import { Check, ChevronDown, Globe2, Search, X } from "lucide-react";
+import { Check, ChevronDown, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import {
@@ -132,13 +132,7 @@ export function CountryLanguageSelector({
   }, [draft.languages]);
 
   // ─── Trigger button label ────────────────────────────────────────────────
-  const languageMeta = languages[preferences.language];
-  const triggerLabel =
-    preferences.language === "en"
-      ? "English (US)"
-      : (languageMeta?.nativeLabel ??
-        languageMeta?.label ??
-        preferences.language.toUpperCase());
+  const triggerLangCode = preferences.language.toUpperCase();
 
   // ─── Portal panel ────────────────────────────────────────────────────────
   const panel = mounted
@@ -375,22 +369,18 @@ export function CountryLanguageSelector({
         className={cn(
           "inline-flex items-center gap-1.5 border text-white transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]",
           compact
-            ? "h-8 rounded-[9px] border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-2 text-[12px] font-semibold"
-            : "h-[36px] rounded-[10px] border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.04)] px-3 text-[13px] font-semibold hover:border-[rgba(255,255,255,0.18)] hover:bg-[rgba(255,255,255,0.07)]",
+            ? "h-8 rounded-[9px] border-white/[0.09] bg-white/[0.04] px-2 text-[12px] font-bold"
+            : "h-[38px] rounded-[10px] border-white/[0.10] bg-white/[0.05] px-3 text-[13.5px] font-bold hover:border-white/[0.22] hover:bg-white/[0.08]",
           className,
         )}
       >
-        {compact ? (
-          <span aria-hidden className="text-[15px] leading-none">
-            {countryFlagEmoji(country.code)}
-          </span>
-        ) : (
-          <>
-            <Globe2 className="size-3.5 shrink-0 opacity-75" aria-hidden />
-            <span className="max-w-[110px] truncate">{triggerLabel}</span>
-          </>
-        )}
-        <ChevronDown className="size-3 shrink-0 opacity-45" aria-hidden />
+        {/* Country flag */}
+        <span aria-hidden className="text-[15px] leading-none">
+          {countryFlagEmoji(country.code)}
+        </span>
+        {/* Language code — e.g. EN, NE, HI */}
+        <span className="font-bold tracking-wide">{triggerLangCode}</span>
+        <ChevronDown className="size-[10px] shrink-0 opacity-50" aria-hidden />
       </button>
       {panel}
     </>
