@@ -8,7 +8,6 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import Image from "next/image";
 import { Check, ChevronDown, Search } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -28,39 +27,62 @@ type Props = {
   className?: string;
 };
 
-/** Inline flag image — rendered from flagcdn.com, works on all platforms */
+/** Real flag image via flagcdn — native img (no Next optimizer) for reliable loading */
 function FlagImg({
   code,
   size = 24,
   className,
+  priority = false,
 }: {
   code: string;
-  size?: 20 | 24 | 32 | 48;
+  size?: number;
   className?: string;
+  priority?: boolean;
 }) {
-  const src = flagImgUrl(code, size);
-  if (!src) {
+  const normalized = code.trim().toUpperCase();
+  const [format, setFormat] = useState<"svg" | "png" | "failed">("svg");
+
+  if (!/^[A-Z]{2}$/.test(normalized) || format === "failed") {
     return (
       <span
         className={cn(
-          "inline-flex shrink-0 items-center justify-center rounded-full bg-white/10 text-[10px] font-bold text-white/60",
+          "inline-flex shrink-0 items-center justify-center rounded-full bg-white/10 text-[9px] font-bold text-white/60",
           className,
         )}
+        style={{ width: size, height: size }}
+        aria-hidden
       >
-        {code.slice(0, 2).toUpperCase()}
+        {normalized.slice(0, 2)}
       </span>
     );
   }
+
+  const src = flagImgUrl(normalized, format === "png" ? "png" : "svg");
+
   return (
-    <Image
-      src={src}
-      alt={code}
-      width={size}
-      height={size}
-      unoptimized
-      className={cn("shrink-0 rounded-full object-cover", className)}
+    <span
+      className={cn(
+        "inline-flex shrink-0 overflow-hidden rounded-full border border-white/15 bg-[#1a2540]",
+        className,
+      )}
       style={{ width: size, height: size }}
-    />
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        width={size}
+        height={size}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
+        referrerPolicy="no-referrer"
+        className="h-full w-full object-cover"
+        onError={() => {
+          setFormat((current) => (current === "svg" ? "png" : "failed"));
+        }}
+      />
+    </span>
   );
 }
 
@@ -209,11 +231,7 @@ export function CountryLanguageSelector({ compact = false, className }: Props) {
         )}
       >
         {/* Circular flag image */}
-        <FlagImg
-          code={country.code}
-          size={20}
-          className="size-5 rounded-full border border-white/[0.15] object-cover"
-        />
+        <FlagImg code={country.code} size={22} priority />
         <span className="font-bold tracking-wide">{triggerLangCode}</span>
         <ChevronDown
           className={cn(
@@ -302,11 +320,7 @@ export function CountryLanguageSelector({ compact = false, className }: Props) {
                       )}
                     >
                       {/* Real flag image — round */}
-                      <FlagImg
-                        code={option.code}
-                        size={24}
-                        className="size-6 shrink-0 rounded-full border border-white/[0.12] object-cover"
-                      />
+                      <FlagImg code={option.code} size={26} />
 
                       {/* Country name */}
                       <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
@@ -373,11 +387,7 @@ export function CountryLanguageSelector({ compact = false, className }: Props) {
             {/* Footer: selected summary + Apply */}
             <div className="flex shrink-0 items-center justify-between gap-3 border-t border-white/[0.07] bg-[rgba(5,8,18,0.7)] px-4 py-2.5">
               <div className="flex min-w-0 items-center gap-2.5">
-                <FlagImg
-                  code={draft.code}
-                  size={20}
-                  className="size-5 shrink-0 rounded-full border border-white/[0.15]"
-                />
+                <FlagImg code={draft.code} size={22} />
                 <div className="min-w-0">
                   <p className="truncate text-[12px] font-semibold text-white/85">
                     {draft.name}

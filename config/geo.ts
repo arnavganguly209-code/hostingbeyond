@@ -196,16 +196,16 @@ export function countryFlagEmoji(countryCode: string): string {
 
 /**
  * Returns a flagcdn.com URL for a 2-letter ISO country code.
- * These are real flag images that render correctly on all platforms/browsers.
- * Size: "24" = 24px wide SVG flag (use w=24 or w=48 for higher DPI).
+ * SVG is default (sharp at any size); PNG fallback uses standard 4:3 flag ratio.
  */
 export function flagImgUrl(
   countryCode: string,
-  size: 20 | 24 | 32 | 48 = 24,
+  format: "svg" | "png" = "svg",
 ): string {
   const code = countryCode.toLowerCase();
   if (!/^[a-z]{2}$/.test(code)) return "";
-  return `https://flagcdn.com/w${size}/${code}.png`;
+  if (format === "png") return `https://flagcdn.com/24x18/${code}.png`;
+  return `https://flagcdn.com/${code}.svg`;
 }
 
 function buildCountryOptions(): CountryOption[] {
