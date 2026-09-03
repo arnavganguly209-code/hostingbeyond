@@ -44,7 +44,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="text-[15px] font-bold whitespace-nowrap text-white/80 transition-colors duration-150 hover:text-white"
+        className="text-[17px] font-extrabold tracking-[-0.01em] whitespace-nowrap text-white/85 transition-colors duration-150 hover:text-white"
       >
         {label}
       </Link>
@@ -62,14 +62,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[15px] font-bold whitespace-nowrap text-white/80 transition-colors duration-150 hover:text-white"
+        className="inline-flex items-center gap-1 text-[17px] font-extrabold tracking-[-0.01em] whitespace-nowrap text-white/85 transition-colors duration-150 hover:text-white"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
         <ChevronDown
           className={cn(
-            "mt-px size-[11px] shrink-0 opacity-50 transition-transform duration-200",
+            "mt-px size-[12px] shrink-0 opacity-50 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -188,15 +188,15 @@ export function SiteHeader({
     <header className="relative z-50 w-full shrink-0 bg-[#050816] px-[2.5%] pt-3 pb-1.5">
       {/* ─── Glass pill nav bar ─────────────────────────────────────────────── */}
       <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center rounded-[16px] border border-white/[0.09] bg-[rgba(6,9,22,0.82)] px-5 shadow-[0_6px_28px_rgb(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[20px] lg:px-7 xl:px-8">
-        {/* Logo — 10% larger than previous */}
-        <div className="flex w-[210px] shrink-0 items-center xl:w-[230px]">
-          <Logo src={logoPath} className="w-[188px] xl:w-[208px]" />
+        {/* Logo — 10% larger */}
+        <div className="flex w-[220px] shrink-0 items-center xl:w-[240px]">
+          <Logo src={logoPath} className="w-[206px] xl:w-[226px]" />
         </div>
 
-        {/* Desktop nav — centered, bigger + bolder */}
+        {/* Desktop nav — centered, bigger + bolder, clear gap between 4 items */}
         <nav
           aria-label="Primary navigation"
-          className="hidden min-w-0 flex-1 items-center justify-center gap-8 lg:flex xl:gap-9"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-10 lg:flex xl:gap-12"
         >
           {filteredNav.map((item) => (
             <NavDropdown
@@ -267,7 +267,7 @@ export function SiteHeader({
                       <>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[15px] font-bold text-white"
+                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[16px] font-extrabold text-white"
                           onClick={() =>
                             setMobileSection((s) =>
                               s === item.label ? null : item.label,
@@ -308,7 +308,7 @@ export function SiteHeader({
                     ) : (
                       <Link
                         href={item.href}
-                        className="block rounded-xl px-3 py-3 text-[15px] font-bold text-white"
+                        className="block rounded-xl px-3 py-3 text-[16px] font-extrabold text-white"
                         onClick={() => setOpen(false)}
                       >
                         {label}
