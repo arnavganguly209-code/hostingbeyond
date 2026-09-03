@@ -44,7 +44,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="text-[17px] font-extrabold tracking-[-0.01em] whitespace-nowrap text-white/85 transition-colors duration-150 hover:text-white"
+        className="text-[15px] font-extrabold tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors duration-150 hover:text-white/80"
       >
         {label}
       </Link>
@@ -62,7 +62,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[17px] font-extrabold tracking-[-0.01em] whitespace-nowrap text-white/85 transition-colors duration-150 hover:text-white"
+        className="inline-flex items-center gap-1 text-[15px] font-extrabold tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors duration-150 hover:text-white/80"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
@@ -185,9 +185,8 @@ export function SiteHeader({
   }, [open]);
 
   return (
-    <header className="relative z-50 w-full shrink-0 bg-[#050816] px-[2.5%] pt-3 pb-1.5">
-      {/* ─── Glass pill nav bar ─────────────────────────────────────────────── */}
-      <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center rounded-[16px] border border-white/[0.09] bg-[rgba(6,9,22,0.82)] px-5 shadow-[0_6px_28px_rgb(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[20px] lg:px-7 xl:px-8">
+    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.5%] pt-3 pb-1.5">
+      <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center rounded-[18px] border border-white/16 bg-white/[0.10] px-5 shadow-[0_8px_32px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-2xl lg:px-7 xl:px-8">
         {/* Logo — 10% larger */}
         <div className="flex w-[220px] shrink-0 items-center xl:w-[240px]">
           <Logo src={logoPath} className="w-[206px] xl:w-[226px]" />
@@ -208,18 +207,14 @@ export function SiteHeader({
         </nav>
 
         {/* Right: language selector + login icon */}
-        <div className="hidden w-[160px] shrink-0 items-center justify-end gap-3 lg:flex xl:w-[180px]">
-          {/* Language / Country selector — circular flag + lang code */}
+        <div className="hidden shrink-0 items-center justify-end gap-2.5 lg:flex xl:min-w-[220px]">
           <CountryLanguageSelector />
-
-          {/* Login — person icon with tooltip */}
           <Link
             href={loginHref}
-            aria-label={resolvedLogin}
-            title={resolvedLogin}
-            className="group inline-flex size-[38px] shrink-0 items-center justify-center rounded-[10px] border border-white/[0.10] bg-white/[0.04] text-white/70 transition-colors duration-150 hover:border-white/[0.22] hover:bg-white/[0.08] hover:text-white"
+            className="inline-flex h-[38px] items-center gap-2 rounded-full border border-white/16 bg-white/[0.08] px-3.5 text-[13px] font-bold text-white backdrop-blur-xl transition hover:bg-white/[0.14]"
           >
-            <User className="size-[17px]" aria-hidden />
+            <User className="size-4" aria-hidden />
+            {resolvedLogin}
           </Link>
         </div>
 
