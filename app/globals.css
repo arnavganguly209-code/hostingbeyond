@@ -236,6 +236,16 @@
     mask-composite: intersect;
   }
 
+  /* Login card — cyan → purple glowing border */
+  .hb-login-glass {
+    background: linear-gradient(
+      135deg,
+      rgba(56, 189, 248, 0.95),
+      rgba(99, 102, 241, 0.75) 45%,
+      rgba(192, 38, 211, 0.95)
+    );
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hb-hero-gradient {
       animation: none;

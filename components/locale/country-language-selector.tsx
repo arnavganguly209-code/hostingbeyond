@@ -24,6 +24,8 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   compact?: boolean;
+  /** Login mockup style: globe + English (US) */
+  variant?: "flag" | "globe";
   className?: string;
 };
 
@@ -86,7 +88,11 @@ function FlagImg({
   );
 }
 
-export function CountryLanguageSelector({ compact = false, className }: Props) {
+export function CountryLanguageSelector({
+  compact = false,
+  variant = "flag",
+  className,
+}: Props) {
   const { preferences, applySelection, t } = useLocale();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -207,12 +213,28 @@ export function CountryLanguageSelector({ compact = false, className }: Props) {
           className,
         )}
       >
-        <span className="inline-block size-5 rounded-full bg-white/10" />
-        <span className="text-[13px] font-bold text-white/70">EN</span>
+        {variant === "globe" ? (
+          <>
+            <span className="inline-block size-4 rounded-full bg-white/10" />
+            <span className="text-[12px] font-semibold text-white/70">
+              English (US)
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="inline-block size-5 rounded-full bg-white/10" />
+            <span className="text-[13px] font-bold text-white/70">EN</span>
+          </>
+        )}
         <ChevronDown className="size-[10px] text-white/40" />
       </div>
     );
   }
+
+  const globeLabel =
+    preferences.language === "en"
+      ? "English (US)"
+      : (languages[preferences.language]?.label ?? "English");
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -223,16 +245,35 @@ export function CountryLanguageSelector({ compact = false, className }: Props) {
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          "inline-flex items-center gap-2 border border-white/[0.12] bg-white/[0.06] text-white transition-all duration-150 hover:border-white/[0.25] hover:bg-white/[0.10] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]",
+          "inline-flex items-center gap-2 border border-white/[0.12] bg-white/[0.06] text-white backdrop-blur-xl transition-all duration-150 hover:border-white/[0.25] hover:bg-white/[0.10] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]",
           compact
             ? "h-8 rounded-full px-2 text-[12px] font-bold"
             : "h-[38px] rounded-full px-3 text-[13.5px] font-bold",
+          variant === "globe" && "h-9 gap-2 px-3 text-[12px] font-semibold",
           className,
         )}
       >
-        {/* Circular flag image */}
-        <FlagImg code={country.code} size={22} priority />
-        <span className="font-bold tracking-wide">{triggerLangCode}</span>
+        {variant === "globe" ? (
+          <>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="size-4 text-white/75"
+              aria-hidden
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z" />
+            </svg>
+            <span className="tracking-wide text-white/90">{globeLabel}</span>
+          </>
+        ) : (
+          <>
+            <FlagImg code={country.code} size={22} priority />
+            <span className="font-bold tracking-wide">{triggerLangCode}</span>
+          </>
+        )}
         <ChevronDown
           className={cn(
             "size-[10px] shrink-0 opacity-55 transition-transform duration-200",
