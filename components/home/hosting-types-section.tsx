@@ -16,6 +16,7 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { isRuntimeMediaSrc } from "@/lib/orbit/media-url";
 import type {
   CmsHostingTypeCard,
   CmsHostingTypesContent,
@@ -86,6 +87,7 @@ function CardImageVisual({ card }: { card: CmsHostingTypeCard }) {
           src={card.imageUrl}
           alt={card.imageAlt || card.title}
           fill
+          unoptimized={isRuntimeMediaSrc(card.imageUrl)}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover object-center"
         />

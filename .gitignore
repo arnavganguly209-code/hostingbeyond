@@ -37,6 +37,8 @@ yarn-error.log*
 # Uploads (runtime media — keep folder, ignore files)
 /public/uploads/*
 !/public/uploads/.gitkeep
+/data/uploads/*
+!/data/uploads/.gitkeep
 
 # Vercel / Netlify
 .vercel

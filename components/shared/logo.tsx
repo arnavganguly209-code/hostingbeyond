@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import { isRuntimeMediaSrc } from "@/lib/orbit/media-url";
 
 type LogoProps = {
   className?: string;
@@ -25,6 +26,7 @@ export function Logo({
       width={264}
       height={92}
       priority
+      unoptimized={isRuntimeMediaSrc(src)}
       className={cn(
         "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] bg-transparent object-contain object-left align-middle",
         className,

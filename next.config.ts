@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+    localPatterns: [
+      { pathname: "/images/**" },
+      { pathname: "/logo/**" },
+      { pathname: "/uploads/**" },
+      { pathname: "/api/uploads/**" },
+    ],
     remotePatterns: [
       {
         protocol: "https",

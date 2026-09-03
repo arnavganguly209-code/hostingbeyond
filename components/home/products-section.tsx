@@ -12,6 +12,7 @@ import { useLocale } from "@/components/locale/locale-provider";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { CmsProductOffer, CmsProductsContent } from "@/lib/orbit/defaults";
+import { isRuntimeMediaSrc } from "@/lib/orbit/media-url";
 import { DomainVisual, EmailVisual, HostingVisual } from "./product-visuals";
 
 function HostingCardIcon({ className }: { className?: string }) {
@@ -155,6 +156,7 @@ function ProductCard({
                 alt=""
                 width={28}
                 height={28}
+                unoptimized={isRuntimeMediaSrc(offer.iconUrl)}
                 className="size-7 object-contain"
               />
             ) : (
@@ -251,6 +253,7 @@ function ProductCard({
                 src={offer.illustrationUrl}
                 alt=""
                 fill
+                unoptimized={isRuntimeMediaSrc(offer.illustrationUrl)}
                 className="object-contain transition-transform duration-300 group-hover:scale-[1.04]"
                 sizes="200px"
               />
