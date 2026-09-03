@@ -21,20 +21,32 @@ export default async function HomePage() {
       <div className="relative flex flex-col lg:h-svh lg:max-h-svh lg:overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[#0a1630]" />
-          <div className="absolute inset-y-0 right-0 w-full lg:w-[68%]">
+          {/* Zoomed-out speaker — object-contain so head/body are not cropped */}
+          <div className="absolute top-[6%] right-[-2%] bottom-[8%] w-[58%] max-lg:hidden">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
               quality={92}
-              sizes="(max-width: 1024px) 100vw, 68vw"
-              className="object-cover object-[72%_16%] opacity-80 lg:opacity-95"
+              sizes="58vw"
+              className="object-contain object-bottom object-right"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1630] via-[#0a1630]/92 to-[#0a1630]/20 lg:via-[#0a1630]/72 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1630] via-transparent to-[#0a1630]/45" />
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0a1630] to-transparent" />
+          <div className="absolute inset-0 lg:hidden">
+            <Image
+              src={heroImage}
+              alt=""
+              fill
+              priority
+              quality={85}
+              sizes="100vw"
+              className="object-contain object-[80%_20%] opacity-45"
+            />
+          </div>
+          <div className="absolute inset-y-0 left-0 w-[52%] bg-gradient-to-r from-[#0a1630] via-[#0a1630]/88 to-transparent max-lg:w-full max-lg:via-[#0a1630]/70" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0a1630]/70 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a1630] to-transparent" />
         </div>
 
         <SiteHeader

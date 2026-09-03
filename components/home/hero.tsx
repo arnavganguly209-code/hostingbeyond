@@ -54,17 +54,17 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
       <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-center px-[3.5%] pt-4 pb-3 lg:pt-6">
-        <div className="max-w-[620px]">
+        <div className="max-w-[560px]">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/18 bg-white/[0.10] px-3.5 py-1.5 text-[11px] font-bold tracking-[0.14em] text-white/90 uppercase backdrop-blur-xl"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#0a1630]/55 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.16em] text-white uppercase backdrop-blur-xl"
           >
             <Zap className="size-3.5 text-[#60a5fa]" aria-hidden />
             Powerful. Reliable. Secure.
           </motion.p>
 
-          <h1 className="font-heading text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] font-extrabold tracking-[-0.035em] text-white">
+          <h1 className="font-heading text-[clamp(2.55rem,5.2vw,4.55rem)] leading-[1.04] font-extrabold tracking-[-0.04em] text-white drop-shadow-[0_2px_18px_rgba(10,22,48,0.55)]">
             <motion.span
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -86,7 +86,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="block bg-gradient-to-r from-[#3b82f6] via-[#60a5fa] to-[#818cf8] bg-clip-text text-transparent"
+              className="block text-[#3b82f6]"
             >
               {line3}
             </motion.span>
@@ -96,7 +96,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.16 }}
-            className="mt-5 max-w-[520px] text-[16px] leading-[1.55] font-medium text-white/78 sm:text-[17px]"
+            className="mt-5 max-w-[500px] text-[16px] leading-[1.55] font-medium text-white sm:text-[17px]"
           >
             {description}
           </motion.p>
@@ -184,23 +184,23 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             </button>
           </form>
 
-          <div className="mt-3.5 flex items-center gap-2.5 overflow-x-auto pb-0.5">
+          <div className="mt-3.5 flex items-end gap-2.5 overflow-x-auto pb-0.5">
             {activeTeasers.map((item) => (
               <button
                 key={item.tld}
                 type="button"
                 onClick={() => setTld(item.tld as typeof tld)}
                 className={cn(
-                  "inline-flex min-w-[92px] shrink-0 flex-col items-start rounded-xl border px-3.5 py-2 text-left backdrop-blur-xl transition",
+                  "inline-flex min-w-[108px] shrink-0 flex-col items-start rounded-[14px] border px-4 py-2.5 text-left backdrop-blur-xl transition",
                   tld === item.tld
-                    ? "border-white/28 bg-white/[0.14]"
-                    : "border-white/14 bg-white/[0.07] hover:bg-white/[0.12]",
+                    ? "border-[#3b82f6]/45 bg-white/[0.14]"
+                    : "border-white/18 bg-white/[0.08] hover:bg-white/[0.12]",
                 )}
               >
-                <span className="text-[13px] font-extrabold text-white">
+                <span className="text-[15px] leading-none font-extrabold text-[#60a5fa]">
                   {item.tld}
                 </span>
-                <span className="text-[11px] font-medium text-white/60">
+                <span className="mt-1.5 text-[13px] leading-none font-bold text-white">
                   {item.priceLabel}
                 </span>
               </button>
