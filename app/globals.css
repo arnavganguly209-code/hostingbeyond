@@ -190,42 +190,26 @@
     animation: hb-hero-gradient-shift 10s ease-in-out infinite;
   }
 
-  /* Soft vignette — photo dissolves into glass navy, no hard frame */
+  /* Soft vignette — photo dissolves into navy (no hard pasted edge) */
   .hb-hero-subject {
-    -webkit-mask-image:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(0, 0, 0, 0.08) 8%,
-        rgba(0, 0, 0, 0.45) 22%,
-        #000 42%,
-        #000 100%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.55) 0%,
-        #000 12%,
-        #000 88%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
-    mask-image:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(0, 0, 0, 0.08) 8%,
-        rgba(0, 0, 0, 0.45) 22%,
-        #000 42%,
-        #000 100%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.55) 0%,
-        #000 12%,
-        #000 88%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.15) 12%,
+      rgba(0, 0, 0, 0.55) 28%,
+      rgba(0, 0, 0, 0.9) 42%,
+      #000 55%,
+      #000 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.15) 12%,
+      rgba(0, 0, 0, 0.55) 28%,
+      rgba(0, 0, 0, 0.9) 42%,
+      #000 55%,
+      #000 100%
+    );
   }
 
   @media (prefers-reduced-motion: reduce) {

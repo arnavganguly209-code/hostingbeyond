@@ -53,20 +53,21 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
 
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-center px-[3.5%] pt-4 pb-3 lg:pt-6">
-        <div className="max-w-[560px]">
+      {/* Copy + CTAs — always fully visible above domain search */}
+      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-center px-[3.5%] py-3 lg:py-4">
+        <div className="relative z-10 max-w-[540px]">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#0a1630]/55 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.16em] text-white uppercase backdrop-blur-xl"
+            className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-[#07122a]/70 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.14em] text-white uppercase shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:mb-4"
           >
             <Zap className="size-3.5 text-[#60a5fa]" aria-hidden />
             Powerful. Reliable. Secure.
           </motion.p>
 
-          <h1 className="font-heading text-[clamp(2.55rem,5.2vw,4.55rem)] leading-[1.04] font-extrabold tracking-[-0.04em] text-white drop-shadow-[0_2px_18px_rgba(10,22,48,0.55)]">
+          <h1 className="font-heading text-[clamp(2.35rem,4.6vw,4.15rem)] leading-[1.05] font-extrabold tracking-[-0.035em] text-white [text-shadow:0_2px_24px_rgba(7,18,42,0.85)]">
             <motion.span
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="block"
             >
@@ -74,7 +75,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             </motion.span>
             {line2 ? (
               <motion.span
-                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
                 className="block"
@@ -83,7 +84,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
               </motion.span>
             ) : null}
             <motion.span
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="block text-[#3b82f6]"
@@ -95,8 +96,8 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.16 }}
-            className="mt-5 max-w-[500px] text-[16px] leading-[1.55] font-medium text-white sm:text-[17px]"
+            transition={{ delay: 0.14 }}
+            className="mt-4 max-w-[480px] text-[15px] leading-[1.55] font-medium text-white [text-shadow:0_1px_12px_rgba(7,18,42,0.8)] sm:text-[16px] lg:mt-5"
           >
             {description}
           </motion.p>
@@ -104,19 +105,19 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-7 flex flex-wrap items-center gap-3"
+            transition={{ delay: 0.18 }}
+            className="mt-5 flex flex-wrap items-center gap-3 lg:mt-6"
           >
             <Link
               href={routes.getStarted}
-              className="inline-flex h-[50px] min-w-[158px] items-center justify-center gap-2 rounded-2xl bg-[#2f6bff] px-6 text-[14px] font-bold text-white shadow-[0_8px_28px_rgba(47,107,255,0.38)] transition hover:brightness-110"
+              className="inline-flex h-[48px] min-w-[150px] items-center justify-center gap-2 rounded-2xl bg-[#2f6bff] px-5 text-[14px] font-bold text-white shadow-[0_8px_28px_rgba(47,107,255,0.4)] transition hover:brightness-110 sm:h-[50px]"
             >
               Get Started
               <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link
               href={routes.hosting}
-              className="inline-flex h-[50px] min-w-[158px] items-center justify-center gap-2 rounded-2xl border border-white/22 bg-white/[0.08] px-6 text-[14px] font-bold text-white backdrop-blur-xl transition hover:bg-white/[0.14]"
+              className="inline-flex h-[48px] min-w-[150px] items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/[0.10] px-5 text-[14px] font-bold text-white backdrop-blur-xl transition hover:bg-white/[0.16] sm:h-[50px]"
             >
               Explore Plans
               <ArrowRight className="size-4" aria-hidden />
@@ -125,19 +126,20 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
         </div>
       </div>
 
+      {/* Domain search — below CTAs, never covers them */}
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.24 }}
-        className="relative z-20 mx-auto w-full max-w-[1520px] shrink-0 px-[3.5%] pb-4 lg:pb-5"
+        transition={{ delay: 0.22 }}
+        className="relative z-20 mx-auto w-full max-w-[1520px] shrink-0 px-[3.5%] pb-3 lg:pb-4"
       >
-        <div className="rounded-[22px] border border-white/16 bg-white/[0.08] px-4 py-4 shadow-[0_16px_50px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl sm:px-5 sm:py-5">
+        <div className="rounded-[20px] border border-white/18 bg-[#0a1834]/55 px-4 py-3.5 shadow-[0_16px_50px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.14)] backdrop-blur-2xl sm:px-5 sm:py-4">
           <form
             onSubmit={onSearch}
-            className="flex flex-col gap-3 lg:flex-row lg:items-center"
+            className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-3"
           >
-            <div className="flex min-w-0 flex-1 items-center gap-2.5 rounded-2xl border border-white/16 bg-[#0a1630]/45 px-3.5 focus-within:border-[#60a5fa]/55">
-              <span className="inline-flex size-9 shrink-0 items-center justify-center text-[#93c5fd]">
+            <div className="flex min-w-0 flex-1 items-center gap-2.5 rounded-2xl border border-white/16 bg-[#07122a]/55 px-3.5 focus-within:border-[#60a5fa]/55">
+              <span className="inline-flex size-8 shrink-0 items-center justify-center text-[#93c5fd]">
                 <Globe2 className="size-4" aria-hidden />
               </span>
               <label htmlFor="hero-domain-search" className="sr-only">
@@ -149,20 +151,20 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
                 value={domain}
                 onChange={(event) => setDomain(event.target.value)}
                 placeholder={searchPlaceholder}
-                className="min-w-0 flex-1 bg-transparent py-[13px] text-[15px] text-white outline-none placeholder:text-white/40 sm:text-[16px]"
+                className="min-w-0 flex-1 bg-transparent py-[12px] text-[15px] text-white outline-none placeholder:text-white/40 sm:text-[16px]"
               />
               <div className="relative shrink-0">
                 <select
                   value={tld}
                   onChange={(event) => setTld(event.target.value as typeof tld)}
-                  className="h-[42px] appearance-none rounded-xl border border-white/16 bg-white/[0.08] py-2 pr-8 pl-3 text-[13px] font-bold text-white outline-none sm:h-[46px]"
+                  className="h-[40px] appearance-none rounded-xl border border-white/16 bg-white/[0.08] py-2 pr-8 pl-3 text-[13px] font-bold text-white outline-none sm:h-[44px]"
                   aria-label="Domain extension"
                 >
                   {heroTldOptions.map((option) => (
                     <option
                       key={option}
                       value={option}
-                      className="bg-[#0a1630]"
+                      className="bg-[#07122a]"
                     >
                       {option}
                     </option>
@@ -177,37 +179,37 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
 
             <button
               type="submit"
-              className="inline-flex h-[50px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#2f6bff] px-6 text-[13px] font-bold tracking-wide text-white uppercase shadow-[0_8px_24px_rgba(47,107,255,0.35)] transition hover:brightness-110 sm:h-[52px] lg:w-[210px]"
+              className="inline-flex h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#2f6bff] px-6 text-[13px] font-bold tracking-wide text-white uppercase shadow-[0_8px_24px_rgba(47,107,255,0.35)] transition hover:brightness-110 sm:h-[50px] lg:w-[200px]"
             >
               Search Domain
               <ArrowRight className="size-4" aria-hidden />
             </button>
           </form>
 
-          <div className="mt-3.5 flex items-end gap-2.5 overflow-x-auto pb-0.5">
+          <div className="mt-3 flex items-end gap-2 overflow-x-auto pb-0.5">
             {activeTeasers.map((item) => (
               <button
                 key={item.tld}
                 type="button"
                 onClick={() => setTld(item.tld as typeof tld)}
                 className={cn(
-                  "inline-flex min-w-[108px] shrink-0 flex-col items-start rounded-[14px] border px-4 py-2.5 text-left backdrop-blur-xl transition",
+                  "inline-flex min-w-[100px] shrink-0 flex-col items-start rounded-[12px] border px-3.5 py-2 text-left backdrop-blur-xl transition",
                   tld === item.tld
-                    ? "border-[#3b82f6]/45 bg-white/[0.14]"
-                    : "border-white/18 bg-white/[0.08] hover:bg-white/[0.12]",
+                    ? "border-[#3b82f6]/50 bg-white/[0.14]"
+                    : "border-white/16 bg-white/[0.08] hover:bg-white/[0.12]",
                 )}
               >
-                <span className="text-[15px] leading-none font-extrabold text-[#60a5fa]">
+                <span className="text-[14px] leading-none font-extrabold text-[#60a5fa]">
                   {item.tld}
                 </span>
-                <span className="mt-1.5 text-[13px] leading-none font-bold text-white">
+                <span className="mt-1.5 text-[12px] leading-none font-bold text-white">
                   {item.priceLabel}
                 </span>
               </button>
             ))}
             <Link
               href={routes.domains}
-              className="ml-auto shrink-0 text-[13px] font-bold whitespace-nowrap text-[#93c5fd] transition hover:text-white"
+              className="ml-auto shrink-0 self-center text-[13px] font-bold whitespace-nowrap text-[#93c5fd] transition hover:text-white"
             >
               View all domains →
             </Link>
