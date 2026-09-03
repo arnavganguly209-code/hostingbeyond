@@ -1,7 +1,11 @@
 import Image from "next/image";
 
 import { SiteHeader } from "@/components/layout";
-import { HeroSection, ProductsSection } from "@/components/home";
+import {
+  HeroSection,
+  HostingTypesSection,
+  ProductsSection,
+} from "@/components/home";
 import { getHomeSections, getSiteSettings } from "@/lib/orbit/content";
 
 export default async function HomePage() {
@@ -94,6 +98,7 @@ export default async function HomePage() {
       {sections.products.visible ? (
         <ProductsSection content={sections.products} />
       ) : null}
+      <HostingTypesSection />
     </div>
   );
 }
