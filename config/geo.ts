@@ -185,12 +185,27 @@ function resolveLanguages(code: string): {
   return { defaultLanguage: "en", languages: ["en"] };
 }
 
+/** @deprecated Use flagImgUrl() instead — emoji flags don't render on Windows */
 export function countryFlagEmoji(countryCode: string): string {
   const code = countryCode.toUpperCase();
   if (!/^[A-Z]{2}$/.test(code)) return "🌐";
   return String.fromCodePoint(
     ...[...code].map((char) => 127397 + char.charCodeAt(0)),
   );
+}
+
+/**
+ * Returns a flagcdn.com URL for a 2-letter ISO country code.
+ * These are real flag images that render correctly on all platforms/browsers.
+ * Size: "24" = 24px wide SVG flag (use w=24 or w=48 for higher DPI).
+ */
+export function flagImgUrl(
+  countryCode: string,
+  size: 20 | 24 | 32 | 48 = 24,
+): string {
+  const code = countryCode.toLowerCase();
+  if (!/^[a-z]{2}$/.test(code)) return "";
+  return `https://flagcdn.com/w${size}/${code}.png`;
 }
 
 function buildCountryOptions(): CountryOption[] {

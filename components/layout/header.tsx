@@ -209,8 +209,8 @@ export function SiteHeader({
 
         {/* Right: language selector + login icon */}
         <div className="hidden w-[160px] shrink-0 items-center justify-end gap-3 lg:flex xl:w-[180px]">
-          {/* Language / Country selector — compact pill */}
-          <CountryLanguageSelector className="h-[38px] rounded-[10px] border-white/[0.10] bg-white/[0.05] px-3 text-[13.5px] font-semibold hover:border-white/[0.20] hover:bg-white/[0.08]" />
+          {/* Language / Country selector — circular flag + lang code */}
+          <CountryLanguageSelector />
 
           {/* Login — person icon with tooltip */}
           <Link
