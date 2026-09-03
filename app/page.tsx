@@ -19,48 +19,66 @@ export default async function HomePage() {
   return (
     <div className="overflow-x-hidden bg-[#07122a]">
       <div className="relative flex flex-col lg:h-svh lg:max-h-svh lg:overflow-hidden">
-        {/* Atmospheric backdrop — soft blend, no pasted rectangle */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
           <div className="absolute inset-0 bg-[#07122a]" />
 
-          {/* Soft blue stage glow behind subject */}
-          <div className="absolute top-[18%] right-[6%] h-[60%] w-[42%] rounded-full bg-[radial-gradient(ellipse,rgba(47,107,255,0.2),transparent_70%)] blur-3xl max-lg:hidden" />
-          <div className="absolute right-[12%] bottom-[12%] h-[36%] w-[30%] rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.12),transparent_70%)] blur-3xl max-lg:hidden" />
-
-          {/*
-            Desktop subject: starts BELOW header so cap/head never crops.
-            object-contain + slight scale-down = ~20% less zoom, full head visible.
-          */}
-          <div className="hb-hero-subject absolute top-[92px] right-0 bottom-[6%] hidden w-[56%] lg:block xl:w-[54%]">
+          {/* Ambient color bleed — blurred photo so edges never look rectangular */}
+          <div className="absolute top-[4%] right-[-8%] bottom-[-2%] hidden w-[70%] lg:block">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
-              quality={93}
-              sizes="56vw"
-              className="scale-[0.92] object-contain object-bottom object-right"
+              quality={60}
+              sizes="70vw"
+              className="scale-110 object-cover object-[70%_12%] opacity-40 blur-[48px] saturate-125"
             />
           </div>
 
-          {/* Mobile soft presence */}
+          {/* Soft stage glows */}
+          <div className="absolute top-[10%] right-[2%] h-[65%] w-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(47,107,255,0.18),transparent_68%)] blur-3xl max-lg:hidden" />
+          <div className="absolute right-[8%] bottom-[8%] h-[40%] w-[35%] rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.12),transparent_70%)] blur-3xl max-lg:hidden" />
+
+          {/*
+            Sharp subject — full head/cap below header.
+            Soft CSS mask dissolves left edge into navy (no pasted box).
+            object-position favors top of photo so cap is never cropped.
+          */}
+          <div className="hb-hero-blend absolute top-[78px] right-[-3%] bottom-[2%] hidden w-[58%] lg:block xl:w-[56%]">
+            <Image
+              src={heroImage}
+              alt=""
+              fill
+              priority
+              quality={95}
+              sizes="58vw"
+              className="object-cover object-[68%_6%]"
+            />
+          </div>
+
+          {/* Mobile soft presence only */}
           <div className="absolute inset-0 lg:hidden">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
-              quality={80}
+              quality={75}
               sizes="100vw"
-              className="object-contain object-[85%_30%] opacity-30"
+              className="object-cover object-[78%_10%] opacity-28 blur-[2px]"
             />
-            <div className="absolute inset-0 bg-[#07122a]/60" />
+            <div className="absolute inset-0 bg-[#07122a]/65" />
           </div>
 
-          {/* Left readability wash — soft dissolve into navy */}
-          <div className="absolute inset-y-0 left-0 hidden w-[50%] bg-gradient-to-r from-[#07122a] from-45% via-[#07122a]/80 to-transparent lg:block" />
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#07122a]/85 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#07122a] via-[#07122a]/75 to-transparent" />
+          {/* Multi-layer navy washes — kill any remaining hard edge */}
+          <div className="absolute inset-y-0 left-0 hidden w-[55%] bg-gradient-to-r from-[#07122a] from-[38%] via-[#07122a]/85 via-[62%] to-transparent lg:block" />
+          <div className="absolute inset-y-0 left-[40%] hidden w-[22%] bg-gradient-to-r from-[#07122a]/40 to-transparent lg:block" />
+          <div className="absolute inset-x-0 top-0 h-[100px] bg-gradient-to-b from-[#07122a] via-[#07122a]/75 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#07122a] via-[#07122a]/80 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-[8%] bg-gradient-to-l from-[#07122a]/50 to-transparent max-lg:hidden" />
         </div>
 
         <SiteHeader
