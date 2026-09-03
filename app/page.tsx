@@ -30,15 +30,15 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-[#07122a]" />
 
           {/* Ambient color bleed — blurred photo so edges never look rectangular */}
-          <div className="absolute top-[4%] right-[-8%] bottom-[-2%] hidden w-[70%] lg:block">
+          <div className="absolute top-[2%] right-[-10%] bottom-[-4%] hidden w-[72%] lg:block">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
               quality={60}
-              sizes="70vw"
-              className="scale-110 object-cover object-[70%_12%] opacity-40 blur-[48px] saturate-125"
+              sizes="72vw"
+              className="scale-105 object-cover object-[70%_22%] opacity-35 blur-[52px] saturate-125"
             />
           </div>
 
@@ -47,19 +47,18 @@ export default async function HomePage() {
           <div className="absolute right-[8%] bottom-[8%] h-[40%] w-[35%] rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.12),transparent_70%)] blur-3xl max-lg:hidden" />
 
           {/*
-            Sharp subject — full head/cap below header.
-            Soft CSS mask dissolves left edge into navy (no pasted box).
-            object-position favors top of photo so cap is never cropped.
+            Sharp subject — slight zoom-out so both hands read clearly.
+            Soft CSS mask dissolves left/top/bottom into navy (no pasted box).
           */}
-          <div className="hb-hero-blend absolute top-[78px] right-[-3%] bottom-[2%] hidden w-[58%] lg:block xl:w-[56%]">
+          <div className="hb-hero-blend absolute top-[64px] right-[-5%] bottom-[-2%] hidden w-[62%] lg:block xl:w-[58%]">
             <Image
               src={heroImage}
               alt=""
               fill
               priority
               quality={95}
-              sizes="58vw"
-              className="object-cover object-[68%_6%]"
+              sizes="62vw"
+              className="origin-[75%_35%] scale-[0.92] object-cover object-[70%_20%]"
             />
           </div>
 
@@ -72,7 +71,7 @@ export default async function HomePage() {
               priority
               quality={75}
               sizes="100vw"
-              className="object-cover object-[78%_10%] opacity-28 blur-[2px]"
+              className="object-cover object-[78%_18%] opacity-28 blur-[2px]"
             />
             <div className="absolute inset-0 bg-[#07122a]/65" />
           </div>

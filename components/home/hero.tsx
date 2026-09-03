@@ -53,9 +53,9 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
 
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      {/* Copy + CTAs — pulled slightly higher so buttons sit above domain search */}
-      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-start px-[3.5%] pt-5 pb-2 lg:justify-center lg:pt-2 lg:pb-1 xl:pt-0">
-        <div className="relative z-10 max-w-[540px] lg:-translate-y-3 xl:-translate-y-5">
+      {/* Copy + CTAs — vertically balanced between header and domain search */}
+      <div className="mx-auto flex min-h-0 w-full max-w-[1520px] flex-1 flex-col justify-center px-[3.5%] pt-8 pb-6 sm:pt-10 sm:pb-8 lg:pt-4 lg:pb-4">
+        <div className="relative z-10 max-w-[540px] lg:translate-y-1 xl:translate-y-2">
           <h1 className="font-heading text-[clamp(2.35rem,4.6vw,4.15rem)] leading-[1.05] font-extrabold tracking-[-0.035em] text-white [text-shadow:0_2px_24px_rgba(7,18,42,0.85)]">
             <motion.span
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}

@@ -190,28 +190,50 @@
     animation: hb-hero-gradient-shift 10s ease-in-out infinite;
   }
 
-  /* Soft blend — left edge dissolves into navy; top stays solid for full head/cap */
+  /* Soft blend — left edge + edges dissolve into navy (no rectangular pasted look) */
   .hb-hero-blend {
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 0, 0, 0.08) 8%,
-      rgba(0, 0, 0, 0.35) 18%,
-      rgba(0, 0, 0, 0.7) 32%,
-      rgba(0, 0, 0, 0.92) 45%,
-      #000 58%,
-      #000 100%
-    );
-    mask-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 0, 0, 0.08) 8%,
-      rgba(0, 0, 0, 0.35) 18%,
-      rgba(0, 0, 0, 0.7) 32%,
-      rgba(0, 0, 0, 0.92) 45%,
-      #000 58%,
-      #000 100%
-    );
+    -webkit-mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.06) 6%,
+        rgba(0, 0, 0, 0.28) 14%,
+        rgba(0, 0, 0, 0.62) 26%,
+        rgba(0, 0, 0, 0.9) 40%,
+        #000 54%,
+        #000 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.55) 4%,
+        #000 10%,
+        #000 82%,
+        rgba(0, 0, 0, 0.55) 92%,
+        transparent 100%
+      );
+    mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.06) 6%,
+        rgba(0, 0, 0, 0.28) 14%,
+        rgba(0, 0, 0, 0.62) 26%,
+        rgba(0, 0, 0, 0.9) 40%,
+        #000 54%,
+        #000 100%
+      ),
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.55) 4%,
+        #000 10%,
+        #000 82%,
+        rgba(0, 0, 0, 0.55) 92%,
+        transparent 100%
+      );
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   @media (prefers-reduced-motion: reduce) {
