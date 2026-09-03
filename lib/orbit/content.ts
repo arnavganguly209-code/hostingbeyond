@@ -1,9 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import {
   defaultHomeSections,
+  defaultLoginPage,
   defaultSiteSettings,
   mergeHomeSections,
+  mergeLoginPage,
   type CmsHomeSections,
+  type CmsLoginPage,
   type CmsSiteSettings,
 } from "@/lib/orbit/defaults";
 
@@ -58,6 +61,37 @@ export async function saveHomeSections(sections: CmsHomeSections) {
   });
 }
 
+export async function getLoginPage(): Promise<CmsLoginPage> {
+  try {
+    const page = await prisma.pageContent.findUnique({
+      where: { slug: "login" },
+    });
+    if (!page) return defaultLoginPage();
+    return mergeLoginPage(page.sections as Partial<CmsLoginPage>);
+  } catch {
+    return defaultLoginPage();
+  }
+}
+
+export async function saveLoginPage(data: CmsLoginPage) {
+  const normalized = mergeLoginPage(data);
+  return prisma.pageContent.upsert({
+    where: { slug: "login" },
+    create: {
+      slug: "login",
+      title: "Login",
+      isPublished: true,
+      isVisible: true,
+      sections: normalized,
+      seo: {
+        title: "Login — HostingBeyond",
+        description: "Sign in to manage your HostingBeyond services.",
+      },
+    },
+    update: { sections: normalized },
+  });
+}
+
 export async function listPages() {
   try {
     const pages = await prisma.pageContent.findMany({
@@ -91,6 +125,12 @@ export async function ensureHomeSeeded() {
     });
     if (!existing) {
       await saveHomeSections(defaultHomeSections());
+    }
+    const login = await prisma.pageContent.findUnique({
+      where: { slug: "login" },
+    });
+    if (!login) {
+      await saveLoginPage(defaultLoginPage());
     }
     const settings = await prisma.siteSettings.findUnique({
       where: { id: "default" },

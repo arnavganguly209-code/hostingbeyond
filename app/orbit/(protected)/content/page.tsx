@@ -8,20 +8,29 @@ import type {
   CmsHomeSections,
   CmsHostingGuarantee,
   CmsHostingPlan,
+  CmsLoginFeature,
+  CmsLoginPage,
   CmsProductOffer,
 } from "@/lib/orbit/defaults";
 
 export default function OrbitContentPage() {
   const [sections, setSections] = useState<CmsHomeSections | null>(null);
+  const [login, setLogin] = useState<CmsLoginPage | null>(null);
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
+  const [savingLogin, setSavingLogin] = useState(false);
 
   useEffect(() => {
     void (async () => {
-      const res = await fetch("/api/orbit/content/home");
-      const json = await res.json();
-      if (res.ok) setSections(json.sections);
-      else setStatus(json.error || "Failed to load content");
+      const [homeRes, loginRes] = await Promise.all([
+        fetch("/api/orbit/content/home"),
+        fetch("/api/orbit/content/login"),
+      ]);
+      const homeJson = await homeRes.json();
+      const loginJson = await loginRes.json();
+      if (homeRes.ok) setSections(homeJson.sections);
+      else setStatus(homeJson.error || "Failed to load content");
+      if (loginRes.ok) setLogin(loginJson.login);
     })();
   }, []);
 
@@ -38,6 +47,23 @@ export default function OrbitContentPage() {
     setSaving(false);
     setStatus(res.ok ? "Saved successfully" : json.error || "Save failed");
     if (res.ok && json.sections) setSections(json.sections);
+  }
+
+  async function saveLogin() {
+    if (!login) return;
+    setSavingLogin(true);
+    setStatus("");
+    const res = await fetch("/api/orbit/content/login", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ login }),
+    });
+    const json = await res.json();
+    setSavingLogin(false);
+    setStatus(
+      res.ok ? "Login page saved successfully" : json.error || "Save failed",
+    );
+    if (res.ok && json.login) setLogin(json.login);
   }
 
   function updateOffer(index: number, patch: Partial<CmsProductOffer>) {
@@ -76,10 +102,18 @@ export default function OrbitContentPage() {
         <div>
           <h1 className="text-2xl font-bold">Website Content</h1>
           <p className="mt-1 text-sm text-[var(--hb-muted)]">
-            Full editor for homepage hero, service cards, and hosting plans.
+            Full editor for homepage, hosting plans, and the /login page.
           </p>
         </div>
         <div className="flex gap-2">
+          <a
+            href="/login"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xl border border-white/10 px-4 py-2 text-sm text-[var(--hb-muted)] hover:text-white"
+          >
+            Preview login
+          </a>
           <a
             href="/"
             target="_blank"
@@ -94,7 +128,7 @@ export default function OrbitContentPage() {
             onClick={() => void save()}
             className="rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-4 py-2 text-sm font-semibold disabled:opacity-60"
           >
-            {saving ? "Saving…" : "Save changes"}
+            {saving ? "Saving…" : "Save home"}
           </button>
         </div>
       </div>
@@ -716,6 +750,313 @@ export default function OrbitContentPage() {
           ))}
         </div>
       </section>
+
+      {/* LOGIN PAGE */}
+      {login ? (
+        <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="font-semibold">Login page (/login)</h2>
+              <p className="mt-0.5 text-xs text-[var(--hb-muted)]">
+                Full A–Z editor for the Sign In page — Google / GitHub included.
+              </p>
+            </div>
+            <button
+              type="button"
+              disabled={savingLogin}
+              onClick={() => void saveLogin()}
+              className="rounded-xl bg-gradient-to-r from-[var(--hb-blue)] to-[var(--hb-purple)] px-4 py-2 text-sm font-semibold disabled:opacity-60"
+            >
+              {savingLogin ? "Saving…" : "Save login page"}
+            </button>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <OrbitImageField
+              label="Logo image"
+              value={login.logoPath}
+              onChange={(url) => setLogin({ ...login, logoPath: url })}
+            />
+            <OrbitImageField
+              label="Background image (right side)"
+              value={login.backgroundImage}
+              onChange={(url) => setLogin({ ...login, backgroundImage: url })}
+            />
+            <Field
+              label="Tagline under logo"
+              value={login.tagline}
+              onChange={(value) => setLogin({ ...login, tagline: value })}
+            />
+            <Field
+              label="Copyright footer"
+              value={login.copyright}
+              onChange={(value) => setLogin({ ...login, copyright: value })}
+            />
+            <Field
+              label="Badge"
+              value={login.badge}
+              onChange={(value) => setLogin({ ...login, badge: value })}
+            />
+            <Field
+              label="Headline"
+              value={login.headline}
+              onChange={(value) => setLogin({ ...login, headline: value })}
+            />
+            <Field
+              label="Headline accent (gradient)"
+              value={login.headlineAccent}
+              onChange={(value) =>
+                setLogin({ ...login, headlineAccent: value })
+              }
+            />
+            <Field
+              label="Divider label"
+              value={login.dividerLabel}
+              onChange={(value) => setLogin({ ...login, dividerLabel: value })}
+            />
+          </div>
+
+          <TextArea
+            label="Description"
+            value={login.description}
+            onChange={(value) => setLogin({ ...login, description: value })}
+          />
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <Field
+              label="Card title"
+              value={login.cardTitle}
+              onChange={(value) => setLogin({ ...login, cardTitle: value })}
+            />
+            <Field
+              label="Card subtitle"
+              value={login.cardSubtitle}
+              onChange={(value) => setLogin({ ...login, cardSubtitle: value })}
+            />
+            <Field
+              label="Email label"
+              value={login.emailLabel}
+              onChange={(value) => setLogin({ ...login, emailLabel: value })}
+            />
+            <Field
+              label="Email placeholder"
+              value={login.emailPlaceholder}
+              onChange={(value) =>
+                setLogin({ ...login, emailPlaceholder: value })
+              }
+            />
+            <Field
+              label="Password label"
+              value={login.passwordLabel}
+              onChange={(value) => setLogin({ ...login, passwordLabel: value })}
+            />
+            <Field
+              label="Password placeholder"
+              value={login.passwordPlaceholder}
+              onChange={(value) =>
+                setLogin({ ...login, passwordPlaceholder: value })
+              }
+            />
+            <Field
+              label="Remember me label"
+              value={login.rememberLabel}
+              onChange={(value) => setLogin({ ...login, rememberLabel: value })}
+            />
+            <Field
+              label="Forgot password label"
+              value={login.forgotLabel}
+              onChange={(value) => setLogin({ ...login, forgotLabel: value })}
+            />
+            <Field
+              label="Forgot password link"
+              value={login.forgotHref}
+              onChange={(value) => setLogin({ ...login, forgotHref: value })}
+            />
+            <Field
+              label="Login button text"
+              value={login.loginCtaLabel}
+              onChange={(value) => setLogin({ ...login, loginCtaLabel: value })}
+            />
+            <Field
+              label="Signup prompt"
+              value={login.signupPrompt}
+              onChange={(value) => setLogin({ ...login, signupPrompt: value })}
+            />
+            <Field
+              label="Signup link text"
+              value={login.signupLabel}
+              onChange={(value) => setLogin({ ...login, signupLabel: value })}
+            />
+            <Field
+              label="Signup link href"
+              value={login.signupHref}
+              onChange={(value) => setLogin({ ...login, signupHref: value })}
+            />
+          </div>
+
+          <div className="grid gap-3 rounded-xl border border-white/10 p-4 md:grid-cols-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Google sign-in</h3>
+                <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+                  <input
+                    type="checkbox"
+                    checked={login.google.visible}
+                    onChange={(e) =>
+                      setLogin({
+                        ...login,
+                        google: { ...login.google, visible: e.target.checked },
+                      })
+                    }
+                  />
+                  Visible
+                </label>
+              </div>
+              <Field
+                label="Button label"
+                value={login.google.label}
+                onChange={(value) =>
+                  setLogin({
+                    ...login,
+                    google: { ...login.google, label: value },
+                  })
+                }
+              />
+              <Field
+                label="Button link / OAuth URL"
+                value={login.google.href}
+                onChange={(value) =>
+                  setLogin({
+                    ...login,
+                    google: { ...login.google, href: value },
+                  })
+                }
+              />
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">GitHub sign-in</h3>
+                <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+                  <input
+                    type="checkbox"
+                    checked={login.github.visible}
+                    onChange={(e) =>
+                      setLogin({
+                        ...login,
+                        github: { ...login.github, visible: e.target.checked },
+                      })
+                    }
+                  />
+                  Visible
+                </label>
+              </div>
+              <Field
+                label="Button label"
+                value={login.github.label}
+                onChange={(value) =>
+                  setLogin({
+                    ...login,
+                    github: { ...login.github, label: value },
+                  })
+                }
+              />
+              <Field
+                label="Button link / OAuth URL"
+                value={login.github.href}
+                onChange={(value) =>
+                  setLogin({
+                    ...login,
+                    github: { ...login.github, href: value },
+                  })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold">Feature icons</h3>
+              <button
+                type="button"
+                onClick={() =>
+                  setLogin({
+                    ...login,
+                    features: [
+                      ...login.features,
+                      {
+                        id: `feature-${Date.now()}`,
+                        title: "New feature",
+                        description: "Description",
+                        icon: "shield",
+                      },
+                    ],
+                  })
+                }
+                className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+              >
+                Add feature
+              </button>
+            </div>
+            {login.features.map((feature, index) => (
+              <div
+                key={feature.id}
+                className="grid gap-3 rounded-xl border border-white/10 p-4 md:grid-cols-2"
+              >
+                <Field
+                  label="Title"
+                  value={feature.title}
+                  onChange={(value) => {
+                    const features = [...login.features];
+                    features[index] = { ...features[index], title: value };
+                    setLogin({ ...login, features });
+                  }}
+                />
+                <Field
+                  label="Icon (shield / zap / headphones / lock)"
+                  value={feature.icon}
+                  onChange={(value) => {
+                    const icon: CmsLoginFeature["icon"] =
+                      value === "zap" ||
+                      value === "headphones" ||
+                      value === "lock"
+                        ? value
+                        : "shield";
+                    const features = [...login.features];
+                    features[index] = { ...features[index], icon };
+                    setLogin({ ...login, features });
+                  }}
+                />
+                <div className="md:col-span-2">
+                  <TextArea
+                    label="Description"
+                    value={feature.description}
+                    onChange={(value) => {
+                      const features = [...login.features];
+                      features[index] = {
+                        ...features[index],
+                        description: value,
+                      };
+                      setLogin({ ...login, features });
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setLogin({
+                      ...login,
+                      features: login.features.filter((_, i) => i !== index),
+                    })
+                  }
+                  className="rounded-lg border border-white/10 px-2 py-1 text-xs text-red-300 md:col-span-2 md:w-fit"
+                >
+                  Remove feature
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

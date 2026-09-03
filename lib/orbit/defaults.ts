@@ -131,6 +131,155 @@ export type CmsHomeSections = {
   navigation: typeof mainNavigation;
 };
 
+export type CmsLoginOAuthButton = {
+  visible: boolean;
+  label: string;
+  href: string;
+};
+
+export type CmsLoginFeature = {
+  id: string;
+  title: string;
+  description: string;
+  icon: "shield" | "zap" | "headphones" | "lock";
+};
+
+export type CmsLoginPage = {
+  logoPath: string;
+  tagline: string;
+  copyright: string;
+  badge: string;
+  headline: string;
+  headlineAccent: string;
+  description: string;
+  features: CmsLoginFeature[];
+  cardTitle: string;
+  cardSubtitle: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  passwordLabel: string;
+  passwordPlaceholder: string;
+  rememberLabel: string;
+  forgotLabel: string;
+  forgotHref: string;
+  loginCtaLabel: string;
+  signupPrompt: string;
+  signupLabel: string;
+  signupHref: string;
+  dividerLabel: string;
+  google: CmsLoginOAuthButton;
+  github: CmsLoginOAuthButton;
+  backgroundImage: string;
+};
+
+export function defaultLoginPage(): CmsLoginPage {
+  return {
+    logoPath: "/logo/hostingbeyond-logo-transparent.png",
+    tagline: "— BEYOND HOSTING, BEYOND POSSIBILITIES —",
+    copyright: "© 2025 HostingBeyond. All rights reserved.",
+    badge: "Everything You Need, All in One Place",
+    headline: "Power Your Online Success with",
+    headlineAccent: "HostingBeyond",
+    description:
+      "Premium hosting solutions, powerful tools, and 24/7 support to help your business grow online with confidence.",
+    features: [
+      {
+        id: "secure",
+        title: "Secure & Reliable",
+        description: "Enterprise-grade security for your peace of mind.",
+        icon: "shield",
+      },
+      {
+        id: "performance",
+        title: "High Performance",
+        description: "Lightning-fast servers for optimal performance.",
+        icon: "zap",
+      },
+      {
+        id: "support",
+        title: "24/7 Support",
+        description: "Expert support whenever you need us.",
+        icon: "headphones",
+      },
+      {
+        id: "uptime",
+        title: "99.99% Uptime",
+        description: "Guaranteed uptime for your business reliability.",
+        icon: "lock",
+      },
+    ],
+    cardTitle: "Welcome Back",
+    cardSubtitle:
+      "Login to your account and continue managing your hosting services.",
+    emailLabel: "Email address",
+    emailPlaceholder: "Enter your email address",
+    passwordLabel: "Password",
+    passwordPlaceholder: "Enter your password",
+    rememberLabel: "Remember me",
+    forgotLabel: "Forgot password?",
+    forgotHref: "/forgot-password",
+    loginCtaLabel: "Login",
+    signupPrompt: "Don't have an account?",
+    signupLabel: "Sign up",
+    signupHref: "/get-started",
+    dividerLabel: "OR",
+    google: {
+      visible: true,
+      label: "Continue with Google",
+      href: "#",
+    },
+    github: {
+      visible: true,
+      label: "Continue with GitHub",
+      href: "#",
+    },
+    backgroundImage: "",
+  };
+}
+
+export function mergeLoginPage(
+  stored?: Partial<CmsLoginPage> | null,
+): CmsLoginPage {
+  const defaults = defaultLoginPage();
+  if (!stored) return defaults;
+
+  const storedFeatures = Array.isArray(stored.features) ? stored.features : [];
+  const features: CmsLoginFeature[] =
+    storedFeatures.length > 0
+      ? storedFeatures.map((item, index) => {
+          const fallback = defaults.features[index % defaults.features.length];
+          const icon: CmsLoginFeature["icon"] =
+            item.icon === "zap" ||
+            item.icon === "headphones" ||
+            item.icon === "lock"
+              ? item.icon
+              : "shield";
+          return {
+            ...fallback,
+            ...item,
+            id: item.id || `feature-${index}`,
+            icon,
+          };
+        })
+      : defaults.features;
+
+  return {
+    ...defaults,
+    ...stored,
+    features,
+    google: {
+      ...defaults.google,
+      ...stored.google,
+      visible: stored.google?.visible ?? defaults.google.visible,
+    },
+    github: {
+      ...defaults.github,
+      ...stored.github,
+      visible: stored.github?.visible ?? defaults.github.visible,
+    },
+  };
+}
+
 export function defaultSiteSettings(): CmsSiteSettings {
   return {
     name: siteConfig.name,
