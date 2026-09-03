@@ -79,9 +79,55 @@ export type CmsProductsContent = {
   offers: CmsProductOffer[];
 };
 
+export type CmsHostingPlan = {
+  id: string;
+  visible: boolean;
+  order: number;
+  name: string;
+  discountBadge: string;
+  popular: boolean;
+  popularLabel: string;
+  accent: "blue" | "purple" | "gradient";
+  /** Per-month price when Annually is selected */
+  priceAnnually: string;
+  /** Strikethrough when Annually is selected */
+  originalAnnually: string;
+  billedAnnually: string;
+  /** Per-month price when Monthly is selected */
+  priceMonthly: string;
+  originalMonthly: string;
+  billedMonthly: string;
+  features: string[];
+  ctaLabel: string;
+  ctaHref: string;
+};
+
+export type CmsHostingGuarantee = {
+  id: string;
+  title: string;
+  description: string;
+  icon: "shield" | "lock" | "rocket";
+};
+
+export type CmsHostingPlansContent = {
+  visible: boolean;
+  eyebrow: string;
+  title: string;
+  titleAccent: string;
+  description: string;
+  supportLabel: string;
+  activationLabel: string;
+  annualToggleLabel: string;
+  monthlyToggleLabel: string;
+  defaultBilling: "annually" | "monthly";
+  plans: CmsHostingPlan[];
+  guarantees: CmsHostingGuarantee[];
+};
+
 export type CmsHomeSections = {
   hero: CmsHeroContent;
   products: CmsProductsContent;
+  hostingPlans: CmsHostingPlansContent;
   navigation: typeof mainNavigation;
 };
 
@@ -106,6 +152,159 @@ export function defaultSiteSettings(): CmsSiteSettings {
       linkedin: "",
       facebook: "",
     },
+  };
+}
+
+function defaultHostingPlans(): CmsHostingPlan[] {
+  return [
+    {
+      id: "essential",
+      visible: true,
+      order: 0,
+      name: "Web Essential",
+      discountBadge: "50% OFF",
+      popular: false,
+      popularLabel: "",
+      accent: "blue",
+      priceAnnually: "$5.00",
+      originalAnnually: "$10.00",
+      billedAnnually: "Billed $60.00 Annually",
+      priceMonthly: "$10.00",
+      originalMonthly: "",
+      billedMonthly: "Billed monthly",
+      features: [
+        "1 Website",
+        "10 GB SSD Storage",
+        "Unmetered Bandwidth",
+        "2 GB RAM",
+        "1 Email Account",
+        "Free SSL Certificate",
+        "24/7 Support",
+      ],
+      ctaLabel: "Get Started",
+      ctaHref: routes.getStarted,
+    },
+    {
+      id: "plus",
+      visible: true,
+      order: 1,
+      name: "Web Plus",
+      discountBadge: "50% OFF",
+      popular: false,
+      popularLabel: "",
+      accent: "blue",
+      priceAnnually: "$10.00",
+      originalAnnually: "$20.00",
+      billedAnnually: "Billed $120.00 Annually",
+      priceMonthly: "$20.00",
+      originalMonthly: "",
+      billedMonthly: "Billed monthly",
+      features: [
+        "5 Websites",
+        "20 GB SSD Storage",
+        "Unmetered Bandwidth",
+        "4 GB RAM",
+        "10 Email Accounts",
+        "Free SSL Certificate",
+        "24/7 Support",
+      ],
+      ctaLabel: "Get Started",
+      ctaHref: routes.getStarted,
+    },
+    {
+      id: "pro",
+      visible: true,
+      order: 2,
+      name: "Web Pro",
+      discountBadge: "50% OFF",
+      popular: true,
+      popularLabel: "Most Popular",
+      accent: "gradient",
+      priceAnnually: "$15.00",
+      originalAnnually: "$30.00",
+      billedAnnually: "Billed $180.00 Annually",
+      priceMonthly: "$30.00",
+      originalMonthly: "",
+      billedMonthly: "Billed monthly",
+      features: [
+        "Unlimited Websites",
+        "40 GB SSD Storage",
+        "Unmetered Bandwidth",
+        "6 GB RAM",
+        "Unlimited Email Accounts",
+        "Free SSL Certificate",
+        "Priority Support",
+      ],
+      ctaLabel: "Get Started",
+      ctaHref: routes.getStarted,
+    },
+    {
+      id: "ultimate",
+      visible: true,
+      order: 3,
+      name: "Web Ultimate",
+      discountBadge: "50% OFF",
+      popular: false,
+      popularLabel: "",
+      accent: "purple",
+      priceAnnually: "$20.00",
+      originalAnnually: "$40.00",
+      billedAnnually: "Billed $240.00 Annually",
+      priceMonthly: "$40.00",
+      originalMonthly: "",
+      billedMonthly: "Billed monthly",
+      features: [
+        "Unlimited Websites",
+        "60 GB SSD Storage",
+        "Unmetered Bandwidth",
+        "8 GB RAM",
+        "Unlimited Email Accounts",
+        "Free SSL Certificate",
+        "Priority Support",
+      ],
+      ctaLabel: "Get Started",
+      ctaHref: routes.getStarted,
+    },
+  ];
+}
+
+function defaultHostingPlansSection(): CmsHostingPlansContent {
+  return {
+    visible: true,
+    eyebrow: "Web Hosting Plans",
+    title: "Web Hosting",
+    titleAccent: "Plans & Price",
+    description:
+      "Compare our affordable web hosting price in Nepal and choose the perfect hosting plan for your website.",
+    supportLabel: "24/7 Local Support",
+    activationLabel: "Instant Activation",
+    annualToggleLabel: "Annually (Save 50%)",
+    monthlyToggleLabel: "Monthly",
+    defaultBilling: "annually",
+    plans: defaultHostingPlans(),
+    guarantees: [
+      {
+        id: "moneyback",
+        title: "30-Day Money-Back Guarantee",
+        description:
+          "Try risk-free. If you're not satisfied, get a full refund within 30 days.",
+        icon: "shield",
+      },
+      {
+        id: "secure",
+        title: "Secure & Reliable Infrastructure",
+        description:
+          "Enterprise-grade security and daily backups keep your sites protected.",
+        icon: "lock",
+      },
+      {
+        id: "uptime",
+        title: "99.99% Uptime Guarantee",
+        description:
+          "High-availability network designed for always-on performance.",
+        icon: "rocket",
+      },
+    ],
   };
 }
 
@@ -234,6 +433,7 @@ export function defaultHomeSections(): CmsHomeSections {
         "Get premium domains, professional email, and blazing-fast hosting at unbeatable prices.",
       offers: defaultOffers(),
     },
+    hostingPlans: defaultHostingPlansSection(),
     navigation: mainNavigation.map((item) => ({
       ...item,
       children: item.children?.map((child) => ({ ...child })),
@@ -297,6 +497,65 @@ export function mergeHomeSections(
     }
   }
 
+  const storedPlans = Array.isArray(stored.hostingPlans?.plans)
+    ? stored.hostingPlans!.plans
+    : [];
+
+  const plans = defaults.hostingPlans.plans
+    .map((fallback) => {
+      const match = storedPlans.find((item) => item.id === fallback.id);
+      if (!match) return fallback;
+      return {
+        ...fallback,
+        ...match,
+        features: Array.isArray(match.features)
+          ? match.features.filter(Boolean)
+          : fallback.features,
+        visible: match.visible ?? true,
+        order: typeof match.order === "number" ? match.order : fallback.order,
+        accent: match.accent ?? fallback.accent,
+        popular: Boolean(match.popular),
+      } satisfies CmsHostingPlan;
+    })
+    .sort((a, b) => a.order - b.order);
+
+  for (const extra of storedPlans) {
+    if (!plans.some((p) => p.id === extra.id)) {
+      plans.push({
+        ...defaults.hostingPlans.plans[0],
+        ...extra,
+        id: extra.id || `plan-${plans.length}`,
+        features: Array.isArray(extra.features) ? extra.features : [],
+        visible: extra.visible ?? true,
+        order: typeof extra.order === "number" ? extra.order : plans.length,
+      });
+    }
+  }
+
+  const storedGuarantees = Array.isArray(stored.hostingPlans?.guarantees)
+    ? stored.hostingPlans!.guarantees
+    : [];
+
+  const guarantees: CmsHostingGuarantee[] =
+    storedGuarantees.length > 0
+      ? storedGuarantees.map((item, index) => {
+          const fallback =
+            defaults.hostingPlans.guarantees[
+              index % defaults.hostingPlans.guarantees.length
+            ];
+          const icon: CmsHostingGuarantee["icon"] =
+            item.icon === "lock" || item.icon === "rocket"
+              ? item.icon
+              : "shield";
+          return {
+            ...fallback,
+            ...item,
+            id: item.id || `guarantee-${index}`,
+            icon,
+          };
+        })
+      : defaults.hostingPlans.guarantees;
+
   const storedHero: Partial<CmsHeroContent> = stored.hero ?? {};
   const legacyHeadline =
     storedHero.headline === "Everything You Need." ||
@@ -351,6 +610,16 @@ export function mergeHomeSections(
       ...defaults.products,
       ...stored.products,
       offers: offers.sort((a, b) => a.order - b.order),
+    },
+    hostingPlans: {
+      ...defaults.hostingPlans,
+      ...stored.hostingPlans,
+      defaultBilling:
+        stored.hostingPlans?.defaultBilling === "monthly"
+          ? "monthly"
+          : "annually",
+      plans: plans.sort((a, b) => a.order - b.order),
+      guarantees,
     },
     // Drop legacy top-level Cloud & VPS — those live under Hosting now.
     // Also normalize stored "Web Hosting" label → "Hosting".

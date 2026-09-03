@@ -223,7 +223,7 @@ export function HostingTypesSection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#07122a] px-4 pt-4 pb-12 sm:px-6 sm:pt-5 sm:pb-14 lg:px-8 lg:pt-6 lg:pb-16">
+    <section className="relative isolate overflow-hidden bg-[#07122a] px-4 pt-4 pb-4 sm:px-6 sm:pt-5 sm:pb-5 lg:px-8 lg:pt-6 lg:pb-6">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 left-1/2 h-40 w-[60%] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(59,130,246,0.1),transparent_70%)] blur-2xl" />
       </div>

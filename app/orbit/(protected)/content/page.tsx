@@ -6,6 +6,8 @@ import { OrbitImageField } from "@/components/orbit/image-field";
 import type {
   CmsDomainTld,
   CmsHomeSections,
+  CmsHostingGuarantee,
+  CmsHostingPlan,
   CmsProductOffer,
 } from "@/lib/orbit/defaults";
 
@@ -74,7 +76,7 @@ export default function OrbitContentPage() {
         <div>
           <h1 className="text-2xl font-bold">Website Content</h1>
           <p className="mt-1 text-sm text-[var(--hb-muted)]">
-            Full editor for homepage hero and service cards.
+            Full editor for homepage hero, service cards, and hosting plans.
           </p>
         </div>
         <div className="flex gap-2">
@@ -439,6 +441,415 @@ export default function OrbitContentPage() {
           </div>
         ))}
       </section>
+
+      {/* HOSTING PLANS */}
+      <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-semibold">Web Hosting Plans & Price</h2>
+            <p className="mt-0.5 text-xs text-[var(--hb-muted)]">
+              Full A–Z editor for the pricing section on the homepage.
+            </p>
+          </div>
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={sections.hostingPlans?.visible !== false}
+              onChange={(e) =>
+                setSections({
+                  ...sections,
+                  hostingPlans: {
+                    ...sections.hostingPlans,
+                    visible: e.target.checked,
+                  },
+                })
+              }
+            />
+            Visible
+          </label>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field
+            label="Eyebrow"
+            value={sections.hostingPlans?.eyebrow ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: { ...sections.hostingPlans, eyebrow: value },
+              })
+            }
+          />
+          <Field
+            label="Default billing (annually / monthly)"
+            value={sections.hostingPlans?.defaultBilling ?? "annually"}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  defaultBilling: value === "monthly" ? "monthly" : "annually",
+                },
+              })
+            }
+          />
+          <Field
+            label="Title"
+            value={sections.hostingPlans?.title ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: { ...sections.hostingPlans, title: value },
+              })
+            }
+          />
+          <Field
+            label="Title accent (gradient text)"
+            value={sections.hostingPlans?.titleAccent ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  titleAccent: value,
+                },
+              })
+            }
+          />
+        </div>
+
+        <TextArea
+          label="Description"
+          value={sections.hostingPlans?.description ?? ""}
+          onChange={(value) =>
+            setSections({
+              ...sections,
+              hostingPlans: { ...sections.hostingPlans, description: value },
+            })
+          }
+        />
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field
+            label="Support label"
+            value={sections.hostingPlans?.supportLabel ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  supportLabel: value,
+                },
+              })
+            }
+          />
+          <Field
+            label="Activation label"
+            value={sections.hostingPlans?.activationLabel ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  activationLabel: value,
+                },
+              })
+            }
+          />
+          <Field
+            label="Annual toggle helper text"
+            value={sections.hostingPlans?.annualToggleLabel ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  annualToggleLabel: value,
+                },
+              })
+            }
+          />
+          <Field
+            label="Monthly toggle label"
+            value={sections.hostingPlans?.monthlyToggleLabel ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  monthlyToggleLabel: value,
+                },
+              })
+            }
+          />
+        </div>
+
+        {(sections.hostingPlans?.plans ?? []).map((plan, index) => (
+          <HostingPlanEditor
+            key={plan.id}
+            plan={plan}
+            onChange={(patch) => {
+              const plans = [...sections.hostingPlans.plans];
+              plans[index] = { ...plans[index], ...patch };
+              setSections({
+                ...sections,
+                hostingPlans: { ...sections.hostingPlans, plans },
+              });
+            }}
+            onMove={(direction) => {
+              const target = index + direction;
+              const plans = [...sections.hostingPlans.plans];
+              if (target < 0 || target >= plans.length) return;
+              const [item] = plans.splice(index, 1);
+              plans.splice(target, 0, item);
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  plans: plans.map((p, order) => ({ ...p, order })),
+                },
+              });
+            }}
+            onRemove={() => {
+              setSections({
+                ...sections,
+                hostingPlans: {
+                  ...sections.hostingPlans,
+                  plans: sections.hostingPlans.plans.filter(
+                    (_, i) => i !== index,
+                  ),
+                },
+              });
+            }}
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={() => {
+            const plans = sections.hostingPlans?.plans ?? [];
+            setSections({
+              ...sections,
+              hostingPlans: {
+                ...sections.hostingPlans,
+                plans: [
+                  ...plans,
+                  {
+                    id: `plan-${Date.now()}`,
+                    visible: true,
+                    order: plans.length,
+                    name: "New Plan",
+                    discountBadge: "50% OFF",
+                    popular: false,
+                    popularLabel: "",
+                    accent: "blue",
+                    priceAnnually: "$0.00",
+                    originalAnnually: "$0.00",
+                    billedAnnually: "Billed annually",
+                    priceMonthly: "$0.00",
+                    originalMonthly: "",
+                    billedMonthly: "Billed monthly",
+                    features: ["Feature 1"],
+                    ctaLabel: "Get Started",
+                    ctaHref: "/get-started",
+                  },
+                ],
+              },
+            });
+          }}
+          className="rounded-xl border border-white/10 px-3 py-2 text-xs text-[var(--hb-muted)] hover:text-white"
+        >
+          + Add plan
+        </button>
+
+        <div className="space-y-3 border-t border-white/10 pt-4">
+          <h3 className="text-sm font-semibold">Guarantee cards</h3>
+          {(sections.hostingPlans?.guarantees ?? []).map((item, index) => (
+            <div
+              key={item.id}
+              className="space-y-3 rounded-xl border border-white/10 p-4"
+            >
+              <div className="grid gap-3 md:grid-cols-2">
+                <Field
+                  label="Title"
+                  value={item.title}
+                  onChange={(value) => {
+                    const guarantees = [...sections.hostingPlans.guarantees];
+                    guarantees[index] = { ...guarantees[index], title: value };
+                    setSections({
+                      ...sections,
+                      hostingPlans: { ...sections.hostingPlans, guarantees },
+                    });
+                  }}
+                />
+                <Field
+                  label="Icon (shield / lock / rocket)"
+                  value={item.icon}
+                  onChange={(value) => {
+                    const guarantees = [...sections.hostingPlans.guarantees];
+                    const icon: CmsHostingGuarantee["icon"] =
+                      value === "lock" || value === "rocket" ? value : "shield";
+                    guarantees[index] = { ...guarantees[index], icon };
+                    setSections({
+                      ...sections,
+                      hostingPlans: { ...sections.hostingPlans, guarantees },
+                    });
+                  }}
+                />
+              </div>
+              <TextArea
+                label="Description"
+                value={item.description}
+                onChange={(value) => {
+                  const guarantees = [...sections.hostingPlans.guarantees];
+                  guarantees[index] = {
+                    ...guarantees[index],
+                    description: value,
+                  };
+                  setSections({
+                    ...sections,
+                    hostingPlans: { ...sections.hostingPlans, guarantees },
+                  });
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function HostingPlanEditor({
+  plan,
+  onChange,
+  onMove,
+  onRemove,
+}: {
+  plan: CmsHostingPlan;
+  onChange: (patch: Partial<CmsHostingPlan>) => void;
+  onMove: (direction: -1 | 1) => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="space-y-3 rounded-xl border border-white/10 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          {plan.name || plan.id} plan
+        </h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={plan.visible !== false}
+              onChange={(e) => onChange({ visible: e.target.checked })}
+            />
+            Visible
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={Boolean(plan.popular)}
+              onChange={(e) => onChange({ popular: e.target.checked })}
+            />
+            Most popular
+          </label>
+          <button
+            type="button"
+            onClick={() => onMove(-1)}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={() => onMove(1)}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs"
+          >
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            className="rounded-lg border border-white/10 px-2 py-1 text-xs text-red-300"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <Field
+          label="Plan name"
+          value={plan.name}
+          onChange={(value) => onChange({ name: value })}
+        />
+        <Field
+          label="Discount badge"
+          value={plan.discountBadge}
+          onChange={(value) => onChange({ discountBadge: value })}
+        />
+        <Field
+          label="Popular label"
+          value={plan.popularLabel}
+          onChange={(value) => onChange({ popularLabel: value })}
+        />
+        <Field
+          label="Accent (blue / purple / gradient)"
+          value={plan.accent}
+          onChange={(value) =>
+            onChange({
+              accent:
+                value === "purple" || value === "gradient" ? value : "blue",
+            })
+          }
+        />
+        <Field
+          label="Annual price /mo"
+          value={plan.priceAnnually}
+          onChange={(value) => onChange({ priceAnnually: value })}
+        />
+        <Field
+          label="Annual original (strikethrough)"
+          value={plan.originalAnnually}
+          onChange={(value) => onChange({ originalAnnually: value })}
+        />
+        <Field
+          label="Billed annually text"
+          value={plan.billedAnnually}
+          onChange={(value) => onChange({ billedAnnually: value })}
+        />
+        <Field
+          label="Monthly price /mo"
+          value={plan.priceMonthly}
+          onChange={(value) => onChange({ priceMonthly: value })}
+        />
+        <Field
+          label="Monthly original (strikethrough)"
+          value={plan.originalMonthly}
+          onChange={(value) => onChange({ originalMonthly: value })}
+        />
+        <Field
+          label="Billed monthly text"
+          value={plan.billedMonthly}
+          onChange={(value) => onChange({ billedMonthly: value })}
+        />
+        <Field
+          label="CTA text"
+          value={plan.ctaLabel}
+          onChange={(value) => onChange({ ctaLabel: value })}
+        />
+        <Field
+          label="CTA link"
+          value={plan.ctaHref}
+          onChange={(value) => onChange({ ctaHref: value })}
+        />
+      </div>
+
+      <FeatureEditor
+        features={plan.features}
+        onChange={(features) => onChange({ features })}
+      />
     </div>
   );
 }

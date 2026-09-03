@@ -3,6 +3,7 @@ import Image from "next/image";
 import { SiteHeader } from "@/components/layout";
 import {
   HeroSection,
+  HostingPlansSection,
   HostingTypesSection,
   ProductsSection,
 } from "@/components/home";
@@ -98,6 +99,9 @@ export default async function HomePage() {
         <ProductsSection content={sections.products} />
       ) : null}
       <HostingTypesSection />
+      {sections.hostingPlans?.visible !== false ? (
+        <HostingPlansSection content={sections.hostingPlans} />
+      ) : null}
     </div>
   );
 }
