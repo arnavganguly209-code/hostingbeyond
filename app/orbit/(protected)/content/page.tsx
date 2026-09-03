@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 
 import { OrbitImageField } from "@/components/orbit/image-field";
-import type { CmsHomeSections, CmsProductOffer } from "@/lib/orbit/defaults";
+import type {
+  CmsDomainTld,
+  CmsHomeSections,
+  CmsProductOffer,
+} from "@/lib/orbit/defaults";
 
 export default function OrbitContentPage() {
   const [sections, setSections] = useState<CmsHomeSections | null>(null);
@@ -194,6 +198,33 @@ export default function OrbitContentPage() {
             setSections({
               ...sections,
               hero: { ...sections.hero, backgroundImage: url },
+            })
+          }
+        />
+      </section>
+
+      {/* DOMAIN PRICING */}
+      <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div>
+          <h2 className="font-semibold">Domain TLD Pricing</h2>
+          <p className="mt-0.5 text-xs text-[var(--hb-muted)]">
+            Edit the domain extension prices shown in the hero search bar.
+          </p>
+        </div>
+        <DomainPricingEditor
+          pricing={
+            sections.hero.domainPricing ?? [
+              { tld: ".com", priceLabel: "$7.99/yr", visible: true },
+              { tld: ".net", priceLabel: "$6.99/yr", visible: true },
+              { tld: ".org", priceLabel: "$5.99/yr", visible: true },
+              { tld: ".co", priceLabel: "$4.99/yr", visible: true },
+              { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
+            ]
+          }
+          onChange={(domainPricing) =>
+            setSections({
+              ...sections,
+              hero: { ...sections.hero, domainPricing },
             })
           }
         />
@@ -408,6 +439,77 @@ export default function OrbitContentPage() {
           </div>
         ))}
       </section>
+    </div>
+  );
+}
+
+function DomainPricingEditor({
+  pricing,
+  onChange,
+}: {
+  pricing: CmsDomainTld[];
+  onChange: (pricing: CmsDomainTld[]) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      {pricing.map((item, index) => (
+        <div
+          key={`${index}-${item.tld}`}
+          className="flex flex-wrap items-center gap-2 rounded-xl border border-white/10 p-3"
+        >
+          <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+            <input
+              type="checkbox"
+              checked={item.visible !== false}
+              onChange={(e) => {
+                const next = [...pricing];
+                next[index] = { ...next[index], visible: e.target.checked };
+                onChange(next);
+              }}
+            />
+            Visible
+          </label>
+          <input
+            value={item.tld}
+            onChange={(e) => {
+              const next = [...pricing];
+              next[index] = { ...next[index], tld: e.target.value };
+              onChange(next);
+            }}
+            placeholder=".com"
+            className="w-[80px] rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm font-bold text-white outline-none"
+          />
+          <input
+            value={item.priceLabel}
+            onChange={(e) => {
+              const next = [...pricing];
+              next[index] = { ...next[index], priceLabel: e.target.value };
+              onChange(next);
+            }}
+            placeholder="$7.99/yr"
+            className="w-[110px] rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => onChange(pricing.filter((_, i) => i !== index))}
+            className="ml-auto rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-red-300"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() =>
+          onChange([
+            ...pricing,
+            { tld: ".io", priceLabel: "$12.99/yr", visible: true },
+          ])
+        }
+        className="rounded-xl border border-white/10 px-3 py-2 text-xs text-[var(--hb-muted)] hover:text-white"
+      >
+        + Add TLD
+      </button>
     </div>
   );
 }

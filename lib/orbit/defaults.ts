@@ -25,6 +25,12 @@ export type CmsSiteSettings = {
   };
 };
 
+export type CmsDomainTld = {
+  tld: string;
+  priceLabel: string;
+  visible: boolean;
+};
+
 export type CmsHeroContent = {
   visible: boolean;
   eyebrow: string;
@@ -37,6 +43,8 @@ export type CmsHeroContent = {
   backgroundImage: string;
   trustItems: Array<{ title: string; subtitle: string; icon: string }>;
   stats: Array<{ value: string; label: string; icon: string }>;
+  /** Editable domain TLD price teasers shown in hero search */
+  domainPricing?: CmsDomainTld[];
 };
 
 export type CmsProductOffer = {
@@ -182,6 +190,13 @@ export function defaultHomeSections(): CmsHomeSections {
       searchButtonLabel: "SEARCH DOMAIN",
       bulkSearchLabel: "Bulk Search",
       backgroundImage: "/images/hero-speaker.png",
+      domainPricing: [
+        { tld: ".com", priceLabel: "$7.99/yr", visible: true },
+        { tld: ".net", priceLabel: "$6.99/yr", visible: true },
+        { tld: ".org", priceLabel: "$5.99/yr", visible: true },
+        { tld: ".co", priceLabel: "$4.99/yr", visible: true },
+        { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
+      ],
       trustItems: [
         {
           title: "99.99% Uptime",
@@ -315,6 +330,7 @@ export function mergeHomeSections(
     searchPlaceholder: defaults.hero.searchPlaceholder,
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
     stats: storedHero.stats ?? defaults.hero.stats,
+    domainPricing: storedHero.domainPricing ?? defaults.hero.domainPricing,
   };
 
   const storedNav = stored.navigation;
@@ -336,10 +352,15 @@ export function mergeHomeSections(
       ...stored.products,
       offers: offers.sort((a, b) => a.order - b.order),
     },
-    // Drop legacy top-level Cloud & VPS — those live under Web Hosting now
-    navigation:
-      hasLegacyCloudTopNav || !Array.isArray(storedNav)
-        ? defaults.navigation
-        : storedNav,
+    // Drop legacy top-level Cloud & VPS — those live under Hosting now.
+    // Also normalize stored "Web Hosting" label → "Hosting".
+    navigation: (() => {
+      if (hasLegacyCloudTopNav || !Array.isArray(storedNav)) {
+        return defaults.navigation;
+      }
+      return storedNav.map((item) =>
+        item.label === "Web Hosting" ? { ...item, label: "Hosting" } : item,
+      );
+    })(),
   };
 }

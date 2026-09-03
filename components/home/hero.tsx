@@ -45,6 +45,12 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
     ? REF.searchPlaceholder
     : (content?.searchPlaceholder ?? REF.searchPlaceholder);
 
+  // Use CMS domain pricing when available (EN only); fall back to config
+  const activeTeasers =
+    isEn && content?.domainPricing?.length
+      ? content.domainPricing.filter((d) => d.visible !== false)
+      : [...heroDomainTeasers];
+
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const raw = domain.trim().replace(/^\.+/, "");
@@ -251,7 +257,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           </form>
 
           <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-0.5">
-            {heroDomainTeasers.map((item) => (
+            {activeTeasers.map((item) => (
               <button
                 key={item.tld}
                 type="button"
