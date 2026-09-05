@@ -72,9 +72,9 @@ export function HeroSection({
 
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
-      <div className="relative mx-auto grid min-h-0 w-full max-w-[1380px] flex-1 grid-cols-1 items-end gap-0 px-[2.8%] pt-0 pb-0 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]">
+      <div className="relative mx-auto grid min-h-0 w-full max-w-[1360px] flex-1 grid-cols-1 items-center gap-2 px-[3%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
         {/* Left copy */}
-        <div className="relative z-30 max-w-[500px] self-center lg:pb-20">
+        <div className="relative z-30 max-w-[520px] self-center lg:pb-16">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export function HeroSection({
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.04 }}
-            className="font-heading mt-2.5 text-[clamp(2.15rem,4.4vw,3.6rem)] leading-[1.06] font-extrabold tracking-[-0.04em] text-slate-950"
+            className="font-heading mt-2.5 text-[clamp(2.2rem,4.5vw,3.7rem)] leading-[1.06] font-extrabold tracking-[-0.04em] text-slate-950"
           >
             <span className="block">{headline}</span>
             <span className="mt-0.5 block bg-gradient-to-r from-[#7c3aed] via-[#6366f1] to-[#2563eb] bg-clip-text text-transparent">
@@ -99,7 +99,7 @@ export function HeroSection({
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="mt-3 max-w-[430px] text-[14px] leading-relaxed font-medium text-slate-600 sm:text-[15px]"
+            className="mt-3 max-w-[440px] text-[14px] leading-relaxed font-medium text-slate-600 sm:text-[15px]"
           >
             {description}
           </motion.p>
@@ -183,60 +183,101 @@ export function HeroSection({
           </motion.div>
         </div>
 
-        {/* Right: mid-body speaker + glass (mockup same) — not zoomed */}
-        <div className="relative mx-auto hidden h-full min-h-[580px] w-full lg:block xl:min-h-[620px]">
+        {/* Right: designed glass scene + clear full mid-body speaker */}
+        <div className="relative mx-auto hidden min-h-[560px] w-full lg:block xl:min-h-[600px]">
+          {/* Soft office / datacenter atmosphere */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[10%] right-[0%] h-[70%] w-[80%] rounded-full bg-[radial-gradient(ellipse_at_55%_35%,rgba(186,230,253,0.45),transparent_68%)] blur-3xl"
-          />
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+          >
+            <div className="absolute top-[6%] right-[2%] h-[72%] w-[88%] rounded-[40px] bg-[radial-gradient(ellipse_at_60%_35%,rgba(147,197,253,0.5),transparent_65%)] blur-2xl" />
+            <div className="absolute top-[18%] right-[4%] h-[55%] w-[28%] rounded-full bg-[radial-gradient(ellipse,rgba(59,130,246,0.22),transparent_70%)] blur-xl" />
+            {/* Soft server rack glow columns */}
+            <div className="absolute top-[16%] right-[8%] flex h-[58%] gap-2 opacity-40">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="w-[18px] rounded-sm bg-gradient-to-b from-sky-300/40 via-blue-500/30 to-indigo-400/20"
+                  style={{ height: `${70 + i * 8}%`, marginTop: `${i * 6}%` }}
+                />
+              ))}
+            </div>
+          </div>
 
+          {/* Glass panel — Ideas Host Grow Beyond */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-[12%] left-[8%] z-[5] h-[58%] w-[26%] -rotate-[3deg] rounded-[20px] border border-sky-200/70 bg-white/30 shadow-[0_20px_60px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md"
+          >
+            <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 text-center text-[12px] font-bold tracking-[0.16em] text-slate-600 uppercase">
+              <span>Ideas</span>
+              <span>Host</span>
+              <span>Grow</span>
+              <span className="text-[13px] tracking-[0.12em] text-[#2563eb]">
+                Beyond
+              </span>
+              <span className="mt-2 h-0.5 w-10 rounded-full bg-[#3b82f6]" />
+            </div>
+          </div>
+
+          {/* Glass panel — Global Infrastructure */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-[16%] right-[3%] z-[5] h-[54%] w-[28%] rotate-[2.5deg] rounded-[20px] border border-sky-200/60 bg-white/25 shadow-[0_20px_50px_rgba(37,99,235,0.10),inset_0_1px_0_rgba(255,255,255,0.75)] backdrop-blur-md"
+          >
+            <p className="absolute inset-x-4 top-[30%] text-center text-[11px] leading-relaxed font-semibold tracking-[0.04em] text-slate-600">
+              Global Infrastructure for a Brighter Tomorrow
+            </p>
+          </div>
+
+          {/* Clear mid-body speaker — not zoomed */}
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: 10 }}
+            initial={reduceMotion ? false : { opacity: 0, x: 14 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
-              delay: 0.05,
-              duration: 0.55,
+              delay: 0.06,
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-scene absolute inset-x-[-2%] inset-y-0 z-10"
+            className="hb-hero-speaker absolute inset-x-[2%] top-[2%] bottom-[4%] z-10"
           >
             <Image
-              src="/images/hero-speaker-scene-v3.png"
-              alt="HostingBeyond speaker with glass panels"
+              src="/images/hero-speaker-clear.png"
+              alt="HostingBeyond speaker Alex Carter"
               fill
               priority
               quality={100}
-              sizes="(max-width: 1280px) 58vw, 780px"
-              className="origin-bottom scale-[0.84] object-contain object-[55%_100%]"
+              sizes="(max-width: 1280px) 50vw, 680px"
+              className="origin-bottom scale-[0.92] object-contain object-bottom drop-shadow-[0_28px_50px_rgba(15,23,42,0.16)]"
             />
           </motion.div>
 
-          {/* Soft dissolve — not stuck-on */}
+          {/* Soft fades — not stuck-on */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[18%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/70 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[14%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/55 to-transparent"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[38%] bg-gradient-to-b from-transparent via-white/65 to-white"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[32%] bg-gradient-to-b from-transparent via-white/70 to-white"
           />
         </div>
       </div>
 
-      {/* Soft wave shelf + partner logos */}
+      {/* Wave + designed partner strip */}
       <div className="relative z-30 mt-auto shrink-0">
         <svg
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-[52px] h-[56px] w-full text-white"
+          className="pointer-events-none absolute inset-x-0 -top-12 h-14 w-full text-white"
           viewBox="0 0 1440 56"
           preserveAspectRatio="none"
         >
           <path
             fill="currentColor"
-            d="M0,56 L0,22 C300,4 520,-2 720,8 C980,20 1200,34 1440,18 L1440,56 Z"
+            d="M0,56 L0,24 C280,6 520,0 720,8 C960,16 1200,32 1440,20 L1440,56 Z"
           />
         </svg>
-        <div className="relative bg-white px-[3%] pt-3 pb-5 sm:pt-4 sm:pb-6">
+        <div className="relative bg-white px-[3.5%] pt-4 pb-5 sm:pt-5 sm:pb-6">
           <PartnerLogoStrip />
         </div>
       </div>

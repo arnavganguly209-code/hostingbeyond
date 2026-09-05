@@ -236,42 +236,55 @@
     mask-composite: intersect;
   }
 
-  /* Mid-body mockup scene — soft left into copy + early bottom dissolve */
+  /* Clear speaker — soft bottom dissolve into white shelf */
+  .hb-hero-speaker {
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 58%,
+      rgba(0, 0, 0, 0.7) 74%,
+      rgba(0, 0, 0, 0.3) 88%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 58%,
+      rgba(0, 0, 0, 0.7) 74%,
+      rgba(0, 0, 0, 0.3) 88%,
+      transparent 100%
+    );
+  }
+
   .hb-hero-scene {
     -webkit-mask-image:
       linear-gradient(
         90deg,
         transparent 0%,
-        rgba(0, 0, 0, 0.12) 10%,
-        rgba(0, 0, 0, 0.5) 18%,
-        #000 28%,
+        rgba(0, 0, 0, 0.2) 8%,
+        #000 20%,
         #000 100%
       ),
       linear-gradient(
         180deg,
         #000 0%,
-        #000 48%,
-        rgba(0, 0, 0, 0.75) 64%,
-        rgba(0, 0, 0, 0.35) 80%,
-        rgba(0, 0, 0, 0.1) 90%,
+        #000 55%,
+        rgba(0, 0, 0, 0.4) 85%,
         transparent 100%
       );
     mask-image:
       linear-gradient(
         90deg,
         transparent 0%,
-        rgba(0, 0, 0, 0.12) 10%,
-        rgba(0, 0, 0, 0.5) 18%,
-        #000 28%,
+        rgba(0, 0, 0, 0.2) 8%,
+        #000 20%,
         #000 100%
       ),
       linear-gradient(
         180deg,
         #000 0%,
-        #000 48%,
-        rgba(0, 0, 0, 0.75) 64%,
-        rgba(0, 0, 0, 0.35) 80%,
-        rgba(0, 0, 0, 0.1) 90%,
+        #000 55%,
+        rgba(0, 0, 0, 0.4) 85%,
         transparent 100%
       );
     -webkit-mask-composite: source-in;
@@ -288,36 +301,19 @@
     mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
   }
 
-  .hb-hero-speaker {
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      #000 0%,
-      #000 55%,
-      rgba(0, 0, 0, 0.4) 82%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      #000 0%,
-      #000 55%,
-      rgba(0, 0, 0, 0.4) 82%,
-      transparent 100%
-    );
-  }
-
   .hb-hero-light-speaker {
     -webkit-mask-image: linear-gradient(
       180deg,
       #000 0%,
-      #000 72%,
-      rgba(0, 0, 0, 0.55) 88%,
+      #000 70%,
+      rgba(0, 0, 0, 0.5) 88%,
       transparent 100%
     );
     mask-image: linear-gradient(
       180deg,
       #000 0%,
-      #000 72%,
-      rgba(0, 0, 0, 0.55) 88%,
+      #000 70%,
+      rgba(0, 0, 0, 0.5) 88%,
       transparent 100%
     );
   }
