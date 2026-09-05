@@ -680,6 +680,11 @@ export function defaultTechnologyPartners(): CmsTechPartner[] {
       visible: true,
       order: 5,
     },
+    { id: "linux", label: "Linux", imageUrl: "", visible: true, order: 6 },
+    { id: "python", label: "Python", imageUrl: "", visible: true, order: 7 },
+    { id: "php", label: "PHP", imageUrl: "", visible: true, order: 8 },
+    { id: "mysql", label: "MySQL", imageUrl: "", visible: true, order: 9 },
+    { id: "docker", label: "Docker", imageUrl: "", visible: true, order: 10 },
   ];
 }
 
@@ -695,8 +700,8 @@ export function defaultHomeSections(): CmsHomeSections {
       searchPlaceholder: "Find your perfect domain name...",
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-glass-bg.jpg",
-      speakerImage: "/images/hero-speaker-half.png",
+      backgroundImage: "/images/hero-speaker-scene.png",
+      speakerImage: "/images/hero-speaker-scene.png",
       glassPanelLeft: "Ideas\nHost\nGrow\nBeyond",
       glassPanelRight: "Global Infrastructure for a Brighter Tomorrow",
       domainPricing: [
@@ -948,12 +953,13 @@ export function mergeHomeSections(
   const partnerIds = new Set(
     storedPartners.map((partner) => (partner.id || "").toLowerCase()),
   );
-  // Prefer mockup strip (WordPress…NVMe Express) over older DELL/Express splits
+  // Prefer full premium strip (11 logos) over older 6-logo / DELL splits
   const useDefaultPartners =
     !storedPartners.length ||
     partnerIds.has("dell") ||
     partnerIds.has("express") ||
-    storedPartners.filter((p) => p.visible !== false).length !== 6;
+    !partnerIds.has("docker") ||
+    storedPartners.filter((p) => p.visible !== false).length < 11;
   const technologyPartners = (
     useDefaultPartners
       ? defaults.hero.technologyPartners!
@@ -1000,23 +1006,36 @@ export function mergeHomeSections(
       if (
         !path ||
         path.includes("hero-atmosphere") ||
-        path.includes("hero-speaker-scene") ||
+        path.includes("hero-glass") ||
+        path.includes("hero-speaker-half") ||
+        path.includes("hero-speaker-clear") ||
+        path.includes("hero-speaker-cutout") ||
         path === "/images/hero-speaker.png" ||
         path === "/images/hero-speaker.jpg"
       ) {
         return defaults.hero.backgroundImage;
       }
+      return path.includes("hero-speaker-scene")
+        ? defaults.hero.backgroundImage
+        : path;
+    })(),
+    speakerImage: (() => {
+      const path = storedHero.speakerImage?.trim() || "";
+      if (
+        !path ||
+        path.includes("hero-speaker-half") ||
+        path.includes("hero-speaker-clear") ||
+        path.includes("hero-speaker-cutout") ||
+        path.includes("hero-glass") ||
+        path.includes("hero-atmosphere") ||
+        path === "/images/hero-speaker.png" ||
+        path === "/images/hero-speaker.jpg" ||
+        path.includes("hero-speaker-scene")
+      ) {
+        return defaults.hero.speakerImage;
+      }
       return path;
     })(),
-    speakerImage:
-      !storedHero.speakerImage?.trim() ||
-      storedHero.speakerImage.includes("hero-speaker-clear") ||
-      storedHero.speakerImage.includes("hero-speaker-cutout") ||
-      storedHero.speakerImage.includes("hero-speaker-scene") ||
-      storedHero.speakerImage === "/images/hero-speaker.png" ||
-      storedHero.speakerImage === "/images/hero-speaker.jpg"
-        ? defaults.hero.speakerImage
-        : storedHero.speakerImage,
     glassPanelLeft:
       storedHero.glassPanelLeft?.trim() || defaults.hero.glassPanelLeft,
     glassPanelRight:

@@ -15,15 +15,16 @@ export default async function HomePage() {
 
   return (
     <div className="overflow-x-hidden bg-[#07122a]">
-      {/* Light glass hero — first viewport includes partner strip */}
-      <div className="relative flex min-h-0 flex-col overflow-hidden bg-[#f4f7fc] lg:h-svh lg:max-h-svh">
+      {/* Premium sky-blue glass hero — matches speaker scene glass */}
+      <div className="relative flex min-h-0 flex-col bg-[#b5d3f2] lg:min-h-svh">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_20%,rgba(147,197,253,0.35),transparent_55%),radial-gradient(ellipse_at_82%_18%,rgba(196,181,253,0.32),transparent_50%),radial-gradient(ellipse_at_70%_75%,rgba(125,211,252,0.22),transparent_55%),linear-gradient(180deg,#eef3fb_0%,#f7f9fd_48%,#ffffff_100%)]" />
-          <div className="absolute top-[-12%] right-[-8%] h-[70%] w-[55%] rounded-full bg-[radial-gradient(ellipse,rgba(99,102,241,0.14),transparent_68%)] blur-3xl" />
-          <div className="absolute bottom-[-10%] left-[-5%] h-[45%] w-[40%] rounded-full bg-[radial-gradient(ellipse,rgba(56,189,248,0.12),transparent_70%)] blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(165deg,#b5d3f2_0%,#b7d4f0_28%,#c5daf0_58%,#bdd8f0_100%)]" />
+          <div className="absolute top-[-20%] left-[-12%] h-[60%] w-[55%] rounded-full bg-[radial-gradient(ellipse,rgba(147,197,253,0.42),transparent_68%)] blur-3xl" />
+          <div className="absolute top-[-8%] right-[-8%] h-[55%] w-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(155,205,240,0.48),transparent_65%)] blur-3xl" />
+          <div className="absolute bottom-[8%] left-[20%] h-[40%] w-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(125,180,230,0.22),transparent_70%)] blur-3xl" />
         </div>
 
         <SiteHeader

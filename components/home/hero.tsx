@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { heroTldOptions } from "@/config/domain-teasers";
 import { routes } from "@/config/routes";
-import { PartnerLogoStrip } from "@/components/home/partner-logo-strip";
+import { HeroFeatureBar } from "@/components/home/hero-feature-bar";
 import { cn } from "@/lib/utils";
 import type { CmsHeroContent } from "@/lib/orbit/defaults";
 
@@ -17,6 +17,8 @@ const FALLBACK_TEASERS = [
   { tld: ".org", priceLabel: "$5.99/yr", visible: true },
   { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
 ] as const;
+
+const SCENE_SRC = "/images/hero-speaker-scene-v3.png";
 
 export function HeroSection({ content }: { content?: CmsHeroContent }) {
   const reduceMotion = useReducedMotion();
@@ -35,27 +37,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
     content?.searchPlaceholder || "Find your perfect domain name...";
   const searchButtonLabel = content?.searchButtonLabel || "Search";
 
-  const glassBg =
-    !content?.backgroundImage ||
-    content.backgroundImage.includes("hero-speaker-scene") ||
-    content.backgroundImage.includes("hero-atmosphere")
-      ? "/images/hero-glass-bg.jpg"
-      : content.backgroundImage;
-
-  const speakerSrc =
-    !content?.speakerImage ||
-    content.speakerImage.includes("hero-speaker-clear") ||
-    content.speakerImage.includes("hero-speaker-cutout") ||
-    content.speakerImage.includes("hero-speaker-scene")
-      ? "/images/hero-speaker-half.png"
-      : content.speakerImage;
-
-  const glassLeft = (content?.glassPanelLeft || "Ideas\nHost\nGrow\nBeyond")
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
-  const glassRight =
-    content?.glassPanelRight || "Global Infrastructure for a Brighter Tomorrow";
+  const sceneSrc = SCENE_SRC;
 
   const teasers = useMemo(() => {
     const fromCms = (content?.domainPricing ?? []).filter(
@@ -99,10 +81,45 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
   };
 
   return (
-    <section className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
-      <div className="relative mx-auto grid w-full max-w-[1360px] flex-1 grid-cols-1 items-center gap-2 px-[3%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-end lg:gap-0">
-        {/* Left copy */}
-        <div className="relative z-30 max-w-[520px] self-center lg:pb-10">
+    <section className="relative z-10 flex min-h-0 flex-1 flex-col">
+      {/* Zoom/position locked. Alpha dissolve + thin sky seals — no milky box overlays. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-2 right-0 bottom-[48px] z-[1] w-[min(100%,860px)] overflow-hidden max-lg:top-[36%] lg:top-0 lg:right-0 lg:bottom-[58px] lg:left-[36%] lg:w-auto"
+      >
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.55 }}
+          className="absolute inset-0"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, #000 5.5%, #000 93%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 6%, #000 100%)",
+            WebkitMaskComposite: "source-in",
+            maskImage:
+              "linear-gradient(to right, transparent 0%, #000 5.5%, #000 93%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 6%, #000 100%)",
+            maskComposite: "intersect",
+          }}
+        >
+          <Image
+            src={`${sceneSrc}?v=mix16`}
+            alt=""
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 70vw"
+            className="scale-[1.04] object-cover object-[50%_6%]"
+          />
+        </motion.div>
+        {/* Hairline sky seals — kill remaining hard rim only */}
+        <div className="absolute inset-y-0 left-0 z-[2] w-[2.2%] bg-gradient-to-r from-[#b5d3f2] from-[40%] to-transparent" />
+        <div className="absolute inset-x-0 top-0 z-[2] h-[4%] bg-gradient-to-b from-[#b5d3f2] from-[35%] to-transparent" />
+        <div className="absolute inset-y-0 right-0 z-[2] w-[2.8%] bg-gradient-to-l from-[#b5d3f2] from-[40%] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 z-[2] h-[5%] bg-gradient-to-t from-[#b5d3f2] via-[#b5d3f2]/30 to-transparent" />
+      </div>
+
+      <div className="relative z-20 mx-auto grid w-full max-w-[1360px] flex-1 grid-cols-1 px-[3%] pt-2 pb-2 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+        <div className="relative max-w-[520px] self-center lg:pb-6">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -212,108 +229,20 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           </motion.div>
         </div>
 
-        {/* Right: designed glass bg + clear half-body speaker */}
-        <div className="relative mx-auto h-[380px] w-full max-w-[520px] sm:h-[440px] lg:mx-0 lg:h-[min(52vh,520px)] lg:max-w-none xl:h-[min(56vh,560px)]">
-          {/* Soft glass / datacenter atmosphere (no rectangular plate) */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-[4%_0_8%_8%] overflow-hidden rounded-[40px]"
-          >
-            <Image
-              src={glassBg}
-              alt=""
-              fill
-              priority
-              sizes="(max-width: 1024px) 90vw, 55vw"
-              className="hb-hero-atmosphere scale-[1.04] object-cover object-[60%_40%] opacity-90"
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_45%_40%,rgba(255,255,255,0.2),transparent_55%),linear-gradient(90deg,rgba(244,247,252,0.75)_0%,rgba(244,247,252,0.15)_22%,transparent_40%),linear-gradient(180deg,transparent_55%,rgba(255,255,255,0.55)_82%,#fff_100%)]" />
-          </div>
-
-          {/* Editable frosted glass overlays */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute top-[12%] left-[10%] z-[5] hidden h-[58%] w-[24%] -rotate-[2deg] flex-col items-center justify-center rounded-[20px] border border-white/75 bg-white/30 px-2 shadow-[0_20px_50px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-md lg:flex"
-          >
-            <div className="flex flex-col items-center gap-1 text-center text-[11px] font-bold tracking-[0.16em] text-slate-600 uppercase">
-              {glassLeft.map((line, index) => (
-                <span
-                  key={`${line}-${index}`}
-                  className={cn(
-                    index === glassLeft.length - 1 &&
-                      "text-[12px] text-[#2563eb]",
-                  )}
-                >
-                  {line}
-                </span>
-              ))}
-              <span className="mt-1.5 h-0.5 w-8 rounded-full bg-[#3b82f6]" />
-            </div>
-          </div>
-
-          <div
-            aria-hidden
-            className="pointer-events-none absolute top-[16%] right-[4%] z-[5] hidden h-[52%] w-[27%] rotate-[1.8deg] rounded-[20px] border border-white/65 bg-white/22 shadow-[0_18px_44px_rgba(37,99,235,0.1),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-md lg:block"
-          >
-            <p className="absolute inset-x-3 top-[28%] text-center text-[10.5px] leading-relaxed font-semibold text-slate-600">
-              {glassRight}
-            </p>
-          </div>
-
-          {/* Soft light behind speaker */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute top-[12%] left-[20%] z-[8] h-[62%] w-[58%] rounded-full bg-[radial-gradient(ellipse,rgba(255,255,255,0.7),rgba(186,230,253,0.28)_50%,transparent_72%)] blur-xl"
-          />
-
-          {/* Clear half-body speaker — full figure, no crop/zoom */}
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.06,
-              duration: 0.5,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="hb-hero-speaker absolute inset-x-[4%] top-[2%] bottom-0 z-10"
-          >
-            <Image
-              src={speakerSrc}
-              alt="HostingBeyond speaker"
-              fill
-              priority
-              unoptimized
-              sizes="(max-width: 1024px) 90vw, 560px"
-              className="object-contain object-bottom"
-            />
-          </motion.div>
-
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[14%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/6 to-transparent"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[22%] bg-gradient-to-b from-transparent via-white/55 to-white"
-          />
-        </div>
+        <div className="hidden lg:block" aria-hidden />
       </div>
 
-      {/* Partner strip under domain area */}
-      <div className="relative z-30 mt-auto shrink-0">
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-9 h-10 w-full text-white sm:-top-11 sm:h-12"
-          viewBox="0 0 1440 56"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="currentColor"
-            d="M0,56 L0,24 C280,6 520,0 720,8 C960,16 1200,32 1440,20 L1440,56 Z"
+      {/* Slim feature glass bar — same sky glass, tighter height */}
+      <div className="relative z-30 mt-auto shrink-0 bg-[#b5d3f2] px-[2.5%] pt-0.5 pb-3 sm:pb-4">
+        <div className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-b from-transparent to-[#b5d3f2]" />
+        <div className="relative mx-auto max-w-[1240px] overflow-hidden rounded-full border border-[#7aadd8]/70 bg-[linear-gradient(180deg,rgba(165,200,232,0.92)_0%,rgba(181,211,242,0.82)_48%,rgba(170,205,236,0.88)_100%)] shadow-[0_8px_24px_rgba(60,120,170,0.16)] backdrop-blur-xl">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(ellipse_at_50%_0%,rgba(140,195,235,0.4),transparent_58%)]"
           />
-        </svg>
-        <div className="relative bg-white px-[3.5%] pt-3 pb-4 sm:pt-4 sm:pb-5">
-          <PartnerLogoStrip partners={content?.technologyPartners} />
+          <div className="relative">
+            <HeroFeatureBar />
+          </div>
         </div>
       </div>
     </section>

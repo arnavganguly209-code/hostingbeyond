@@ -6,175 +6,112 @@ import { cn } from "@/lib/utils";
 import type { CmsTechPartner } from "@/lib/orbit/defaults";
 import { defaultTechnologyPartners } from "@/lib/orbit/defaults";
 
-function BuiltInMark({ id }: { id: string }) {
-  switch (id) {
-    case "wordpress":
-      return (
-        <svg viewBox="0 0 132 24" className="h-[18px] w-auto" aria-hidden>
-          <circle cx="11" cy="12" r="10" fill="currentColor" />
-          <path
-            fill="#fff"
-            d="M6.4 7.2c.3-.1.6-.15.95-.15.9 0 1.5.35 1.72 1l3 8.9a7.8 7.8 0 0 1-2.15.42L6.4 7.2zm8.2.78c0 .6-.24 1.25-.64 2l-2.14 6-1.6-4.75c.35-.07.6-.22.6-.55 0-.27-.18-.42-.52-.42-.14 0-.3.02-.45.05l-3.8.18.15-.58c.32-.08.68-.14 1.07-.14 1.45 0 2.4.55 2.86 1.48.38-.78 1.1-1.48 2.26-1.48.66 0 1.13.18 1.45.52.3.3.46.74.46 1.3z"
-          />
-          <text
-            x="28"
-            y="16.5"
-            fill="currentColor"
-            fontFamily="Georgia, 'Times New Roman', Times, serif"
-            fontSize="13"
-            fontWeight="700"
+/** Premium trust strip — real brand colors, left auto-slide */
+const STRIP_IDS = [
+  "wordpress",
+  "cpanel",
+  "plesk",
+  "intel",
+  "amd",
+  "nvme",
+  "linux",
+  "python",
+  "php",
+  "mysql",
+  "docker",
+] as const;
+
+type StripId = (typeof STRIP_IDS)[number];
+
+const LOGO_SRC: Record<StripId, string> = {
+  wordpress: "/images/partners/wordpress.svg",
+  cpanel: "/images/partners/cpanel.svg",
+  plesk: "/images/partners/plesk.svg",
+  intel: "/images/partners/intel.svg",
+  amd: "/images/partners/amd.svg",
+  nvme: "/images/partners/nvme.svg",
+  linux: "/images/partners/linux.svg",
+  python: "/images/partners/python.svg",
+  php: "/images/partners/php.svg",
+  mysql: "/images/partners/mysql.svg",
+  docker: "/images/partners/docker.svg",
+};
+
+/** Intrinsic widths — all render at same visual height as WordPress */
+const LOGO_SIZE: Record<StripId, { w: number; h: number }> = {
+  wordpress: { w: 185, h: 40 },
+  cpanel: { w: 180, h: 44 },
+  plesk: { w: 180, h: 44 },
+  intel: { w: 180, h: 44 },
+  amd: { w: 180, h: 44 },
+  nvme: { w: 180, h: 40 },
+  linux: { w: 145, h: 40 },
+  python: { w: 150, h: 40 },
+  php: { w: 180, h: 44 },
+  mysql: { w: 180, h: 44 },
+  docker: { w: 150, h: 40 },
+};
+
+function PartnerRow({
+  items,
+  keyPrefix,
+}: {
+  items: Array<{
+    id: StripId;
+    label: string;
+    imageUrl: string;
+  }>;
+  keyPrefix: string;
+}) {
+  return (
+    <ul
+      className="flex shrink-0 items-center gap-0"
+      aria-hidden={keyPrefix !== "a"}
+    >
+      {items.map((partner, index) => {
+        const size = LOGO_SIZE[partner.id];
+        return (
+          <li
+            key={`${keyPrefix}-${partner.id}`}
+            className="flex shrink-0 items-center"
           >
-            WordPress
-          </text>
-        </svg>
-      );
-    case "cpanel":
-      return (
-        <svg viewBox="0 0 78 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="14"
-            fontWeight="800"
-            letterSpacing="-0.04em"
-          >
-            cPanel
-          </text>
-          <circle cx="72" cy="7" r="2.4" fill="currentColor" opacity="0.4" />
-        </svg>
-      );
-    case "plesk":
-      return (
-        <svg viewBox="0 0 58 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="14"
-            fontWeight="700"
-            letterSpacing="-0.02em"
-          >
-            plesk
-          </text>
-        </svg>
-      );
-    case "intel":
-      return (
-        <svg viewBox="0 0 52 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="14"
-            fontWeight="800"
-            fontStyle="italic"
-            letterSpacing="0.01em"
-          >
-            intel
-          </text>
-        </svg>
-      );
-    case "amd":
-      return (
-        <svg viewBox="0 0 48 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="14"
-            fontWeight="900"
-            letterSpacing="0.08em"
-          >
-            AMD
-          </text>
-        </svg>
-      );
-    case "dell":
-      return (
-        <svg viewBox="0 0 56 24" className="h-[19px] w-auto" aria-hidden>
-          <ellipse
-            cx="28"
-            cy="12"
-            rx="25"
-            ry="10"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            fill="none"
-          />
-          <text
-            x="28"
-            y="15.5"
-            textAnchor="middle"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="9.5"
-            fontWeight="800"
-            letterSpacing="0.16em"
-          >
-            DELL
-          </text>
-        </svg>
-      );
-    case "nvme":
-      return (
-        <svg viewBox="0 0 118 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="13"
-            fontWeight="800"
-            letterSpacing="0.02em"
-          >
-            nvme
-          </text>
-          <text
-            x="48"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="12.5"
-            fontWeight="650"
-            letterSpacing="0.06em"
-            opacity="0.92"
-          >
-            EXPRESS
-          </text>
-        </svg>
-      );
-    case "express":
-      return (
-        <svg viewBox="0 0 72 24" className="h-[18px] w-auto" aria-hidden>
-          <text
-            x="0"
-            y="17"
-            fill="currentColor"
-            fontFamily="ui-sans-serif, system-ui, sans-serif"
-            fontSize="13"
-            fontWeight="700"
-            letterSpacing="0.08em"
-          >
-            EXPRESS
-          </text>
-        </svg>
-      );
-    default:
-      return (
-        <span className="text-[13px] font-bold tracking-wide uppercase">
-          {id}
-        </span>
-      );
-  }
+            {index > 0 ? (
+              <span
+                aria-hidden
+                className="mx-5 h-5 w-px shrink-0 bg-[#7eb6e8]/55 sm:mx-7"
+              />
+            ) : (
+              <span aria-hidden className="w-2 shrink-0 sm:w-3" />
+            )}
+            {/* Fixed slot height = WordPress visual size for every logo */}
+            <span
+              className="inline-flex h-12 w-[min(190px,44vw)] items-center justify-center px-1 sm:h-[50px] sm:w-[200px]"
+              title={partner.label}
+            >
+              <Image
+                src={`${partner.imageUrl}?v=size6`}
+                alt={keyPrefix === "a" ? partner.label : ""}
+                width={size.w}
+                height={size.h}
+                unoptimized
+                className="h-[42px] max-h-[42px] w-auto max-w-[180px] object-contain sm:h-[46px] sm:max-h-[46px]"
+              />
+            </span>
+            {index === items.length - 1 ? (
+              <span
+                aria-hidden
+                className="mx-5 h-5 w-px shrink-0 bg-[#7eb6e8]/55 sm:mx-7"
+              />
+            ) : null}
+          </li>
+        );
+      })}
+    </ul>
+  );
 }
 
 /**
- * Technology / trust strip — CMS-driven with built-in monochrome marks.
+ * Premium cream-blue glass partner strip — equal-size logos, continuous left slide.
  */
 export function PartnerLogoStrip({
   className,
@@ -183,50 +120,34 @@ export function PartnerLogoStrip({
   className?: string;
   partners?: CmsTechPartner[];
 }) {
-  const items = (partners?.length ? partners : defaultTechnologyPartners())
-    .filter((partner) => partner.visible !== false)
-    .sort((a, b) => a.order - b.order);
+  const defaults = defaultTechnologyPartners();
+  const source = partners?.length ? partners : defaults;
+  const byId = new Map(
+    source
+      .filter((p) => p.visible !== false)
+      .map((p) => [p.id.toLowerCase(), p]),
+  );
+
+  const items = STRIP_IDS.map((id) => {
+    const found = byId.get(id);
+    const fallback = defaults.find((d) => d.id === id);
+    return {
+      id,
+      label: found?.label || fallback?.label || id,
+      imageUrl: found?.imageUrl?.trim() || LOGO_SRC[id],
+    };
+  });
 
   return (
     <div
-      className={cn(
-        "mx-auto flex w-full max-w-[1100px] flex-nowrap items-center justify-center overflow-x-auto py-1.5",
-        className,
-      )}
-      role="list"
+      className={cn("relative w-full overflow-hidden", className)}
+      role="region"
       aria-label="Technology partners"
     >
-      {items.map((partner, index) => (
-        <div
-          key={partner.id}
-          role="listitem"
-          className="flex shrink-0 items-center"
-        >
-          {index > 0 ? (
-            <span
-              aria-hidden
-              className="mx-3 h-3.5 w-px bg-slate-300/90 sm:mx-4 lg:mx-[18px]"
-            />
-          ) : null}
-          <span
-            className="inline-flex h-7 items-center text-slate-500/90"
-            title={partner.label}
-          >
-            {partner.imageUrl ? (
-              <Image
-                src={partner.imageUrl}
-                alt={partner.label}
-                width={120}
-                height={28}
-                className="h-[18px] w-auto object-contain opacity-80 grayscale"
-              />
-            ) : (
-              <BuiltInMark id={partner.id} />
-            )}
-            <span className="sr-only">{partner.label}</span>
-          </span>
-        </div>
-      ))}
+      <div className="hb-partner-marquee flex w-max items-center">
+        <PartnerRow items={items} keyPrefix="a" />
+        <PartnerRow items={items} keyPrefix="b" />
+      </div>
     </div>
   );
 }

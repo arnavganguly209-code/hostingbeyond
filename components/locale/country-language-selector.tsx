@@ -31,7 +31,7 @@ type Props = {
   className?: string;
 };
 
-/** Real flag image via flagcdn — native img (no Next optimizer) for reliable loading */
+/** Real US flag first (local SVG); other countries via flagcdn */
 function FlagImg({
   code,
   size = 24,
@@ -49,32 +49,37 @@ function FlagImg({
   const [format, setFormat] = useState<"svg" | "png" | "failed">("svg");
   const light = tone === "light";
 
+  const chipClass = cn(
+    "inline-flex shrink-0 overflow-hidden rounded-full border",
+    light
+      ? "border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
+      : "border-white/15 bg-[#1a2540]",
+    className,
+  );
+
+  // Always use crisp local US flag — CDN/crop looked wrong in the header chip
+  if (normalized === "US") {
+    return (
+      <span
+        className={chipClass}
+        style={{ width: size, height: size }}
+        aria-hidden
+      >
+        {/* Raster flag reads clearer than SVG at 24–28px circle */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/flags/us.png"
+          alt=""
+          width={size}
+          height={size}
+          className="h-full w-full object-cover"
+          draggable={false}
+        />
+      </span>
+    );
+  }
+
   if (!/^[A-Z]{2}$/.test(normalized) || format === "failed") {
-    // Inline US fallback when CDN fails — ensures header always shows a flag
-    if (normalized === "US") {
-      return (
-        <span
-          className={cn(
-            "inline-flex shrink-0 overflow-hidden rounded-full border",
-            light
-              ? "border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
-              : "border-white/15 bg-[#1a2540]",
-            className,
-          )}
-          style={{ width: size, height: size }}
-          aria-hidden
-        >
-          <svg viewBox="0 0 24 24" className="h-full w-full" aria-hidden>
-            <rect width="24" height="24" fill="#b22234" />
-            <path
-              fill="#fff"
-              d="M0 2.4h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0z"
-            />
-            <rect width="10.5" height="9.6" fill="#3c3b6e" />
-          </svg>
-        </span>
-      );
-    }
     return (
       <span
         className={cn(
@@ -95,16 +100,7 @@ function FlagImg({
   const src = flagImgUrl(normalized, format === "png" ? "png" : "svg");
 
   return (
-    <span
-      className={cn(
-        "inline-flex shrink-0 overflow-hidden rounded-full border",
-        light
-          ? "border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
-          : "border-white/15 bg-[#1a2540]",
-        className,
-      )}
-      style={{ width: size, height: size }}
-    >
+    <span className={chipClass} style={{ width: size, height: size }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
@@ -351,7 +347,7 @@ export function CountryLanguageSelector({
           </>
         ) : (
           <>
-            <FlagImg code={country.code} size={22} priority tone={tone} />
+            <FlagImg code={country.code} size={28} priority tone={tone} />
             <span className="font-bold tracking-wide">{triggerLangCode}</span>
           </>
         )}
