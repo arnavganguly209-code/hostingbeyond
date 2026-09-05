@@ -71,10 +71,10 @@ export function HeroSection({
   };
 
   return (
-    <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      <div className="relative mx-auto grid min-h-0 w-full max-w-[1360px] flex-1 grid-cols-1 items-end gap-0 px-[3%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+    <section className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="relative mx-auto grid min-h-0 w-full max-w-[1380px] flex-1 grid-cols-1 items-end gap-0 px-[2.8%] pt-0 pb-0 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]">
         {/* Left copy */}
-        <div className="relative z-20 max-w-[520px] self-center lg:pb-16">
+        <div className="relative z-30 max-w-[500px] self-center lg:pb-20">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export function HeroSection({
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.04 }}
-            className="font-heading mt-2.5 text-[clamp(2.2rem,4.5vw,3.75rem)] leading-[1.06] font-extrabold tracking-[-0.04em] text-slate-950"
+            className="font-heading mt-2.5 text-[clamp(2.15rem,4.4vw,3.6rem)] leading-[1.06] font-extrabold tracking-[-0.04em] text-slate-950"
           >
             <span className="block">{headline}</span>
             <span className="mt-0.5 block bg-gradient-to-r from-[#7c3aed] via-[#6366f1] to-[#2563eb] bg-clip-text text-transparent">
@@ -99,7 +99,7 @@ export function HeroSection({
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="mt-3 max-w-[440px] text-[14px] leading-relaxed font-medium text-slate-600 sm:text-[15px] lg:mt-3.5"
+            className="mt-3 max-w-[430px] text-[14px] leading-relaxed font-medium text-slate-600 sm:text-[15px]"
           >
             {description}
           </motion.p>
@@ -183,56 +183,60 @@ export function HeroSection({
           </motion.div>
         </div>
 
-        {/* Right: mockup scene zoomed-out + soft fade into white wave */}
-        <div className="relative mx-auto hidden min-h-[540px] w-full lg:block xl:min-h-[560px]">
+        {/* Right: mid-body speaker + glass (mockup same) — not zoomed */}
+        <div className="relative mx-auto hidden h-full min-h-[580px] w-full lg:block xl:min-h-[620px]">
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[8%] right-[4%] h-[62%] w-[72%] rounded-full bg-[radial-gradient(ellipse_at_50%_40%,rgba(147,197,253,0.32),transparent_70%)] blur-3xl"
+            className="pointer-events-none absolute top-[10%] right-[0%] h-[70%] w-[80%] rounded-full bg-[radial-gradient(ellipse_at_55%_35%,rgba(186,230,253,0.45),transparent_68%)] blur-3xl"
           />
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+            initial={reduceMotion ? false : { opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
-              delay: 0.06,
-              duration: 0.5,
+              delay: 0.05,
+              duration: 0.55,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-scene absolute inset-x-0 top-0 bottom-[6%]"
+            className="hb-hero-scene absolute inset-x-[-2%] inset-y-0 z-10"
           >
             <Image
-              src="/images/hero-speaker-scene-v2.png"
+              src="/images/hero-speaker-scene-v3.png"
               alt="HostingBeyond speaker with glass panels"
               fill
               priority
               quality={100}
-              sizes="(max-width: 1280px) 55vw, 740px"
-              className="origin-bottom scale-[0.9] object-contain object-bottom"
+              sizes="(max-width: 1280px) 58vw, 780px"
+              className="origin-bottom scale-[0.84] object-contain object-[55%_100%]"
             />
           </motion.div>
 
-          {/* Tall soft dissolve into partner shelf */}
+          {/* Soft dissolve — not stuck-on */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[34%] bg-gradient-to-b from-transparent via-white/50 to-white"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[18%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/70 to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[38%] bg-gradient-to-b from-transparent via-white/65 to-white"
           />
         </div>
       </div>
 
-      {/* Curved white wave + partner logos */}
-      <div className="relative z-20 mt-auto shrink-0">
+      {/* Soft wave shelf + partner logos */}
+      <div className="relative z-30 mt-auto shrink-0">
         <svg
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-14 h-16 w-full text-white"
-          viewBox="0 0 1440 64"
+          className="pointer-events-none absolute inset-x-0 -top-[52px] h-[56px] w-full text-white"
+          viewBox="0 0 1440 56"
           preserveAspectRatio="none"
         >
           <path
             fill="currentColor"
-            d="M0,64 L0,28 C240,8 480,0 720,6 C960,12 1200,28 1440,20 L1440,64 Z"
+            d="M0,56 L0,22 C300,4 520,-2 720,8 C980,20 1200,34 1440,18 L1440,56 Z"
           />
         </svg>
-        <div className="relative bg-white/90 px-[3.5%] pt-4 pb-5 backdrop-blur-xl sm:pt-5 sm:pb-6">
+        <div className="relative bg-white px-[3%] pt-3 pb-5 sm:pt-4 sm:pb-6">
           <PartnerLogoStrip />
         </div>
       </div>
