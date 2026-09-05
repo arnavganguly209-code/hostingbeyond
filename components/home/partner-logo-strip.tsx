@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Partner strip matching light hero mockup — monochrome marks + thin dividers */
+/** Partner strip — monochrome marks + thin dividers (mockup match) */
 const partners = [
   {
     id: "wordpress",
@@ -206,11 +206,11 @@ export function PartnerLogoStrip({ className }: { className?: string }) {
           {index > 0 ? (
             <span
               aria-hidden
-              className="mx-2.5 hidden h-[16px] w-px bg-slate-300/75 sm:mx-3.5 sm:block lg:mx-5"
+              className="mx-2.5 hidden h-[16px] w-px bg-slate-300/80 sm:mx-3.5 sm:block lg:mx-5"
             />
           ) : null}
           <span
-            className="inline-flex items-center text-slate-500 transition-colors hover:text-slate-700"
+            className="inline-flex items-center text-slate-500/95"
             title={partner.label}
           >
             {partner.svg}
