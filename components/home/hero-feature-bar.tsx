@@ -111,7 +111,7 @@ const features = [
 
 export function HeroFeatureBar() {
   return (
-    <div className="relative flex [scrollbar-width:none] items-center gap-2 overflow-x-auto px-3 py-1.5 sm:gap-0 sm:overflow-visible sm:px-3.5 sm:py-1.5 lg:justify-between [&::-webkit-scrollbar]:hidden">
+    <div className="relative flex [scrollbar-width:none] items-center gap-3 overflow-x-auto px-3 py-2 sm:gap-0 sm:overflow-visible sm:px-3.5 sm:py-1.5 lg:justify-between [&::-webkit-scrollbar]:hidden">
       <div className="flex shrink-0 items-center gap-2">
         <IconTile tone="violet">
           <Gift className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2} />

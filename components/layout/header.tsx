@@ -188,10 +188,14 @@ export function SiteHeader({
   }, [open]);
 
   return (
-    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.2%] pt-3 pb-1 sm:pt-4">
-      <div className="mx-auto flex h-[64px] w-full max-w-[1280px] items-center rounded-full border border-white/70 bg-white/70 px-4 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl sm:h-[70px] sm:px-5 lg:px-6">
-        <div className="flex min-w-[210px] shrink-0 items-center sm:min-w-[240px] xl:min-w-[270px]">
-          <Logo src="/logo/hostingbeyond-logo-v5.png" variant="image" />
+    <header className="relative z-50 w-full shrink-0 bg-transparent px-[3%] pt-2.5 pb-1 sm:px-[2.2%] sm:pt-4">
+      <div className="mx-auto flex h-[56px] w-full max-w-[1280px] items-center gap-2 rounded-full border border-white/70 bg-white/70 px-3 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl sm:h-[70px] sm:gap-3 sm:px-5 lg:px-6">
+        <div className="min-w-0 flex-1 lg:min-w-[210px] lg:flex-none xl:min-w-[270px]">
+          <Logo
+            src="/logo/hostingbeyond-logo-v5.png"
+            variant="image"
+            className="h-[26px] max-w-[min(100%,168px)] sm:h-[34px] sm:max-w-[280px] xl:h-[38px] xl:max-w-[310px]"
+          />
         </div>
 
         <nav
@@ -222,7 +226,7 @@ export function SiteHeader({
           </Link>
         </div>
 
-        <div className="ml-auto flex items-center gap-2 lg:hidden">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
           <CountryLanguageSelector compact tone="light" />
           <button
             type="button"
