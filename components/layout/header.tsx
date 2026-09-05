@@ -179,8 +179,9 @@ export function SiteHeader({
     logoPath.includes("hostingbeyond-logo-transparent") ||
     logoPath.includes("hostingbeyond-logo-wordmark") ||
     logoPath.includes("hostingbeyond-logo-header") ||
-    logoPath.includes("hostingbeyond-logo-light")
-      ? "/logo/hostingbeyond-logo-v3.png"
+    logoPath.includes("hostingbeyond-logo-light") ||
+    logoPath.includes("hostingbeyond-logo-v3")
+      ? "/logo/hostingbeyond-logo-v4.png"
       : logoPath;
 
   useEffect(() => {
