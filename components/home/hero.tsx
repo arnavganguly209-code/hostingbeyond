@@ -28,9 +28,10 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
     content?.searchPlaceholder || "Find your perfect domain name...";
   const searchButtonLabel = content?.searchButtonLabel || "Search";
   const speakerImage =
-    content?.speakerImage || "/images/hero-speaker-clear.png";
-  const atmosphereImage =
-    content?.backgroundImage || "/images/hero-atmosphere.jpg";
+    content?.speakerImage?.includes("hero-speaker-clear") ||
+    !content?.speakerImage
+      ? "/images/hero-speaker-cutout.png"
+      : content.speakerImage;
   const glassLeft = (content?.glassPanelLeft || "Ideas\nHost\nGrow\nBeyond")
     .split("\n")
     .map((line) => line.trim())
@@ -189,7 +190,7 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
         <div className="relative mx-auto mt-2 h-[340px] w-full max-w-[420px] sm:h-[400px] lg:hidden">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(ellipse_at_50%_35%,rgba(147,197,253,0.45),transparent_65%)]"
+            className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(ellipse_at_50%_35%,rgba(147,197,253,0.42),transparent_68%)]"
           />
           <div className="hb-hero-speaker absolute inset-0 z-10">
             <Image
@@ -197,8 +198,9 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
               alt="HostingBeyond speaker"
               fill
               priority
+              unoptimized
               sizes="420px"
-              className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(15,23,42,0.14)]"
+              className="object-contain object-bottom"
             />
           </div>
           <div
@@ -207,26 +209,45 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           />
         </div>
 
-        {/* Right: designed glass/datacenter scene + clear speaker */}
-        <div className="relative mx-auto hidden min-h-[540px] w-full lg:block xl:min-h-[580px]">
+        {/* Right: designed glass scene (no black plate) + clear speaker */}
+        <div className="relative mx-auto hidden min-h-[540px] w-full lg:block xl:min-h-[590px]">
+          {/* Soft designed atmosphere — no rectangular photo plate */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-[0_0_6%_2%] overflow-hidden"
+            className="pointer-events-none absolute inset-0 overflow-hidden"
           >
-            <Image
-              src={atmosphereImage}
-              alt=""
-              fill
-              priority
-              sizes="(max-width: 1280px) 50vw, 680px"
-              className="hb-hero-atmosphere object-cover object-[58%_42%] opacity-[0.92]"
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_48%_42%,rgba(255,255,255,0.12),transparent_52%),linear-gradient(90deg,rgba(244,247,252,0.72)_0%,rgba(244,247,252,0.18)_18%,transparent_34%),linear-gradient(180deg,transparent_58%,rgba(255,255,255,0.55)_82%,#ffffff_100%)]" />
+            <div className="absolute top-[4%] right-[0%] h-[78%] w-[92%] rounded-[42px] bg-[radial-gradient(ellipse_at_62%_36%,rgba(186,230,253,0.55),transparent_62%)] blur-2xl" />
+            <div className="absolute top-[10%] right-[6%] h-[62%] w-[70%] rounded-[36px] bg-[radial-gradient(ellipse_at_70%_40%,rgba(196,181,253,0.28),transparent_60%)] blur-xl" />
+            <div className="absolute top-[22%] right-[4%] h-[48%] w-[22%] rounded-full bg-[radial-gradient(ellipse,rgba(59,130,246,0.18),transparent_70%)] blur-lg" />
+            {/* Soft green plant hints */}
+            <div className="absolute top-[28%] right-[38%] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(134,239,172,0.35),transparent_70%)] blur-md" />
+            <div className="absolute top-[36%] left-[18%] h-16 w-16 rounded-full bg-[radial-gradient(circle,rgba(167,243,208,0.28),transparent_70%)] blur-md" />
+            {/* Server rack LED columns */}
+            <div className="absolute top-[14%] right-[5%] flex h-[60%] gap-2.5 opacity-55">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="relative w-[15px] overflow-hidden rounded-full bg-gradient-to-b from-sky-200/70 via-blue-500/40 to-indigo-400/20 shadow-[0_0_20px_rgba(59,130,246,0.35)]"
+                  style={{ height: `${58 + i * 8}%`, marginTop: `${i * 5}%` }}
+                >
+                  <div className="absolute inset-x-1 top-[12%] bottom-[12%] space-y-1.5">
+                    {Array.from({ length: 8 }).map((_, d) => (
+                      <div
+                        key={d}
+                        className="h-1 rounded-full bg-sky-300/80"
+                        style={{ opacity: 0.35 + (d % 3) * 0.2 }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
+          {/* Glass panel — Ideas Host Grow Beyond */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[9%] left-[7%] z-[5] flex h-[64%] w-[26%] -rotate-[2deg] flex-col items-center justify-center rounded-[20px] border border-sky-200/80 bg-white/35 px-3 shadow-[0_22px_55px_rgba(37,99,235,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-md"
+            className="pointer-events-none absolute top-[10%] left-[8%] z-[5] flex h-[62%] w-[25%] -rotate-[2.2deg] flex-col items-center justify-center rounded-[22px] border border-white/80 bg-gradient-to-b from-white/55 to-white/20 px-3 shadow-[0_24px_60px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-[16px]"
           >
             <div className="flex flex-col items-center gap-1.5 text-center text-[12px] font-bold tracking-[0.18em] text-slate-600 uppercase">
               {glassLeft.map((line, index) => (
@@ -244,18 +265,20 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
             </div>
           </div>
 
+          {/* Glass panel — Global Infrastructure */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[12%] right-[3%] z-[5] h-[58%] w-[29%] rotate-[1.8deg] rounded-[20px] border border-sky-200/70 bg-white/28 shadow-[0_20px_48px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-md"
+            className="pointer-events-none absolute top-[13%] right-[3%] z-[5] h-[56%] w-[28%] rotate-[2deg] rounded-[22px] border border-white/70 bg-gradient-to-b from-white/45 to-white/15 shadow-[0_20px_50px_rgba(37,99,235,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-[16px]"
           >
             <p className="absolute inset-x-4 top-[30%] text-center text-[11px] leading-relaxed font-semibold tracking-[0.03em] text-slate-600">
               {glassRight}
             </p>
           </div>
 
+          {/* Soft light behind speaker — no dark halo */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[16%] left-[24%] z-[8] h-[58%] w-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(147,197,253,0.4),transparent_70%)] blur-2xl"
+            className="pointer-events-none absolute top-[14%] left-[22%] z-[8] h-[60%] w-[54%] rounded-full bg-[radial-gradient(ellipse,rgba(255,255,255,0.75),rgba(186,230,253,0.35)_45%,transparent_72%)] blur-xl"
           />
 
           <motion.div
@@ -266,26 +289,31 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
               duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-speaker absolute inset-x-[0%] top-[1%] bottom-[1%] z-10"
+            className="hb-hero-speaker absolute inset-x-[2%] top-[2%] bottom-[2%] z-10"
           >
             <Image
               src={speakerImage}
               alt="HostingBeyond speaker"
               fill
               priority
-              quality={100}
+              unoptimized
               sizes="(max-width: 1280px) 52vw, 720px"
-              className="origin-bottom object-contain object-bottom drop-shadow-[0_26px_48px_rgba(15,23,42,0.2)]"
+              className="origin-bottom object-contain object-bottom"
             />
           </motion.div>
 
+          {/* Soft edge dissolves — no black frame */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[14%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/65 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[18%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/75 to-transparent"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[26%] bg-gradient-to-b from-transparent via-white/55 to-white"
+            className="pointer-events-none absolute inset-y-0 right-0 z-20 w-[8%] bg-gradient-to-l from-[#f4f7fc]/80 to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[30%] bg-gradient-to-b from-transparent via-white/70 to-white"
           />
         </div>
       </div>

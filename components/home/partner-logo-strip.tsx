@@ -178,20 +178,26 @@ export function PartnerLogoStrip({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-[1120px] flex-nowrap items-center justify-center gap-0 overflow-x-auto py-1",
+        "mx-auto flex w-full max-w-[1100px] flex-nowrap items-center justify-center overflow-x-auto py-1.5",
         className,
       )}
+      role="list"
+      aria-label="Technology partners"
     >
       {items.map((partner, index) => (
-        <div key={partner.id} className="flex shrink-0 items-center">
+        <div
+          key={partner.id}
+          role="listitem"
+          className="flex shrink-0 items-center"
+        >
           {index > 0 ? (
             <span
               aria-hidden
-              className="mx-2.5 h-[15px] w-px bg-slate-300/90 sm:mx-3.5 lg:mx-4"
+              className="mx-3 h-3.5 w-px bg-slate-300/90 sm:mx-4 lg:mx-[18px]"
             />
           ) : null}
           <span
-            className="inline-flex h-8 items-center text-slate-500 transition-colors hover:text-slate-700"
+            className="inline-flex h-7 items-center text-slate-500/90"
             title={partner.label}
           >
             {partner.imageUrl ? (

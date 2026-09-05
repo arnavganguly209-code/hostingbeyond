@@ -692,7 +692,7 @@ export function defaultHomeSections(): CmsHomeSections {
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
       backgroundImage: "/images/hero-atmosphere.jpg",
-      speakerImage: "/images/hero-speaker-clear.png",
+      speakerImage: "/images/hero-speaker-cutout.png",
       glassPanelLeft: "Ideas\nHost\nGrow\nBeyond",
       glassPanelRight: "Global Infrastructure for a Brighter Tomorrow",
       domainPricing: [
@@ -991,9 +991,13 @@ export function mergeHomeSections(
         ? defaults.hero.backgroundImage
         : storedHero.backgroundImage,
     speakerImage:
-      storedHero.speakerImage && storedHero.speakerImage.trim()
-        ? storedHero.speakerImage
-        : defaults.hero.speakerImage,
+      !storedHero.speakerImage?.trim() ||
+      storedHero.speakerImage.includes("hero-speaker-clear") ||
+      storedHero.speakerImage.includes("hero-speaker-scene") ||
+      storedHero.speakerImage === "/images/hero-speaker.png" ||
+      storedHero.speakerImage === "/images/hero-speaker.jpg"
+        ? defaults.hero.speakerImage
+        : storedHero.speakerImage,
     glassPanelLeft:
       storedHero.glassPanelLeft?.trim() || defaults.hero.glassPanelLeft,
     glassPanelRight:
