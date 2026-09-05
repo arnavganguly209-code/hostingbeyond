@@ -1,37 +1,37 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Gift,
-  Mail,
-  MousePointer2,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, Gift, Mail, ShieldCheck } from "lucide-react";
 
 import { routes } from "@/config/routes";
 
 function IconTile({
   children,
   tone = "sky",
+  wide = false,
 }: {
   children: ReactNode;
-  tone?: "sky" | "white" | "green" | "violet";
+  tone?: "sky" | "white" | "green" | "violet" | "orange" | "blue";
+  wide?: boolean;
 }) {
   const tones = {
     white:
-      "border border-white/80 bg-white shadow-[0_1px_4px_rgba(60,120,170,0.12)]",
+      "border border-slate-200/80 bg-white shadow-[0_2px_10px_rgba(60,120,170,0.14)]",
     sky: "bg-[#d6e8f8] text-[#2563eb]",
     green: "bg-[#d8f3e4] text-[#16a34a]",
     violet:
       "bg-gradient-to-br from-[#7c3aed]/15 to-[#2563eb]/20 text-[#4f46e5]",
+    orange:
+      "border border-orange-100/90 bg-white shadow-[0_2px_12px_rgba(255,108,44,0.22)]",
+    blue: "border border-sky-100/90 bg-white shadow-[0_2px_12px_rgba(33,117,155,0.18)]",
   } as const;
 
   return (
     <span
-      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] sm:h-9 sm:w-9 ${tones[tone]}`}
+      className={`flex h-8 shrink-0 items-center justify-center rounded-[10px] sm:h-9 ${
+        wide ? "w-10 sm:w-11" : "w-8 sm:w-9"
+      } ${tones[tone]}`}
     >
       {children}
     </span>
@@ -44,13 +44,15 @@ const features = [
     title: "One Click",
     subtitle: "cPanel Access",
     icon: (
-      <IconTile tone="white">
-        <Image
-          src="/images/feature-marks/cpanel-cp.svg"
-          alt=""
-          width={28}
-          height={28}
-          className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
+      <IconTile tone="orange" wide>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/feature-marks/cpanel-cp.svg?v=3"
+          alt="cPanel"
+          width={36}
+          height={20}
+          className="h-[15px] w-auto object-contain sm:h-[17px]"
+          draggable={false}
         />
       </IconTile>
     ),
@@ -60,13 +62,15 @@ const features = [
     title: "One Click",
     subtitle: "WordPress Install",
     icon: (
-      <IconTile tone="white">
-        <Image
-          src="/images/feature-marks/wordpress-w.svg"
-          alt=""
+      <IconTile tone="blue">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/feature-marks/wordpress-w.svg?v=3"
+          alt="WordPress"
           width={28}
           height={28}
           className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
+          draggable={false}
         />
       </IconTile>
     ),
@@ -76,10 +80,15 @@ const features = [
     title: "One Click",
     subtitle: "Website Create",
     icon: (
-      <IconTile tone="sky">
-        <MousePointer2
-          className="h-4 w-4 sm:h-[18px] sm:w-[18px]"
-          strokeWidth={2.2}
+      <IconTile tone="white">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/feature-marks/website-create.svg?v=2"
+          alt=""
+          width={28}
+          height={28}
+          className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
+          draggable={false}
         />
       </IconTile>
     ),
