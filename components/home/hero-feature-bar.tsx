@@ -1,10 +1,42 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Gift, Globe, Mail, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  Gift,
+  Mail,
+  MousePointer2,
+  ShieldCheck,
+} from "lucide-react";
 
 import { routes } from "@/config/routes";
+
+function IconTile({
+  children,
+  tone = "sky",
+}: {
+  children: ReactNode;
+  tone?: "sky" | "white" | "green" | "violet";
+}) {
+  const tones = {
+    white:
+      "border border-white/80 bg-white shadow-[0_1px_4px_rgba(60,120,170,0.12)]",
+    sky: "bg-[#d6e8f8] text-[#2563eb]",
+    green: "bg-[#d8f3e4] text-[#16a34a]",
+    violet:
+      "bg-gradient-to-br from-[#7c3aed]/15 to-[#2563eb]/20 text-[#4f46e5]",
+  } as const;
+
+  return (
+    <span
+      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] sm:h-9 sm:w-9 ${tones[tone]}`}
+    >
+      {children}
+    </span>
+  );
+}
 
 const features = [
   {
@@ -12,13 +44,15 @@ const features = [
     title: "One Click",
     subtitle: "cPanel Access",
     icon: (
-      <Image
-        src="/images/partners/cpanel.svg"
-        alt=""
-        width={36}
-        height={22}
-        className="h-[18px] w-auto object-contain sm:h-[20px]"
-      />
+      <IconTile tone="white">
+        <Image
+          src="/images/feature-marks/cpanel-cp.svg"
+          alt=""
+          width={28}
+          height={28}
+          className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
+        />
+      </IconTile>
     ),
   },
   {
@@ -26,13 +60,15 @@ const features = [
     title: "One Click",
     subtitle: "WordPress Install",
     icon: (
-      <Image
-        src="/images/partners/wordpress.svg"
-        alt=""
-        width={28}
-        height={28}
-        className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
-      />
+      <IconTile tone="white">
+        <Image
+          src="/images/feature-marks/wordpress-w.svg"
+          alt=""
+          width={28}
+          height={28}
+          className="h-[22px] w-[22px] object-contain sm:h-6 sm:w-6"
+        />
+      </IconTile>
     ),
   },
   {
@@ -40,9 +76,12 @@ const features = [
     title: "One Click",
     subtitle: "Website Create",
     icon: (
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d6e8f8] text-[#3b82f6] sm:h-9 sm:w-9">
-        <Globe className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2} />
-      </span>
+      <IconTile tone="sky">
+        <MousePointer2
+          className="h-4 w-4 sm:h-[18px] sm:w-[18px]"
+          strokeWidth={2.2}
+        />
+      </IconTile>
     ),
   },
   {
@@ -50,9 +89,9 @@ const features = [
     title: "Business Email",
     subtitle: "Professional Mail",
     icon: (
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d6e8f8] text-[#3b82f6] sm:h-9 sm:w-9">
+      <IconTile tone="sky">
         <Mail className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2} />
-      </span>
+      </IconTile>
     ),
   },
   {
@@ -60,12 +99,12 @@ const features = [
     title: "Free SSL",
     subtitle: "With All Plans",
     icon: (
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d8f3e4] text-[#16a34a] sm:h-9 sm:w-9">
+      <IconTile tone="green">
         <ShieldCheck
           className="h-4 w-4 sm:h-[18px] sm:w-[18px]"
           strokeWidth={2}
         />
-      </span>
+      </IconTile>
     ),
   },
 ] as const;
@@ -73,11 +112,10 @@ const features = [
 export function HeroFeatureBar() {
   return (
     <div className="relative flex [scrollbar-width:none] items-center gap-2 overflow-x-auto px-3 py-1.5 sm:gap-0 sm:overflow-visible sm:px-3.5 sm:py-1.5 lg:justify-between [&::-webkit-scrollbar]:hidden">
-      {/* Special offer */}
       <div className="flex shrink-0 items-center gap-2">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#7c3aed]/15 to-[#2563eb]/20 text-[#4f46e5] sm:h-9 sm:w-9">
+        <IconTile tone="violet">
           <Gift className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2} />
-        </span>
+        </IconTile>
         <div className="min-w-0 leading-tight">
           <p className="text-[9px] font-bold tracking-[0.14em] text-slate-500 uppercase sm:text-[10px]">
             Special Offer
@@ -98,9 +136,7 @@ export function HeroFeatureBar() {
             className="mx-2 hidden h-7 w-px bg-[#8eb8de]/50 sm:mx-2.5 sm:block lg:mx-3"
           />
           <div className="flex items-center gap-2">
-            <span className="flex shrink-0 items-center justify-center">
-              {item.icon}
-            </span>
+            {item.icon}
             <div className="min-w-0 leading-tight">
               <p className="text-[12px] font-bold text-slate-900 sm:text-[13px]">
                 {item.title}
