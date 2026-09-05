@@ -6,7 +6,6 @@ export const heroDomainTeasers = [
   { tld: ".com", priceLabel: "$7.99/yr" },
   { tld: ".net", priceLabel: "$6.99/yr" },
   { tld: ".org", priceLabel: "$5.99/yr" },
-  { tld: ".co", priceLabel: "$4.99/yr" },
   { tld: ".dev", priceLabel: "$3.99/yr" },
 ] as const;
 

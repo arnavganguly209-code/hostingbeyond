@@ -691,7 +691,7 @@ export function defaultHomeSections(): CmsHomeSections {
       searchPlaceholder: "Find your perfect domain name...",
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-atmosphere.jpg",
+      backgroundImage: "/images/hero-speaker-scene.png",
       speakerImage: "/images/hero-speaker-cutout.png",
       glassPanelLeft: "Ideas\nHost\nGrow\nBeyond",
       glassPanelRight: "Global Infrastructure for a Brighter Tomorrow",
@@ -699,7 +699,6 @@ export function defaultHomeSections(): CmsHomeSections {
         { tld: ".com", priceLabel: "$7.99/yr", visible: true },
         { tld: ".net", priceLabel: "$6.99/yr", visible: true },
         { tld: ".org", priceLabel: "$5.99/yr", visible: true },
-        { tld: ".co", priceLabel: "$4.99/yr", visible: true },
         { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
       ],
       technologyPartners: defaultTechnologyPartners(),
@@ -983,13 +982,19 @@ export function mergeHomeSections(
       storedHero.searchButtonLabel ?? defaults.hero.searchButtonLabel,
     bulkSearchLabel:
       storedHero.bulkSearchLabel ?? defaults.hero.bulkSearchLabel,
-    backgroundImage:
-      !storedHero.backgroundImage ||
-      storedHero.backgroundImage.includes("hero-speaker-scene") ||
-      storedHero.backgroundImage === "/images/hero-speaker.png" ||
-      storedHero.backgroundImage === "/images/hero-speaker.jpg"
-        ? defaults.hero.backgroundImage
-        : storedHero.backgroundImage,
+    backgroundImage: (() => {
+      const path = storedHero.backgroundImage?.trim() || "";
+      if (
+        !path ||
+        path.includes("hero-atmosphere") ||
+        path.includes("hero-speaker-scene-v") ||
+        path === "/images/hero-speaker.png" ||
+        path === "/images/hero-speaker.jpg"
+      ) {
+        return defaults.hero.backgroundImage;
+      }
+      return path;
+    })(),
     speakerImage:
       !storedHero.speakerImage?.trim() ||
       storedHero.speakerImage.includes("hero-speaker-clear") ||
@@ -1004,13 +1009,23 @@ export function mergeHomeSections(
       storedHero.glassPanelRight?.trim() || defaults.hero.glassPanelRight,
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
     stats: storedHero.stats ?? defaults.hero.stats,
-    domainPricing: storedPricing.length
-      ? storedPricing.map((item) => ({
-          tld: item.tld.startsWith(".") ? item.tld : `.${item.tld}`,
-          priceLabel: item.priceLabel || "",
-          visible: item.visible !== false,
-        }))
-      : defaults.hero.domainPricing,
+    domainPricing: (() => {
+      if (!storedPricing.length) return defaults.hero.domainPricing;
+      const normalized = storedPricing.map((item) => ({
+        tld: item.tld.startsWith(".") ? item.tld : `.${item.tld}`,
+        priceLabel: item.priceLabel || "",
+        visible: item.visible !== false,
+      }));
+      // Prefer the 4 mockup TLDs when CMS still has the old 5-item set
+      const preferred = [".com", ".net", ".org", ".dev"];
+      const picked = preferred
+        .map((tld) =>
+          normalized.find((item) => item.tld === tld && item.visible),
+        )
+        .filter(Boolean) as typeof normalized;
+      if (picked.length === 4) return picked;
+      return normalized.filter((item) => item.visible).slice(0, 4);
+    })(),
     technologyPartners,
   };
 
