@@ -63,7 +63,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[15px] font-bold tracking-[-0.015em] whitespace-nowrap text-slate-800 transition-colors duration-150 hover:text-slate-950 xl:text-[16px]"
+        className="inline-flex items-center gap-1 text-[15px] font-bold tracking-[-0.015em] whitespace-nowrap text-slate-800 transition-colors duration-150 hover:text-slate-950 xl:text-[15.5px]"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
@@ -130,7 +130,7 @@ export function SiteHeader({
   loginHref = routes.login,
   getStartedLabel,
   getStartedHref = routes.getStarted,
-  logoPath: _logoPath,
+  logoPath,
 }: {
   navigation?: NavItem[];
   loginLabel?: string;
@@ -149,6 +149,7 @@ export function SiteHeader({
     preferences.language === "en"
       ? getStartedLabel || "Get Started"
       : t.nav.getStarted;
+  const resolvedLogo = logoPath?.trim() || "/logo/hostingbeyond-logo-v5.png";
 
   const filteredNav = (() => {
     const cleaned = navigation.filter(
@@ -188,15 +189,15 @@ export function SiteHeader({
   }, [open]);
 
   return (
-    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.2%] pt-3 pb-1 sm:pt-4">
-      <div className="mx-auto flex h-[64px] w-full max-w-[1280px] items-center rounded-full border border-white/70 bg-white/70 px-4 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl sm:h-[70px] sm:px-5 lg:px-6">
-        <div className="flex min-w-[210px] shrink-0 items-center sm:min-w-[240px] xl:min-w-[270px]">
-          <Logo src="/logo/hostingbeyond-logo-v5.png" variant="image" />
+    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.2%] pt-3 pb-0.5 sm:pt-3.5">
+      <div className="mx-auto flex h-[62px] w-full max-w-[1280px] items-center rounded-full border border-white/75 bg-white/75 px-4 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl sm:h-[68px] sm:px-5 lg:px-6">
+        <div className="flex min-w-[200px] shrink-0 items-center sm:min-w-[230px] xl:min-w-[260px]">
+          <Logo src={resolvedLogo} variant="image" />
         </div>
 
         <nav
           aria-label="Primary navigation"
-          className="hidden min-w-0 flex-1 items-center justify-center gap-6 lg:flex xl:gap-8"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-5 lg:flex xl:gap-7"
         >
           {filteredNav.map((item) => (
             <NavDropdown
@@ -215,7 +216,7 @@ export function SiteHeader({
           />
           <Link
             href={loginHref}
-            className="inline-flex h-[38px] items-center gap-2 rounded-full border border-slate-200/90 bg-white px-3.5 text-[13px] font-semibold text-slate-800 shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex h-[38px] items-center gap-2 rounded-full border border-slate-200/90 bg-white px-3.5 text-[13.5px] font-semibold text-slate-800 shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition hover:border-slate-300 hover:bg-slate-50"
           >
             <User className="size-4 text-slate-600" aria-hidden />
             {resolvedLogin}

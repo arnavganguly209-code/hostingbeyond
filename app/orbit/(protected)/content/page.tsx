@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 
 import { OrbitImageField } from "@/components/orbit/image-field";
-import type {
-  CmsDomainTld,
-  CmsHomeSections,
-  CmsHostingGuarantee,
-  CmsHostingPlan,
-  CmsHostingTypeCard,
-  CmsLoginFeature,
-  CmsLoginPage,
-  CmsProductOffer,
+import {
+  defaultTechnologyPartners,
+  type CmsDomainTld,
+  type CmsHomeSections,
+  type CmsHostingGuarantee,
+  type CmsHostingPlan,
+  type CmsHostingTypeCard,
+  type CmsLoginFeature,
+  type CmsLoginPage,
+  type CmsProductOffer,
+  type CmsTechPartner,
 } from "@/lib/orbit/defaults";
 
 export default function OrbitContentPage() {
@@ -228,16 +230,50 @@ export default function OrbitContentPage() {
             }
           />
         </div>
-        <OrbitImageField
-          label="Hero background / visual image"
-          value={sections.hero.backgroundImage}
-          onChange={(url) =>
-            setSections({
-              ...sections,
-              hero: { ...sections.hero, backgroundImage: url },
-            })
-          }
-        />
+        <div className="grid gap-3 md:grid-cols-2">
+          <OrbitImageField
+            label="Speaker image (clear cutout)"
+            value={sections.hero.speakerImage ?? ""}
+            onChange={(url) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, speakerImage: url },
+              })
+            }
+          />
+          <OrbitImageField
+            label="Hero atmosphere / background plate"
+            value={sections.hero.backgroundImage}
+            onChange={(url) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, backgroundImage: url },
+              })
+            }
+          />
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          <TextArea
+            label="Left glass panel text (one line per row)"
+            value={sections.hero.glassPanelLeft ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, glassPanelLeft: value },
+              })
+            }
+          />
+          <TextArea
+            label="Right glass panel caption"
+            value={sections.hero.glassPanelRight ?? ""}
+            onChange={(value) =>
+              setSections({
+                ...sections,
+                hero: { ...sections.hero, glassPanelRight: value },
+              })
+            }
+          />
+        </div>
       </section>
 
       {/* DOMAIN PRICING */}
@@ -262,6 +298,28 @@ export default function OrbitContentPage() {
             setSections({
               ...sections,
               hero: { ...sections.hero, domainPricing },
+            })
+          }
+        />
+      </section>
+
+      {/* TECHNOLOGY / TRUST STRIP */}
+      <section className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div>
+          <h2 className="font-semibold">Technology / trust logos</h2>
+          <p className="mt-0.5 text-xs text-[var(--hb-muted)]">
+            Control visibility, order, labels and optional custom logo images
+            for the strip under the hero.
+          </p>
+        </div>
+        <TechPartnersEditor
+          partners={
+            sections.hero.technologyPartners ?? defaultTechnologyPartners()
+          }
+          onChange={(technologyPartners) =>
+            setSections({
+              ...sections,
+              hero: { ...sections.hero, technologyPartners },
             })
           }
         />
@@ -1457,6 +1515,15 @@ function DomainPricingEditor({
   pricing: CmsDomainTld[];
   onChange: (pricing: CmsDomainTld[]) => void;
 }) {
+  const move = (index: number, direction: -1 | 1) => {
+    const target = index + direction;
+    if (target < 0 || target >= pricing.length) return;
+    const next = [...pricing];
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item);
+    onChange(next);
+  };
+
   return (
     <div className="space-y-2">
       {pricing.map((item, index) => (
@@ -1496,13 +1563,29 @@ function DomainPricingEditor({
             placeholder="$7.99/yr"
             className="w-[110px] rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none"
           />
-          <button
-            type="button"
-            onClick={() => onChange(pricing.filter((_, i) => i !== index))}
-            className="ml-auto rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-red-300"
-          >
-            Remove
-          </button>
+          <div className="ml-auto flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => move(index, -1)}
+              className="rounded-lg border border-white/10 px-2 py-1.5 text-xs text-[var(--hb-muted)]"
+            >
+              Up
+            </button>
+            <button
+              type="button"
+              onClick={() => move(index, 1)}
+              className="rounded-lg border border-white/10 px-2 py-1.5 text-xs text-[var(--hb-muted)]"
+            >
+              Down
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(pricing.filter((_, i) => i !== index))}
+              className="rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-red-300"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       ))}
       <button
@@ -1516,6 +1599,109 @@ function DomainPricingEditor({
         className="rounded-xl border border-white/10 px-3 py-2 text-xs text-[var(--hb-muted)] hover:text-white"
       >
         + Add TLD
+      </button>
+    </div>
+  );
+}
+
+function TechPartnersEditor({
+  partners,
+  onChange,
+}: {
+  partners: CmsTechPartner[];
+  onChange: (partners: CmsTechPartner[]) => void;
+}) {
+  const ordered = [...partners].sort((a, b) => a.order - b.order);
+
+  const update = (index: number, patch: Partial<CmsTechPartner>) => {
+    const next = ordered.map((partner, i) =>
+      i === index ? { ...partner, ...patch } : partner,
+    );
+    onChange(next.map((partner, i) => ({ ...partner, order: i })));
+  };
+
+  const move = (index: number, direction: -1 | 1) => {
+    const target = index + direction;
+    if (target < 0 || target >= ordered.length) return;
+    const next = [...ordered];
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item);
+    onChange(next.map((partner, i) => ({ ...partner, order: i })));
+  };
+
+  return (
+    <div className="space-y-3">
+      {ordered.map((partner, index) => (
+        <div
+          key={partner.id}
+          className="space-y-2 rounded-xl border border-white/10 p-3"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex items-center gap-2 text-xs text-[var(--hb-muted)]">
+              <input
+                type="checkbox"
+                checked={partner.visible !== false}
+                onChange={(e) => update(index, { visible: e.target.checked })}
+              />
+              Visible
+            </label>
+            <input
+              value={partner.label}
+              onChange={(e) => update(index, { label: e.target.value })}
+              className="min-w-[120px] flex-1 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => move(index, -1)}
+              className="rounded-lg border border-white/10 px-2 py-1.5 text-xs text-[var(--hb-muted)]"
+            >
+              Up
+            </button>
+            <button
+              type="button"
+              onClick={() => move(index, 1)}
+              className="rounded-lg border border-white/10 px-2 py-1.5 text-xs text-[var(--hb-muted)]"
+            >
+              Down
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                onChange(
+                  ordered
+                    .filter((_, i) => i !== index)
+                    .map((item, i) => ({ ...item, order: i })),
+                )
+              }
+              className="rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-red-300"
+            >
+              Remove
+            </button>
+          </div>
+          <OrbitImageField
+            label={`${partner.label} logo (optional — leave empty for built-in mark)`}
+            value={partner.imageUrl}
+            onChange={(url) => update(index, { imageUrl: url })}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() =>
+          onChange([
+            ...ordered,
+            {
+              id: `partner-${Date.now()}`,
+              label: "New partner",
+              imageUrl: "",
+              visible: true,
+              order: ordered.length,
+            },
+          ])
+        }
+        className="rounded-xl border border-white/10 px-3 py-2 text-xs text-[var(--hb-muted)] hover:text-white"
+      >
+        + Add partner
       </button>
     </div>
   );

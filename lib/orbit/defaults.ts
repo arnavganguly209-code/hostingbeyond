@@ -31,6 +31,15 @@ export type CmsDomainTld = {
   visible: boolean;
 };
 
+export type CmsTechPartner = {
+  id: string;
+  label: string;
+  /** Optional uploaded logo; empty = built-in monochrome mark */
+  imageUrl: string;
+  visible: boolean;
+  order: number;
+};
+
 export type CmsHeroContent = {
   visible: boolean;
   eyebrow: string;
@@ -40,11 +49,20 @@ export type CmsHeroContent = {
   searchPlaceholder: string;
   searchButtonLabel: string;
   bulkSearchLabel: string;
+  /** Soft atmosphere / scene plate behind the speaker */
   backgroundImage: string;
+  /** Clear mid-body speaker cutout (transparent PNG preferred) */
+  speakerImage: string;
+  /** Left glass panel stacked lines (newline-separated) */
+  glassPanelLeft: string;
+  /** Right glass panel caption */
+  glassPanelRight: string;
   trustItems: Array<{ title: string; subtitle: string; icon: string }>;
   stats: Array<{ value: string; label: string; icon: string }>;
   /** Editable domain TLD price teasers shown in hero search */
   domainPricing?: CmsDomainTld[];
+  /** Technology / trust strip logos */
+  technologyPartners?: CmsTechPartner[];
 };
 
 export type CmsProductOffer = {
@@ -642,6 +660,25 @@ function defaultOffers(): CmsProductOffer[] {
   ];
 }
 
+export function defaultTechnologyPartners(): CmsTechPartner[] {
+  return [
+    {
+      id: "wordpress",
+      label: "WordPress",
+      imageUrl: "",
+      visible: true,
+      order: 0,
+    },
+    { id: "cpanel", label: "cPanel", imageUrl: "", visible: true, order: 1 },
+    { id: "plesk", label: "Plesk", imageUrl: "", visible: true, order: 2 },
+    { id: "intel", label: "Intel", imageUrl: "", visible: true, order: 3 },
+    { id: "amd", label: "AMD", imageUrl: "", visible: true, order: 4 },
+    { id: "dell", label: "DELL", imageUrl: "", visible: true, order: 5 },
+    { id: "nvme", label: "NVMe", imageUrl: "", visible: true, order: 6 },
+    { id: "express", label: "Express", imageUrl: "", visible: true, order: 7 },
+  ];
+}
+
 export function defaultHomeSections(): CmsHomeSections {
   return {
     hero: {
@@ -654,13 +691,18 @@ export function defaultHomeSections(): CmsHomeSections {
       searchPlaceholder: "Find your perfect domain name...",
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-speaker-scene.png",
+      backgroundImage: "/images/hero-atmosphere.jpg",
+      speakerImage: "/images/hero-speaker-clear.png",
+      glassPanelLeft: "Ideas\nHost\nGrow\nBeyond",
+      glassPanelRight: "Global Infrastructure for a Brighter Tomorrow",
       domainPricing: [
-        { tld: ".com", priceLabel: "$9.99", visible: true },
-        { tld: ".net", priceLabel: "$11.99", visible: true },
-        { tld: ".org", priceLabel: "$9.99", visible: true },
-        { tld: ".dev", priceLabel: "$14.99", visible: true },
+        { tld: ".com", priceLabel: "$7.99/yr", visible: true },
+        { tld: ".net", priceLabel: "$6.99/yr", visible: true },
+        { tld: ".org", priceLabel: "$5.99/yr", visible: true },
+        { tld: ".co", priceLabel: "$4.99/yr", visible: true },
+        { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
       ],
+      technologyPartners: defaultTechnologyPartners(),
       trustItems: [
         {
           title: "99.99% Uptime",
@@ -883,37 +925,89 @@ export function mergeHomeSections(
     storedHero.headline === "Everything You Need" ||
     storedHero.headline === "HOST SMARTER." ||
     storedHero.headline === "Built for Speed." ||
-    storedHero.headline === "Host Your Ideas" ||
-    storedHero.headline?.includes("Built for Speed") ||
-    storedHero.headline?.includes("Secured for You") ||
-    storedHero.headline?.includes("HOST SMARTER") ||
-    storedHero.headline?.includes("Host Your Ideas");
-  const hero = {
-    ...defaults.hero,
-    ...storedHero,
-    eyebrow: defaults.hero.eyebrow,
-    headline: defaults.hero.headline,
-    headlineAccent: defaults.hero.headlineAccent,
-    description:
-      legacyHeadline ||
-      storedHero.description?.includes("Premium domains, blazing-fast") ||
+    Boolean(storedHero.headline?.includes("Built for Speed")) ||
+    Boolean(storedHero.headline?.includes("Secured for You")) ||
+    Boolean(storedHero.headline?.includes("HOST SMARTER"));
+  const legacyDescription =
+    Boolean(
+      storedHero.description?.includes("Premium domains, blazing-fast"),
+    ) ||
+    Boolean(
       storedHero.description?.includes(
         "Premium hosting infrastructure for ambitious",
-      ) ||
-      storedHero.description?.includes("High-performance hosting") ||
-      storedHero.description?.includes("Reliable hosting, powerful")
-        ? defaults.hero.description
-        : (storedHero.description ?? defaults.hero.description),
-    searchPlaceholder: defaults.hero.searchPlaceholder,
-    searchButtonLabel: defaults.hero.searchButtonLabel,
+      ),
+    ) ||
+    Boolean(storedHero.description?.includes("High-performance hosting"));
+
+  const storedPartners = Array.isArray(storedHero.technologyPartners)
+    ? storedHero.technologyPartners
+    : [];
+  const technologyPartners = (
+    storedPartners.length
+      ? storedPartners.map((partner, index) => ({
+          id: partner.id || `partner-${index}`,
+          label: partner.label || `Partner ${index + 1}`,
+          imageUrl:
+            typeof partner.imageUrl === "string" ? partner.imageUrl : "",
+          visible: partner.visible !== false,
+          order: typeof partner.order === "number" ? partner.order : index,
+        }))
+      : defaults.hero.technologyPartners!
+  ).sort((a, b) => a.order - b.order);
+
+  const storedPricing = Array.isArray(storedHero.domainPricing)
+    ? storedHero.domainPricing.filter(
+        (item) => typeof item?.tld === "string" && item.tld.trim(),
+      )
+    : [];
+
+  const hero: CmsHeroContent = {
+    ...defaults.hero,
+    ...storedHero,
+    visible: storedHero.visible !== false,
+    eyebrow: legacyHeadline
+      ? defaults.hero.eyebrow
+      : (storedHero.eyebrow ?? defaults.hero.eyebrow),
+    headline: legacyHeadline
+      ? defaults.hero.headline
+      : (storedHero.headline ?? defaults.hero.headline),
+    headlineAccent: legacyHeadline
+      ? defaults.hero.headlineAccent
+      : (storedHero.headlineAccent ?? defaults.hero.headlineAccent),
+    description: legacyDescription
+      ? defaults.hero.description
+      : (storedHero.description ?? defaults.hero.description),
+    searchPlaceholder:
+      storedHero.searchPlaceholder ?? defaults.hero.searchPlaceholder,
+    searchButtonLabel:
+      storedHero.searchButtonLabel ?? defaults.hero.searchButtonLabel,
+    bulkSearchLabel:
+      storedHero.bulkSearchLabel ?? defaults.hero.bulkSearchLabel,
     backgroundImage:
       !storedHero.backgroundImage ||
-      storedHero.backgroundImage.includes("hero-speaker")
+      storedHero.backgroundImage.includes("hero-speaker-scene") ||
+      storedHero.backgroundImage === "/images/hero-speaker.png" ||
+      storedHero.backgroundImage === "/images/hero-speaker.jpg"
         ? defaults.hero.backgroundImage
         : storedHero.backgroundImage,
+    speakerImage:
+      storedHero.speakerImage && storedHero.speakerImage.trim()
+        ? storedHero.speakerImage
+        : defaults.hero.speakerImage,
+    glassPanelLeft:
+      storedHero.glassPanelLeft?.trim() || defaults.hero.glassPanelLeft,
+    glassPanelRight:
+      storedHero.glassPanelRight?.trim() || defaults.hero.glassPanelRight,
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
     stats: storedHero.stats ?? defaults.hero.stats,
-    domainPricing: defaults.hero.domainPricing,
+    domainPricing: storedPricing.length
+      ? storedPricing.map((item) => ({
+          tld: item.tld.startsWith(".") ? item.tld : `.${item.tld}`,
+          priceLabel: item.priceLabel || "",
+          visible: item.visible !== false,
+        }))
+      : defaults.hero.domainPricing,
+    technologyPartners,
   };
 
   const storedNav = stored.navigation;
