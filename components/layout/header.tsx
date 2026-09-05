@@ -201,7 +201,8 @@ export function SiteHeader({
         <div className="flex w-[180px] shrink-0 items-center sm:w-[210px] xl:w-[230px]">
           <Logo
             src={resolvedLogo}
-            className="w-[168px] max-w-[168px] sm:w-[196px] sm:max-w-[196px] xl:w-[214px] xl:max-w-[214px]"
+            variant="mark"
+            className="w-[176px] sm:w-[200px] xl:w-[218px]"
           />
         </div>
 

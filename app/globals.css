@@ -236,7 +236,24 @@
     mask-composite: intersect;
   }
 
-  /* Light hero — soft dissolve under speaker feet into partner strip */
+  /* Light hero — soft left fade so scene blends into copy */
+  .hb-hero-scene {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) 8%,
+      #000 18%,
+      #000 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) 8%,
+      #000 18%,
+      #000 100%
+    );
+  }
+
   .hb-hero-light-speaker {
     -webkit-mask-image: linear-gradient(
       180deg,

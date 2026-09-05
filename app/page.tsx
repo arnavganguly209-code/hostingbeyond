@@ -15,9 +15,8 @@ export default async function HomePage() {
 
   const heroImage =
     !sections.hero.backgroundImage ||
-    sections.hero.backgroundImage === "/images/hero-speaker.png" ||
-    sections.hero.backgroundImage === "/images/hero-speaker-v2.png"
-      ? "/images/hero-speaker-light.png"
+    sections.hero.backgroundImage.includes("hero-speaker")
+      ? "/images/hero-speaker-scene.png"
       : sections.hero.backgroundImage;
 
   return (

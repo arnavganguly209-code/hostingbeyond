@@ -648,13 +648,13 @@ export function defaultHomeSections(): CmsHomeSections {
       visible: true,
       eyebrow: "SIMPLE • SECURE • SCALABLE",
       headline: "Host Your Ideas",
-      headlineAccent: "Beyond",
+      headlineAccent: "Beyond Limits",
       description:
         "Reliable hosting, powerful infrastructure and the freedom to build what's next.",
       searchPlaceholder: "Find your perfect domain name...",
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-speaker-light.png",
+      backgroundImage: "/images/hero-speaker-scene.png",
       domainPricing: [
         { tld: ".com", priceLabel: "$9.99", visible: true },
         { tld: ".net", priceLabel: "$11.99", visible: true },
