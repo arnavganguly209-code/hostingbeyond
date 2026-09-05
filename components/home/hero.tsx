@@ -31,7 +31,6 @@ const DEFAULT_TEASERS = [
 
 export function HeroSection({
   content,
-  speakerSrc = "/images/hero-speaker-scene.png",
 }: {
   content?: CmsHeroContent;
   speakerSrc?: string;
@@ -60,9 +59,8 @@ export function HeroSection({
     ? REF.searchButtonLabel
     : (content?.searchButtonLabel ?? REF.searchButtonLabel);
 
-  const activeTeasers = content?.domainPricing
-    ?.filter((d) => d.visible !== false)
-    .slice(0, 4) ?? [...DEFAULT_TEASERS];
+  // Always match mockup pricing chips
+  const activeTeasers = [...DEFAULT_TEASERS];
 
   const onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,19 +71,11 @@ export function HeroSection({
       : routes.domains;
   };
 
-  const sceneSrc =
-    !speakerSrc ||
-    speakerSrc.includes("hero-speaker-light") ||
-    speakerSrc.includes("hero-speaker-v2") ||
-    speakerSrc.includes("hero-speaker.png")
-      ? "/images/hero-speaker-scene.png"
-      : speakerSrc;
-
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      <div className="relative mx-auto grid min-h-0 w-full max-w-[1320px] flex-1 grid-cols-1 items-center gap-2 px-[3.5%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-4 xl:gap-6">
+      <div className="relative mx-auto grid min-h-0 w-full max-w-[1320px] flex-1 grid-cols-1 items-center gap-2 px-[3.5%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-2 xl:gap-4">
         {/* Left copy */}
-        <div className="relative z-20 max-w-[540px] lg:self-center lg:pb-8">
+        <div className="relative z-20 max-w-[540px] lg:self-center lg:pb-10">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,7 +112,7 @@ export function HeroSection({
             onSubmit={onSearch}
             className="mt-5"
           >
-            <div className="flex min-w-0 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 p-1.5 shadow-[0_12px_40px_rgba(15,23,42,0.10)] backdrop-blur-xl focus-within:border-[#818cf8]/50 focus-within:ring-4 focus-within:ring-[#818cf8]/12">
+            <div className="flex min-w-0 items-center gap-1.5 rounded-full border border-white/80 bg-white/95 p-1.5 shadow-[0_12px_40px_rgba(15,23,42,0.10)] backdrop-blur-xl focus-within:border-[#818cf8]/50 focus-within:ring-4 focus-within:ring-[#818cf8]/12">
               <span className="pl-2.5">
                 <Search className="size-4 text-slate-400" aria-hidden />
               </span>
@@ -165,11 +155,12 @@ export function HeroSection({
             </div>
           </motion.form>
 
+          {/* Domain price chips — mockup match */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.16 }}
-            className="mt-3.5 flex flex-wrap gap-2"
+            className="mt-3.5 flex flex-wrap gap-2.5"
           >
             {activeTeasers.map((item) => (
               <button
@@ -177,53 +168,95 @@ export function HeroSection({
                 type="button"
                 onClick={() => setTld(item.tld as typeof tld)}
                 className={cn(
-                  "inline-flex items-center gap-1.5 rounded-2xl border bg-white/85 px-3 py-2 text-left shadow-[0_6px_18px_rgba(15,23,42,0.05)] backdrop-blur-md transition",
+                  "inline-flex items-baseline gap-1.5 rounded-2xl border bg-white/90 px-3.5 py-2 shadow-[0_8px_22px_rgba(15,23,42,0.06)] backdrop-blur-md transition",
                   tld === item.tld
-                    ? "border-[#818cf8]/55 ring-2 ring-[#818cf8]/15"
-                    : "border-white/90 hover:border-slate-200",
+                    ? "border-[#818cf8]/60 ring-2 ring-[#818cf8]/15"
+                    : "border-white hover:border-slate-200",
                 )}
               >
-                <span className="text-[13px] font-extrabold text-slate-900">
+                <span className="text-[13.5px] font-extrabold text-[#4f46e5]">
                   {item.tld}
                 </span>
-                <span className="text-[12px] font-semibold text-slate-500">
-                  {item.priceLabel.replace(/\/yr$/i, "")}
+                <span className="text-[12.5px] font-semibold text-slate-500">
+                  {item.priceLabel}
                 </span>
               </button>
             ))}
           </motion.div>
         </div>
 
-        {/* Right: speaker + glass — zoomed out, soft fade into white */}
-        <div className="relative mx-auto hidden h-full min-h-[460px] w-full lg:block">
+        {/* Right: glass atmosphere + clear speaker + soft fade */}
+        <div className="relative mx-auto hidden h-full min-h-[480px] w-full lg:block">
+          {/* Soft blue bloom */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[8%] right-[2%] h-[72%] w-[78%] rounded-[40px] bg-[radial-gradient(ellipse_at_55%_35%,rgba(147,197,253,0.38),transparent_68%)] blur-3xl"
+            className="pointer-events-none absolute top-[4%] right-[0%] h-[70%] w-[85%] rounded-[48px] bg-[radial-gradient(ellipse_at_55%_40%,rgba(147,197,253,0.42),transparent_68%)] blur-3xl"
           />
+
+          {/* Glass / office atmosphere (faded, not stuck) */}
+          <div className="hb-hero-glass-bg absolute inset-0 overflow-hidden">
+            <Image
+              src="/images/hero-glass-scene.png"
+              alt=""
+              fill
+              priority
+              quality={90}
+              sizes="(max-width: 1280px) 52vw, 700px"
+              className="scale-[1.08] object-cover object-[60%_40%] opacity-40 blur-[2px]"
+            />
+          </div>
+
+          {/* Frosted glass panels */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-[8%] bottom-[4%] h-[42%] rounded-full bg-white/80 blur-2xl"
-          />
+            className="pointer-events-none absolute top-[10%] left-[6%] h-[62%] w-[22%] -rotate-[4deg] rounded-[18px] border border-white/55 bg-white/25 shadow-[0_20px_50px_rgba(37,99,235,0.10),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-md"
+          >
+            <div className="flex h-full flex-col justify-center gap-1 px-3 py-6 text-center text-[11px] font-bold tracking-[0.14em] text-sky-700/80 uppercase">
+              <span>Ideas</span>
+              <span>Host</span>
+              <span>Grow</span>
+              <span className="bg-gradient-to-r from-[#7c3aed] to-[#2563eb] bg-clip-text text-transparent">
+                Beyond
+              </span>
+              <span className="mx-auto mt-2 h-0.5 w-8 rounded-full bg-sky-400/70" />
+            </div>
+          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-[14%] right-[4%] h-[58%] w-[24%] rotate-[3deg] rounded-[18px] border border-white/50 bg-white/20 shadow-[0_20px_50px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.65)] backdrop-blur-md"
+          >
+            <p className="absolute inset-x-3 top-[28%] text-center text-[10px] leading-snug font-semibold tracking-[0.06em] text-sky-800/70 uppercase">
+              Global Infrastructure for a Brighter Tomorrow
+            </p>
+          </div>
+
+          {/* Clear speaker — premium cutout with bottom dissolve */}
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: 18 }}
+            initial={reduceMotion ? false : { opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
               delay: 0.08,
-              duration: 0.45,
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-scene absolute inset-0"
+            className="hb-hero-speaker absolute inset-x-[4%] inset-y-[2%] z-10"
           >
             <Image
-              src={sceneSrc}
-              alt="HostingBeyond speaker with glass panels"
+              src="/images/hero-speaker-clear.png"
+              alt="HostingBeyond speaker Alex Carter"
               fill
               priority
-              quality={95}
-              sizes="(max-width: 1280px) 52vw, 680px"
-              className="scale-[0.92] object-contain object-[58%_100%] drop-shadow-[0_18px_40px_rgba(37,99,235,0.12)]"
+              quality={98}
+              sizes="(max-width: 1280px) 48vw, 640px"
+              className="object-contain object-[50%_100%] drop-shadow-[0_24px_48px_rgba(15,23,42,0.14)]"
             />
           </motion.div>
+
+          {/* Soft white ground fade into partner strip */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[28%] bg-gradient-to-b from-transparent via-white/70 to-white"
+          />
         </div>
       </div>
 
@@ -231,9 +264,9 @@ export function HeroSection({
       <div className="relative z-10 mt-auto shrink-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-16 h-20 bg-gradient-to-b from-transparent via-white/80 to-white"
+          className="pointer-events-none absolute inset-x-0 -top-20 h-24 bg-gradient-to-b from-transparent via-white/85 to-white"
         />
-        <div className="relative border-t border-slate-200/40 bg-gradient-to-b from-white/55 to-white/90 px-[3.5%] pt-5 pb-5 backdrop-blur-md sm:pt-6 sm:pb-6">
+        <div className="relative border-t border-slate-200/35 bg-white/80 px-[3.5%] pt-5 pb-5 backdrop-blur-xl sm:pt-6 sm:pb-6">
           <PartnerLogoStrip />
         </div>
       </div>

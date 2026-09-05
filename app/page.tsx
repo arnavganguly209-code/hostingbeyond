@@ -13,12 +13,6 @@ export default async function HomePage() {
     getSiteSettings(),
   ]);
 
-  const heroImage =
-    !sections.hero.backgroundImage ||
-    sections.hero.backgroundImage.includes("hero-speaker")
-      ? "/images/hero-speaker-scene.png"
-      : sections.hero.backgroundImage;
-
   return (
     <div className="overflow-x-hidden bg-[#07122a]">
       {/* Light glass hero — fits first viewport, no scroll needed */}
@@ -40,9 +34,7 @@ export default async function HomePage() {
           getStartedHref={settings.getStartedHref}
           logoPath={settings.logoPath}
         />
-        {sections.hero.visible ? (
-          <HeroSection content={sections.hero} speakerSrc={heroImage} />
-        ) : null}
+        {sections.hero.visible ? <HeroSection content={sections.hero} /> : null}
       </div>
 
       {sections.products.visible ? (
