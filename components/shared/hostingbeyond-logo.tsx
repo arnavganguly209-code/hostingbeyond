@@ -5,14 +5,17 @@ type Props = {
   title?: string;
 };
 
-/** Crisp light-mode wordmark — cloud mark + Hosting (dark) + Beyond (gradient). */
+/**
+ * Crisp light-mode wordmark matching the official HostingBeyond mark:
+ * cloud + bars (purple→blue gradient), Hosting (slate), Beyond (gradient).
+ */
 export function HostingBeyondLogo({
   className,
   title = "HostingBeyond",
 }: Props) {
   return (
     <svg
-      viewBox="0 0 280 48"
+      viewBox="0 0 320 52"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-auto w-full", className)}
@@ -21,58 +24,63 @@ export function HostingBeyondLogo({
     >
       <defs>
         <linearGradient id="hbLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#7c3aed" />
-          <stop offset="45%" stopColor="#6366f1" />
+          <stop offset="0%" stopColor="#a855f7" />
+          <stop offset="40%" stopColor="#6366f1" />
+          <stop offset="100%" stopColor="#2563eb" />
+        </linearGradient>
+        <linearGradient id="hbLogoGradText" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#9333ea" />
           <stop offset="100%" stopColor="#2563eb" />
         </linearGradient>
       </defs>
 
-      {/* Cloud mark */}
-      <g transform="translate(1,4)">
+      {/* Cloud mark — thick outline + three bars */}
+      <g transform="translate(2,6)">
         <path
-          d="M28.5 8.2c-1.9-4.4-6.3-7.2-11.2-7.2-5.7 0-10.6 3.8-12.1 9.1C2.1 11 0 13.9 0 17.4 0 21.8 3.5 25.4 7.9 25.4h20.7c4.1 0 7.4-3.3 7.4-7.4 0-3.7-2.7-6.8-6.3-7.4-.4-.9-.8-1.7-1.2-2.4z"
+          d="M30.2 9.1c-2.05-4.85-6.85-8-12.15-8-6.2 0-11.45 4.15-13.05 9.85C2.15 11.7 0 14.85 0 18.7 0 23.55 3.9 27.5 8.7 27.5h22.4c4.45 0 8.05-3.6 8.05-8.05 0-4-2.95-7.35-6.85-7.95-.4-.95-.85-1.85-1.1-2.4z"
           stroke="url(#hbLogoGrad)"
-          strokeWidth="3.2"
+          strokeWidth="3.6"
           strokeLinejoin="round"
+          strokeLinecap="round"
           fill="none"
         />
         <rect
-          x="11.2"
-          y="14.2"
-          width="3.4"
-          height="7.2"
-          rx="1.2"
+          x="12"
+          y="15.2"
+          width="3.8"
+          height="8"
+          rx="1.4"
           fill="url(#hbLogoGrad)"
         />
         <rect
-          x="16.4"
-          y="11.4"
-          width="3.4"
-          height="10"
-          rx="1.2"
+          x="17.6"
+          y="12.2"
+          width="3.8"
+          height="11"
+          rx="1.4"
           fill="url(#hbLogoGrad)"
         />
         <rect
-          x="21.6"
-          y="13.2"
-          width="3.4"
-          height="8.2"
-          rx="1.2"
+          x="23.2"
+          y="14"
+          width="3.8"
+          height="9.2"
+          rx="1.4"
           fill="url(#hbLogoGrad)"
         />
       </g>
 
       {/* Wordmark */}
       <text
-        x="48"
-        y="33"
-        fontFamily="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-        fontSize="26"
+        x="52"
+        y="35"
+        fontFamily="var(--font-heading), ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+        fontSize="28"
         fontWeight="800"
-        letterSpacing="-0.04em"
+        letterSpacing="-0.045em"
       >
         <tspan fill="#0f172a">Hosting</tspan>
-        <tspan fill="url(#hbLogoGrad)">Beyond</tspan>
+        <tspan fill="url(#hbLogoGradText)">Beyond</tspan>
       </text>
     </svg>
   );
