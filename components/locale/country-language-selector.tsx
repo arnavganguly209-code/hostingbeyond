@@ -26,6 +26,8 @@ type Props = {
   compact?: boolean;
   /** Login mockup style: globe + English (US) */
   variant?: "flag" | "globe";
+  /** Light glass header uses dark text / white chips */
+  tone?: "dark" | "light";
   className?: string;
 };
 
@@ -91,8 +93,10 @@ function FlagImg({
 export function CountryLanguageSelector({
   compact = false,
   variant = "flag",
+  tone = "dark",
   className,
 }: Props) {
+  const light = tone === "light";
   const { preferences, applySelection, t } = useLocale();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -208,25 +212,55 @@ export function CountryLanguageSelector({
     return (
       <div
         className={cn(
-          "inline-flex items-center gap-2 border border-white/[0.10] bg-white/[0.05]",
+          "inline-flex items-center gap-2 border backdrop-blur-xl",
+          light
+            ? "border-slate-200/90 bg-white/80"
+            : "border-white/[0.10] bg-white/[0.05]",
           compact ? "h-8 rounded-full px-2" : "h-[38px] rounded-full px-3",
           className,
         )}
       >
         {variant === "globe" ? (
           <>
-            <span className="inline-block size-4 rounded-full bg-white/10" />
-            <span className="text-[12px] font-semibold text-white/70">
+            <span
+              className={cn(
+                "inline-block size-4 rounded-full",
+                light ? "bg-slate-200" : "bg-white/10",
+              )}
+            />
+            <span
+              className={cn(
+                "text-[12px] font-semibold",
+                light ? "text-slate-700" : "text-white/70",
+              )}
+            >
               English (US)
             </span>
           </>
         ) : (
           <>
-            <span className="inline-block size-5 rounded-full bg-white/10" />
-            <span className="text-[13px] font-bold text-white/70">EN</span>
+            <span
+              className={cn(
+                "inline-block size-5 rounded-full",
+                light ? "bg-slate-200" : "bg-white/10",
+              )}
+            />
+            <span
+              className={cn(
+                "text-[13px] font-bold",
+                light ? "text-slate-800" : "text-white/70",
+              )}
+            >
+              EN
+            </span>
           </>
         )}
-        <ChevronDown className="size-[10px] text-white/40" />
+        <ChevronDown
+          className={cn(
+            "size-[10px]",
+            light ? "text-slate-400" : "text-white/40",
+          )}
+        />
       </div>
     );
   }
@@ -245,7 +279,10 @@ export function CountryLanguageSelector({
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          "inline-flex items-center gap-2 border border-white/[0.12] bg-white/[0.06] text-white backdrop-blur-xl transition-all duration-150 hover:border-white/[0.25] hover:bg-white/[0.10] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]",
+          "inline-flex items-center gap-2 border backdrop-blur-xl transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]",
+          light
+            ? "border-slate-200/90 bg-white/85 text-slate-800 shadow-[0_4px_16px_rgba(15,23,42,0.06)] hover:border-slate-300 hover:bg-white"
+            : "border-white/[0.12] bg-white/[0.06] text-white hover:border-white/[0.25] hover:bg-white/[0.10]",
           compact
             ? "h-8 rounded-full px-2 text-[12px] font-bold"
             : "h-[38px] rounded-full px-3 text-[13.5px] font-bold",
@@ -260,13 +297,23 @@ export function CountryLanguageSelector({
               fill="none"
               stroke="currentColor"
               strokeWidth="1.8"
-              className="size-4 text-white/75"
+              className={cn(
+                "size-4",
+                light ? "text-slate-500" : "text-white/75",
+              )}
               aria-hidden
             >
               <circle cx="12" cy="12" r="9" />
               <path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z" />
             </svg>
-            <span className="tracking-wide text-white/90">{globeLabel}</span>
+            <span
+              className={cn(
+                "tracking-wide",
+                light ? "text-slate-800" : "text-white/90",
+              )}
+            >
+              {globeLabel}
+            </span>
           </>
         ) : (
           <>
@@ -278,6 +325,7 @@ export function CountryLanguageSelector({
           className={cn(
             "size-[10px] shrink-0 opacity-55 transition-transform duration-200",
             open && "rotate-180",
+            light ? "text-slate-500" : "",
           )}
           aria-hidden
         />

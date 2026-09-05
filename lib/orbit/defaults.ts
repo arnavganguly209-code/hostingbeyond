@@ -325,9 +325,9 @@ export function defaultSiteSettings(): CmsSiteSettings {
     url: siteConfig.url,
     locale: siteConfig.locale,
     twitterHandle: siteConfig.twitterHandle,
-    logoPath: "/logo/hostingbeyond-logo-transparent.png",
-    ogImagePath: "/images/hero-speaker.png",
-    loginLabel: "Log In",
+    logoPath: "/logo/hostingbeyond-logo-light.png",
+    ogImagePath: "/images/hero-speaker-light.png",
+    loginLabel: "Login",
     getStartedLabel: "Get Started",
     getStartedHref: "/get-started",
     loginHref: "/login",
@@ -646,21 +646,20 @@ export function defaultHomeSections(): CmsHomeSections {
   return {
     hero: {
       visible: true,
-      eyebrow: "",
-      headline: "Built for Speed.",
-      headlineAccent: "Beyond Limits.",
+      eyebrow: "SIMPLE • SECURE • SCALABLE",
+      headline: "Host Your Ideas",
+      headlineAccent: "Beyond",
       description:
-        "Premium hosting infrastructure for ambitious ideas and growing businesses.",
-      searchPlaceholder: "Find your perfect domain name",
-      searchButtonLabel: "SEARCH DOMAIN",
+        "Reliable hosting, powerful infrastructure and the freedom to build what's next.",
+      searchPlaceholder: "Find your perfect domain name...",
+      searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-speaker.png",
+      backgroundImage: "/images/hero-speaker-light.png",
       domainPricing: [
-        { tld: ".com", priceLabel: "$7.99/yr", visible: true },
-        { tld: ".net", priceLabel: "$6.99/yr", visible: true },
-        { tld: ".org", priceLabel: "$5.99/yr", visible: true },
-        { tld: ".co", priceLabel: "$4.99/yr", visible: true },
-        { tld: ".dev", priceLabel: "$3.99/yr", visible: true },
+        { tld: ".com", priceLabel: "$9.99", visible: true },
+        { tld: ".net", priceLabel: "$11.99", visible: true },
+        { tld: ".org", priceLabel: "$9.99", visible: true },
+        { tld: ".dev", priceLabel: "$14.99", visible: true },
       ],
       trustItems: [
         {
@@ -884,19 +883,15 @@ export function mergeHomeSections(
     storedHero.headline === "Everything You Need" ||
     storedHero.headline === "HOST SMARTER." ||
     storedHero.headline === "Built for Speed." ||
+    storedHero.headline === "Host Your Ideas" ||
     storedHero.headline?.includes("Built for Speed") ||
     storedHero.headline?.includes("Secured for You") ||
-    storedHero.headline?.includes("HOST SMARTER");
-  const legacyAccent =
-    storedHero.headlineAccent === "Beyond Expectations." ||
-    storedHero.headlineAccent === "GROW BEYOND." ||
-    storedHero.headlineAccent === "Beyond Limits." ||
-    storedHero.headlineAccent?.includes("Beyond Limits") ||
-    storedHero.headlineAccent?.includes("GROW BEYOND");
+    storedHero.headline?.includes("HOST SMARTER") ||
+    storedHero.headline?.includes("Host Your Ideas");
   const hero = {
     ...defaults.hero,
     ...storedHero,
-    eyebrow: "",
+    eyebrow: defaults.hero.eyebrow,
     headline: defaults.hero.headline,
     headlineAccent: defaults.hero.headlineAccent,
     description:
@@ -905,13 +900,20 @@ export function mergeHomeSections(
       storedHero.description?.includes(
         "Premium hosting infrastructure for ambitious",
       ) ||
-      storedHero.description?.includes("High-performance hosting")
+      storedHero.description?.includes("High-performance hosting") ||
+      storedHero.description?.includes("Reliable hosting, powerful")
         ? defaults.hero.description
         : (storedHero.description ?? defaults.hero.description),
     searchPlaceholder: defaults.hero.searchPlaceholder,
+    searchButtonLabel: defaults.hero.searchButtonLabel,
+    backgroundImage:
+      !storedHero.backgroundImage ||
+      storedHero.backgroundImage.includes("hero-speaker")
+        ? defaults.hero.backgroundImage
+        : storedHero.backgroundImage,
     trustItems: storedHero.trustItems ?? defaults.hero.trustItems,
     stats: storedHero.stats ?? defaults.hero.stats,
-    domainPricing: storedHero.domainPricing ?? defaults.hero.domainPricing,
+    domainPricing: defaults.hero.domainPricing,
   };
 
   const storedNav = stored.navigation;

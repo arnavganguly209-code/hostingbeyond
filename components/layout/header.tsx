@@ -18,10 +18,11 @@ function localizeNavLabel(
 ) {
   const map: Record<string, string> = {
     Domains: nav.domains,
-    Hosting: nav.hosting,
-    "Web Hosting": nav.hosting,
+    Hosting: "Servers & Hosting",
+    "Web Hosting": "Servers & Hosting",
     "Business Email": nav.businessEmail,
-    Resources: nav.resources,
+    Resources: "Solutions",
+    Pricing: "Pricing",
   };
   return map[label] ?? label;
 }
@@ -44,7 +45,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="text-[15px] font-extrabold tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors duration-150 hover:text-white/80"
+        className="text-[14px] font-semibold tracking-[-0.01em] whitespace-nowrap text-slate-700 transition-colors duration-150 hover:text-slate-950 xl:text-[15px]"
       >
         {label}
       </Link>
@@ -62,14 +63,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[15px] font-extrabold tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors duration-150 hover:text-white/80"
+        className="inline-flex items-center gap-1 text-[14px] font-semibold tracking-[-0.01em] whitespace-nowrap text-slate-700 transition-colors duration-150 hover:text-slate-950 xl:text-[15px]"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
         <ChevronDown
           className={cn(
-            "mt-px size-[12px] shrink-0 opacity-50 transition-transform duration-200",
+            "mt-px size-[13px] shrink-0 text-slate-400 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -83,14 +84,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 3 }}
             transition={{ duration: 0.13, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-[calc(100%+10px)] left-1/2 z-50 min-w-[220px] -translate-x-1/2"
+            className="absolute top-[calc(100%+12px)] left-1/2 z-50 min-w-[220px] -translate-x-1/2"
           >
-            <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-[rgba(5,8,20,0.98)] py-1 shadow-[0_16px_48px_rgb(0,0,0,0.55)] backdrop-blur-2xl">
+            <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 py-1.5 shadow-[0_18px_48px_rgba(15,23,42,0.12)] backdrop-blur-2xl">
               {item.children.map((child) => (
                 <Link
                   key={child.href}
                   href={child.href}
-                  className="block px-4 py-[10px] text-[13.5px] font-medium text-white/65 transition-colors hover:bg-white/[0.05] hover:text-white"
+                  className="block px-4 py-[10px] text-[13.5px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
                   onClick={() => setOpen(false)}
                 >
                   {child.label}
@@ -104,13 +105,13 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
   );
 }
 
-// ─── Fixed nav order ──────────────────────────────────────────────────────────
 const NAV_ORDER = [
   "Domains",
   "Hosting",
   "Web Hosting",
   "Business Email",
   "Resources",
+  "Pricing",
 ];
 
 function sortNav(items: NavItem[]): NavItem[] {
@@ -143,13 +144,12 @@ export function SiteHeader({
   const [mobileSection, setMobileSection] = useState<string | null>(null);
 
   const resolvedLogin =
-    preferences.language === "en" ? loginLabel || "Log In" : t.nav.login;
+    preferences.language === "en" ? loginLabel || "Login" : t.nav.login;
   const resolvedGetStarted =
     preferences.language === "en"
       ? getStartedLabel || "Get Started"
       : t.nav.getStarted;
 
-  // Remove Cloud & VPS top-level, deduplicate Hosting/Web Hosting, enforce order
   const filteredNav = (() => {
     const cleaned = navigation.filter(
       (item) => !/^cloud\s*&\s*vps$/i.test(item.label.trim()),
@@ -168,8 +168,19 @@ export function SiteHeader({
       seen.add(key);
       return true;
     });
+    if (!deduped.some((item) => item.label === "Pricing")) {
+      deduped.push({ label: "Pricing", href: routes.pricing });
+    }
     return sortNav(deduped);
   })();
+
+  const resolvedLogo =
+    !logoPath ||
+    logoPath.includes("hostingbeyond-logo-transparent") ||
+    logoPath.includes("hostingbeyond-logo-wordmark") ||
+    logoPath.includes("hostingbeyond-logo-header")
+      ? "/logo/hostingbeyond-logo-light.png"
+      : logoPath;
 
   useEffect(() => {
     if (!open) return;
@@ -185,17 +196,18 @@ export function SiteHeader({
   }, [open]);
 
   return (
-    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.5%] pt-3 pb-1.5">
-      <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center rounded-[18px] border border-white/16 bg-white/[0.10] px-5 shadow-[0_8px_32px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-2xl lg:px-7 xl:px-8">
-        {/* Logo — 10% larger */}
-        <div className="flex w-[220px] shrink-0 items-center xl:w-[240px]">
-          <Logo src={logoPath} className="w-[206px] xl:w-[226px]" />
+    <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.2%] pt-3 pb-1 sm:pt-4">
+      <div className="mx-auto flex h-[64px] w-full max-w-[1280px] items-center rounded-full border border-white/70 bg-white/70 px-4 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl sm:h-[70px] sm:px-5 lg:px-6">
+        <div className="flex w-[180px] shrink-0 items-center sm:w-[210px] xl:w-[230px]">
+          <Logo
+            src={resolvedLogo}
+            className="w-[168px] max-w-[168px] sm:w-[196px] sm:max-w-[196px] xl:w-[214px] xl:max-w-[214px]"
+          />
         </div>
 
-        {/* Desktop nav — centered, bigger + bolder, clear gap between 4 items */}
         <nav
           aria-label="Primary navigation"
-          className="hidden min-w-0 flex-1 items-center justify-center gap-10 lg:flex xl:gap-12"
+          className="hidden min-w-0 flex-1 items-center justify-center gap-6 lg:flex xl:gap-8"
         >
           {filteredNav.map((item) => (
             <NavDropdown
@@ -206,24 +218,26 @@ export function SiteHeader({
           ))}
         </nav>
 
-        {/* Right: language selector + login icon */}
-        <div className="hidden shrink-0 items-center justify-end gap-2.5 lg:flex xl:min-w-[220px]">
-          <CountryLanguageSelector />
+        <div className="hidden shrink-0 items-center justify-end gap-2.5 lg:flex">
+          <CountryLanguageSelector tone="light" />
+          <span
+            aria-hidden
+            className="mx-0.5 hidden h-6 w-px bg-slate-200 xl:block"
+          />
           <Link
             href={loginHref}
-            className="inline-flex h-[38px] items-center gap-2 rounded-full border border-white/16 bg-white/[0.08] px-3.5 text-[13px] font-bold text-white backdrop-blur-xl transition hover:bg-white/[0.14]"
+            className="inline-flex h-[38px] items-center gap-2 rounded-full border border-slate-200/90 bg-white px-3.5 text-[13px] font-semibold text-slate-800 shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition hover:border-slate-300 hover:bg-slate-50"
           >
-            <User className="size-4" aria-hidden />
+            <User className="size-4 text-slate-600" aria-hidden />
             {resolvedLogin}
           </Link>
         </div>
 
-        {/* Mobile: compact controls + hamburger */}
         <div className="ml-auto flex items-center gap-2 lg:hidden">
-          <CountryLanguageSelector compact />
+          <CountryLanguageSelector compact tone="light" />
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-white/[0.10] bg-white/[0.04] text-white"
+            className="inline-flex size-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 shadow-sm"
             aria-expanded={open}
             aria-controls="hb-mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -238,7 +252,6 @@ export function SiteHeader({
         </div>
       </div>
 
-      {/* ─── Mobile drawer ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -247,7 +260,7 @@ export function SiteHeader({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.17 }}
-            className="mx-auto mt-2 w-full max-w-[1500px] overflow-hidden rounded-[16px] border border-white/[0.08] bg-[rgba(5,8,20,0.97)] shadow-[0_20px_56px_rgb(0,0,0,0.5)] backdrop-blur-2xl lg:hidden"
+            className="mx-auto mt-2 w-full max-w-[1280px] overflow-hidden rounded-[22px] border border-slate-200/80 bg-white/95 shadow-[0_20px_56px_rgba(15,23,42,0.12)] backdrop-blur-2xl lg:hidden"
           >
             <nav
               className="flex flex-col gap-0.5 p-4"
@@ -262,7 +275,7 @@ export function SiteHeader({
                       <>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[16px] font-extrabold text-white"
+                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[16px] font-bold text-slate-900"
                           onClick={() =>
                             setMobileSection((s) =>
                               s === item.label ? null : item.label,
@@ -272,7 +285,7 @@ export function SiteHeader({
                           {label}
                           <ChevronDown
                             className={cn(
-                              "size-4 opacity-50 transition-transform duration-200",
+                              "size-4 text-slate-400 transition-transform duration-200",
                               mobileSection === item.label && "rotate-180",
                             )}
                           />
@@ -290,7 +303,7 @@ export function SiteHeader({
                                 <Link
                                   key={child.href}
                                   href={child.href}
-                                  className="block rounded-lg px-3 py-2.5 text-[13.5px] text-white/60 hover:text-white"
+                                  className="block rounded-lg px-3 py-2.5 text-[13.5px] text-slate-600 hover:text-slate-950"
                                   onClick={() => setOpen(false)}
                                 >
                                   {child.label}
@@ -303,7 +316,7 @@ export function SiteHeader({
                     ) : (
                       <Link
                         href={item.href}
-                        className="block rounded-xl px-3 py-3 text-[16px] font-extrabold text-white"
+                        className="block rounded-xl px-3 py-3 text-[16px] font-bold text-slate-900"
                         onClick={() => setOpen(false)}
                       >
                         {label}
@@ -312,10 +325,10 @@ export function SiteHeader({
                   </div>
                 );
               })}
-              <div className="mt-3 flex flex-col gap-2 border-t border-white/[0.07] pt-3">
+              <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 pt-3">
                 <Link
                   href={loginHref}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.10] px-3 py-2.5 text-[14px] font-semibold text-white/75"
+                  className="flex items-center justify-center gap-2 rounded-full border border-slate-200 px-3 py-2.5 text-[14px] font-semibold text-slate-800"
                   onClick={() => setOpen(false)}
                 >
                   <User className="size-4" aria-hidden />
@@ -323,7 +336,7 @@ export function SiteHeader({
                 </Link>
                 <Link
                   href={getStartedHref}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#7c3aed] px-3 py-2.5 text-[14px] font-semibold text-white shadow-[0_0_18px_rgba(37,99,235,0.28)]"
+                  className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#2563eb] px-3 py-2.5 text-[14px] font-semibold text-white shadow-[0_8px_24px_rgba(124,58,237,0.28)]"
                   onClick={() => setOpen(false)}
                 >
                   {resolvedGetStarted}

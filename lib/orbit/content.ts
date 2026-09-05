@@ -16,7 +16,23 @@ export async function getSiteSettings(): Promise<CmsSiteSettings> {
       where: { id: "default" },
     });
     if (!row) return defaultSiteSettings();
-    return { ...defaultSiteSettings(), ...(row.data as CmsSiteSettings) };
+    return {
+      ...defaultSiteSettings(),
+      ...(row.data as CmsSiteSettings),
+      logoPath:
+        !(row.data as CmsSiteSettings)?.logoPath ||
+        (row.data as CmsSiteSettings).logoPath.includes(
+          "hostingbeyond-logo-transparent",
+        ) ||
+        (row.data as CmsSiteSettings).logoPath.includes(
+          "hostingbeyond-logo-wordmark",
+        ) ||
+        (row.data as CmsSiteSettings).logoPath.includes(
+          "hostingbeyond-logo-header",
+        )
+          ? defaultSiteSettings().logoPath
+          : (row.data as CmsSiteSettings).logoPath,
+    };
   } catch {
     return defaultSiteSettings();
   }

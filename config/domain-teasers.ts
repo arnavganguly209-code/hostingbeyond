@@ -5,11 +5,10 @@
  * Update prices here or wire to the DB-backed pricing system later.
  */
 export const heroDomainTeasers = [
-  { tld: ".com", priceLabel: "$7.99/yr" },
-  { tld: ".net", priceLabel: "$6.99/yr" },
-  { tld: ".org", priceLabel: "$5.99/yr" },
-  { tld: ".co", priceLabel: "$4.99/yr" },
-  { tld: ".dev", priceLabel: "$3.99/yr" },
+  { tld: ".com", priceLabel: "$9.99" },
+  { tld: ".net", priceLabel: "$11.99" },
+  { tld: ".org", priceLabel: "$9.99" },
+  { tld: ".dev", priceLabel: "$14.99" },
 ] as const;
 
 export const heroTldOptions = [
