@@ -72,9 +72,9 @@ export function HeroSection({
 
   return (
     <section className="relative z-10 flex min-h-0 flex-1 flex-col">
-      <div className="relative mx-auto grid min-h-0 w-full max-w-[1340px] flex-1 grid-cols-1 items-center gap-1 px-[3.2%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-0 xl:gap-2">
+      <div className="relative mx-auto grid min-h-0 w-full max-w-[1360px] flex-1 grid-cols-1 items-end gap-0 px-[3%] pt-1 pb-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         {/* Left copy */}
-        <div className="relative z-20 max-w-[520px] lg:self-center lg:pb-12">
+        <div className="relative z-20 max-w-[520px] self-center lg:pb-16">
           <motion.p
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -183,49 +183,56 @@ export function HeroSection({
           </motion.div>
         </div>
 
-        {/* Right: exact mockup speaker + glass scene (same-to-same) */}
-        <div className="relative mx-auto hidden h-full min-h-[500px] w-full lg:block">
+        {/* Right: mockup scene zoomed-out + soft fade into white wave */}
+        <div className="relative mx-auto hidden min-h-[540px] w-full lg:block xl:min-h-[560px]">
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[6%] right-[2%] h-[68%] w-[78%] rounded-[48px] bg-[radial-gradient(ellipse_at_55%_40%,rgba(147,197,253,0.35),transparent_70%)] blur-3xl"
+            className="pointer-events-none absolute top-[8%] right-[4%] h-[62%] w-[72%] rounded-full bg-[radial-gradient(ellipse_at_50%_40%,rgba(147,197,253,0.32),transparent_70%)] blur-3xl"
           />
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: 14 }}
+            initial={reduceMotion ? false : { opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
               delay: 0.06,
               duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-scene absolute inset-0"
+            className="hb-hero-scene absolute inset-x-0 top-0 bottom-[6%]"
           >
             <Image
-              src="/images/hero-speaker-scene.png"
+              src="/images/hero-speaker-scene-v2.png"
               alt="HostingBeyond speaker with glass panels"
               fill
               priority
               quality={100}
-              sizes="(max-width: 1280px) 55vw, 720px"
-              className="object-contain object-[62%_100%]"
+              sizes="(max-width: 1280px) 55vw, 740px"
+              className="origin-bottom scale-[0.9] object-contain object-bottom"
             />
           </motion.div>
 
-          {/* Soft dissolve into partner strip */}
+          {/* Tall soft dissolve into partner shelf */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[22%] bg-gradient-to-b from-transparent via-white/55 to-white"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[34%] bg-gradient-to-b from-transparent via-white/50 to-white"
           />
         </div>
       </div>
 
-      {/* Partner logo strip — mockup match */}
-      <div className="relative z-10 mt-auto shrink-0">
-        <div
+      {/* Curved white wave + partner logos */}
+      <div className="relative z-20 mt-auto shrink-0">
+        <svg
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-16 h-20 bg-gradient-to-b from-transparent via-white/80 to-white"
-        />
-        <div className="relative border-t border-slate-200/30 bg-white/85 px-[3.5%] pt-5 pb-5 backdrop-blur-xl sm:pt-6 sm:pb-6">
+          className="pointer-events-none absolute inset-x-0 -top-14 h-16 w-full text-white"
+          viewBox="0 0 1440 64"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="currentColor"
+            d="M0,64 L0,28 C240,8 480,0 720,6 C960,12 1200,28 1440,20 L1440,64 Z"
+          />
+        </svg>
+        <div className="relative bg-white/90 px-[3.5%] pt-4 pb-5 backdrop-blur-xl sm:pt-5 sm:pb-6">
           <PartnerLogoStrip />
         </div>
       </div>
