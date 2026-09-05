@@ -343,7 +343,7 @@ export function defaultSiteSettings(): CmsSiteSettings {
     url: siteConfig.url,
     locale: siteConfig.locale,
     twitterHandle: siteConfig.twitterHandle,
-    logoPath: "/logo/hostingbeyond-logo-light.png",
+    logoPath: "/logo/hostingbeyond-logo-v5.png",
     ogImagePath: "/images/hero-speaker-light.png",
     loginLabel: "Login",
     getStartedLabel: "Get Started",

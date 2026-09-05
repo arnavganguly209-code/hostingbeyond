@@ -29,6 +29,9 @@ export async function getSiteSettings(): Promise<CmsSiteSettings> {
         ) ||
         (row.data as CmsSiteSettings).logoPath.includes(
           "hostingbeyond-logo-header",
+        ) ||
+        (row.data as CmsSiteSettings).logoPath.includes(
+          "hostingbeyond-logo-light",
         )
           ? defaultSiteSettings().logoPath
           : (row.data as CmsSiteSettings).logoPath,

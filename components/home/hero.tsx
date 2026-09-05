@@ -207,40 +207,28 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
           />
         </div>
 
-        {/* Right: atmosphere + glass + speaker */}
-        <div className="relative mx-auto hidden min-h-[520px] w-full lg:block xl:min-h-[560px]">
+        {/* Right: designed glass/datacenter scene + clear speaker */}
+        <div className="relative mx-auto hidden min-h-[540px] w-full lg:block xl:min-h-[580px]">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-[2%_0_8%_4%] overflow-hidden rounded-[36px]"
+            className="pointer-events-none absolute inset-[0_0_6%_2%] overflow-hidden"
           >
             <Image
               src={atmosphereImage}
               alt=""
               fill
               priority
-              sizes="(max-width: 1280px) 48vw, 640px"
-              className="hb-hero-atmosphere scale-105 object-cover object-[62%_35%] opacity-80"
+              sizes="(max-width: 1280px) 50vw, 680px"
+              className="hb-hero-atmosphere object-cover object-[58%_42%] opacity-[0.92]"
             />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_55%_40%,rgba(255,255,255,0.28),transparent_55%),linear-gradient(180deg,rgba(244,247,252,0.15)_0%,rgba(244,247,252,0.55)_72%,rgba(255,255,255,0.95)_100%)]" />
-            <div className="absolute top-[14%] right-[6%] flex h-[58%] gap-2.5 opacity-50">
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="w-[14px] rounded-full bg-gradient-to-b from-sky-200/80 via-blue-500/45 to-indigo-400/25 shadow-[0_0_18px_rgba(59,130,246,0.35)]"
-                  style={{
-                    height: `${62 + i * 7}%`,
-                    marginTop: `${i * 5}%`,
-                  }}
-                />
-              ))}
-            </div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_48%_42%,rgba(255,255,255,0.12),transparent_52%),linear-gradient(90deg,rgba(244,247,252,0.72)_0%,rgba(244,247,252,0.18)_18%,transparent_34%),linear-gradient(180deg,transparent_58%,rgba(255,255,255,0.55)_82%,#ffffff_100%)]" />
           </div>
 
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[10%] left-[6%] z-[5] h-[62%] w-[27%] -rotate-[2.5deg] rounded-[22px] border border-white/70 bg-white/25 shadow-[0_24px_60px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-[14px]"
+            className="pointer-events-none absolute top-[9%] left-[7%] z-[5] flex h-[64%] w-[26%] -rotate-[2deg] flex-col items-center justify-center rounded-[20px] border border-sky-200/80 bg-white/35 px-3 shadow-[0_22px_55px_rgba(37,99,235,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-md"
           >
-            <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 text-center text-[12px] font-bold tracking-[0.18em] text-slate-600 uppercase">
+            <div className="flex flex-col items-center gap-1.5 text-center text-[12px] font-bold tracking-[0.18em] text-slate-600 uppercase">
               {glassLeft.map((line, index) => (
                 <span
                   key={`${line}-${index}`}
@@ -258,28 +246,27 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
 
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[14%] right-[2%] z-[5] h-[56%] w-[30%] rotate-[2deg] rounded-[22px] border border-white/60 bg-white/20 shadow-[0_20px_50px_rgba(37,99,235,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-[14px]"
+            className="pointer-events-none absolute top-[12%] right-[3%] z-[5] h-[58%] w-[29%] rotate-[1.8deg] rounded-[20px] border border-sky-200/70 bg-white/28 shadow-[0_20px_48px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-md"
           >
-            <p className="absolute inset-x-4 top-[28%] text-center text-[11px] leading-relaxed font-semibold tracking-[0.03em] text-slate-600">
+            <p className="absolute inset-x-4 top-[30%] text-center text-[11px] leading-relaxed font-semibold tracking-[0.03em] text-slate-600">
               {glassRight}
             </p>
           </div>
 
-          {/* Soft depth glow behind speaker */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[18%] left-[22%] z-[8] h-[55%] w-[52%] rounded-full bg-[radial-gradient(ellipse,rgba(147,197,253,0.45),transparent_68%)] blur-2xl"
+            className="pointer-events-none absolute top-[16%] left-[24%] z-[8] h-[58%] w-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(147,197,253,0.4),transparent_70%)] blur-2xl"
           />
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.08,
-              duration: 0.55,
+              delay: 0.06,
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="hb-hero-speaker absolute inset-x-[1%] top-0 bottom-[2%] z-10"
+            className="hb-hero-speaker absolute inset-x-[0%] top-[1%] bottom-[1%] z-10"
           >
             <Image
               src={speakerImage}
@@ -287,18 +274,18 @@ export function HeroSection({ content }: { content?: CmsHeroContent }) {
               fill
               priority
               quality={100}
-              sizes="(max-width: 1280px) 52vw, 700px"
-              className="origin-bottom object-contain object-bottom drop-shadow-[0_30px_55px_rgba(15,23,42,0.18)]"
+              sizes="(max-width: 1280px) 52vw, 720px"
+              className="origin-bottom object-contain object-bottom drop-shadow-[0_26px_48px_rgba(15,23,42,0.2)]"
             />
           </motion.div>
 
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[16%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/70 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[14%] bg-gradient-to-r from-[#f4f7fc] via-[#f4f7fc]/65 to-transparent"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[28%] bg-gradient-to-b from-transparent via-white/65 to-white"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[26%] bg-gradient-to-b from-transparent via-white/55 to-white"
           />
         </div>
       </div>
