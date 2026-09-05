@@ -194,11 +194,15 @@ export function HeroSection({
           </motion.div>
         </div>
 
-        {/* Right: mockup speaker + glass scene (same-to-same) */}
-        <div className="relative mx-auto hidden h-full min-h-[420px] w-full lg:block">
+        {/* Right: speaker + glass — zoomed out, soft fade into white */}
+        <div className="relative mx-auto hidden h-full min-h-[460px] w-full lg:block">
           <div
             aria-hidden
-            className="absolute top-[6%] right-[4%] h-[78%] w-[70%] rounded-[32px] bg-[radial-gradient(ellipse_at_60%_40%,rgba(147,197,253,0.45),transparent_70%)] blur-2xl"
+            className="pointer-events-none absolute top-[8%] right-[2%] h-[72%] w-[78%] rounded-[40px] bg-[radial-gradient(ellipse_at_55%_35%,rgba(147,197,253,0.38),transparent_68%)] blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-[8%] bottom-[4%] h-[42%] rounded-full bg-white/80 blur-2xl"
           />
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, x: 18 }}
@@ -217,7 +221,7 @@ export function HeroSection({
               priority
               quality={95}
               sizes="(max-width: 1280px) 52vw, 680px"
-              className="object-contain object-[72%_100%] drop-shadow-[0_24px_48px_rgba(37,99,235,0.18)]"
+              className="scale-[0.92] object-contain object-[58%_100%] drop-shadow-[0_18px_40px_rgba(37,99,235,0.12)]"
             />
           </motion.div>
         </div>
@@ -227,9 +231,9 @@ export function HeroSection({
       <div className="relative z-10 mt-auto shrink-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-10 h-14 bg-[radial-gradient(ellipse_at_50%_100%,rgba(255,255,255,0.95),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 -top-16 h-20 bg-gradient-to-b from-transparent via-white/80 to-white"
         />
-        <div className="relative border-t border-slate-200/50 bg-white/70 px-[3.5%] pt-4 pb-4 backdrop-blur-md sm:pt-5 sm:pb-5">
+        <div className="relative border-t border-slate-200/40 bg-gradient-to-b from-white/55 to-white/90 px-[3.5%] pt-5 pb-5 backdrop-blur-md sm:pt-6 sm:pb-6">
           <PartnerLogoStrip />
         </div>
       </div>

@@ -45,7 +45,7 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     return (
       <Link
         href={item.href}
-        className="text-[14px] font-semibold tracking-[-0.01em] whitespace-nowrap text-slate-700 transition-colors duration-150 hover:text-slate-950 xl:text-[15px]"
+        className="text-[15px] font-bold tracking-[-0.015em] whitespace-nowrap text-slate-800 transition-colors duration-150 hover:text-slate-950 xl:text-[16px]"
       >
         {label}
       </Link>
@@ -63,14 +63,14 @@ function NavDropdown({ item, label }: { item: NavItem; label: string }) {
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[14px] font-semibold tracking-[-0.01em] whitespace-nowrap text-slate-700 transition-colors duration-150 hover:text-slate-950 xl:text-[15px]"
+        className="inline-flex items-center gap-1 text-[15px] font-bold tracking-[-0.015em] whitespace-nowrap text-slate-800 transition-colors duration-150 hover:text-slate-950 xl:text-[16px]"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
         <ChevronDown
           className={cn(
-            "mt-px size-[13px] shrink-0 text-slate-400 transition-transform duration-200",
+            "mt-px size-[14px] shrink-0 text-slate-500 transition-transform duration-200",
             open && "rotate-180",
           )}
           aria-hidden
@@ -201,7 +201,7 @@ export function SiteHeader({
         <div className="flex w-[180px] shrink-0 items-center sm:w-[210px] xl:w-[230px]">
           <Logo
             src={resolvedLogo}
-            variant="mark"
+            variant="image"
             className="w-[176px] sm:w-[200px] xl:w-[218px]"
           />
         </div>

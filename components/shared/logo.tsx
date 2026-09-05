@@ -1,35 +1,29 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { HostingBeyondLogo } from "@/components/shared/hostingbeyond-logo";
 import { cn } from "@/lib/utils";
 import { isRuntimeMediaSrc } from "@/lib/orbit/media-url";
-import Image from "next/image";
 
 type LogoProps = {
   className?: string;
   href?: string;
   src?: string;
-  /** Prefer crisp SVG wordmark for light glass header */
+  /** `image` = attached raster wordmark; `mark` = SVG fallback */
   variant?: "image" | "mark";
 };
 
 /**
  * Official HostingBeyond wordmark —
- * light header uses SVG mark; otherwise raster `src`.
+ * light header prefers the processed attached logo PNG.
  */
 export function Logo({
   className,
   href = "/",
   src = "/logo/hostingbeyond-logo-light.png",
-  variant = "mark",
+  variant = "image",
 }: LogoProps) {
-  const useMark =
-    variant === "mark" ||
-    !src ||
-    src.includes("hostingbeyond-logo-light") ||
-    src.includes("hostingbeyond-logo-transparent") ||
-    src.includes("hostingbeyond-logo-wordmark") ||
-    src.includes("hostingbeyond-logo-header");
+  const useMark = variant === "mark";
 
   const content = useMark ? (
     <HostingBeyondLogo className={cn("w-[200px] sm:w-[220px]", className)} />
@@ -38,9 +32,9 @@ export function Logo({
       src={src}
       alt="HostingBeyond"
       width={264}
-      height={92}
+      height={45}
       priority
-      unoptimized={isRuntimeMediaSrc(src)}
+      unoptimized={isRuntimeMediaSrc(src) || src.endsWith(".png")}
       className={cn(
         "m-0 block h-auto w-[var(--hb-logo-width)] max-w-[var(--hb-logo-width)] bg-transparent object-contain object-left align-middle",
         className,

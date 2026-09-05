@@ -37,20 +37,51 @@ function FlagImg({
   size = 24,
   className,
   priority = false,
+  tone = "dark",
 }: {
   code: string;
   size?: number;
   className?: string;
   priority?: boolean;
+  tone?: "dark" | "light";
 }) {
   const normalized = code.trim().toUpperCase();
   const [format, setFormat] = useState<"svg" | "png" | "failed">("svg");
+  const light = tone === "light";
 
   if (!/^[A-Z]{2}$/.test(normalized) || format === "failed") {
+    // Inline US fallback when CDN fails — ensures header always shows a flag
+    if (normalized === "US") {
+      return (
+        <span
+          className={cn(
+            "inline-flex shrink-0 overflow-hidden rounded-full border",
+            light
+              ? "border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
+              : "border-white/15 bg-[#1a2540]",
+            className,
+          )}
+          style={{ width: size, height: size }}
+          aria-hidden
+        >
+          <svg viewBox="0 0 24 24" className="h-full w-full" aria-hidden>
+            <rect width="24" height="24" fill="#b22234" />
+            <path
+              fill="#fff"
+              d="M0 2.4h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0zm0 3.7h24v1.85H0z"
+            />
+            <rect width="10.5" height="9.6" fill="#3c3b6e" />
+          </svg>
+        </span>
+      );
+    }
     return (
       <span
         className={cn(
-          "inline-flex shrink-0 items-center justify-center rounded-full bg-white/10 text-[9px] font-bold text-white/60",
+          "inline-flex shrink-0 items-center justify-center rounded-full text-[9px] font-bold",
+          light
+            ? "border border-slate-200 bg-slate-100 text-slate-500"
+            : "bg-white/10 text-white/60",
           className,
         )}
         style={{ width: size, height: size }}
@@ -66,7 +97,10 @@ function FlagImg({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 overflow-hidden rounded-full border border-white/15 bg-[#1a2540]",
+        "inline-flex shrink-0 overflow-hidden rounded-full border",
+        light
+          ? "border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
+          : "border-white/15 bg-[#1a2540]",
         className,
       )}
       style={{ width: size, height: size }}
@@ -317,7 +351,7 @@ export function CountryLanguageSelector({
           </>
         ) : (
           <>
-            <FlagImg code={country.code} size={22} priority />
+            <FlagImg code={country.code} size={22} priority tone={tone} />
             <span className="font-bold tracking-wide">{triggerLangCode}</span>
           </>
         )}
@@ -339,24 +373,47 @@ export function CountryLanguageSelector({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 3, scale: 0.97 }}
             transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute right-0 z-[200] mt-2 flex flex-col overflow-hidden rounded-[18px] border border-white/[0.12] bg-[#0c1528] shadow-[0_20px_60px_rgba(0,0,0,0.65)] backdrop-blur-2xl"
+            className={cn(
+              "absolute right-0 z-[200] mt-2 flex flex-col overflow-hidden rounded-[18px] border backdrop-blur-2xl",
+              light
+                ? "border-slate-200/80 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.14)]"
+                : "border-white/[0.12] bg-[#0c1528] shadow-[0_20px_60px_rgba(0,0,0,0.65)]",
+            )}
             style={{
               width: compact ? 320 : 360,
               maxHeight: "min(520px, 80dvh)",
             }}
           >
             {/* Title */}
-            <div className="shrink-0 border-b border-white/[0.07] px-4 py-3">
-              <p className="text-[13.5px] font-bold text-white">
+            <div
+              className={cn(
+                "shrink-0 border-b px-4 py-3",
+                light ? "border-slate-200/80" : "border-white/[0.07]",
+              )}
+            >
+              <p
+                className={cn(
+                  "text-[13.5px] font-bold",
+                  light ? "text-slate-900" : "text-white",
+                )}
+              >
                 {t.locale.selectLocation}
               </p>
             </div>
 
             {/* Search */}
-            <div className="shrink-0 border-b border-white/[0.06] px-3 py-2.5">
+            <div
+              className={cn(
+                "shrink-0 border-b px-3 py-2.5",
+                light ? "border-slate-200/70" : "border-white/[0.06]",
+              )}
+            >
               <label className="relative block">
                 <Search
-                  className="pointer-events-none absolute top-1/2 left-3 size-[13px] -translate-y-1/2 text-white/35"
+                  className={cn(
+                    "pointer-events-none absolute top-1/2 left-3 size-[13px] -translate-y-1/2",
+                    light ? "text-slate-400" : "text-white/35",
+                  )}
                   aria-hidden
                 />
                 <input
@@ -366,7 +423,12 @@ export function CountryLanguageSelector({
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={onSearchKeyDown}
                   placeholder="Search country or language…"
-                  className="h-[36px] w-full rounded-[9px] border border-white/[0.10] bg-white/[0.05] pr-3 pl-9 text-[13px] text-white outline-none placeholder:text-white/30 focus:border-[#2563eb]/50"
+                  className={cn(
+                    "h-[36px] w-full rounded-[9px] border pr-3 pl-9 text-[13px] outline-none",
+                    light
+                      ? "border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:border-[#6366f1]/50 focus:bg-white"
+                      : "border-white/[0.10] bg-white/[0.05] text-white placeholder:text-white/30 focus:border-[#2563eb]/50",
+                  )}
                   autoComplete="off"
                 />
               </label>
@@ -379,7 +441,12 @@ export function CountryLanguageSelector({
               role="listbox"
             >
               {results.length === 0 ? (
-                <p className="px-4 py-6 text-center text-[12px] text-white/40">
+                <p
+                  className={cn(
+                    "px-4 py-6 text-center text-[12px]",
+                    light ? "text-slate-400" : "text-white/40",
+                  )}
+                >
                   {t.locale.noResults}
                 </p>
               ) : (
@@ -401,37 +468,53 @@ export function CountryLanguageSelector({
                       onClick={() => selectAndApply(option)}
                       className={cn(
                         "flex w-full items-center gap-3 px-3 py-[9px] text-left transition-colors duration-100",
-                        selected
-                          ? "bg-[rgba(37,99,235,0.20)] text-white"
-                          : active
-                            ? "bg-white/[0.07] text-white"
-                            : "text-white/80 hover:bg-white/[0.05] hover:text-white",
+                        light
+                          ? selected
+                            ? "bg-indigo-50 text-slate-900"
+                            : active
+                              ? "bg-slate-100 text-slate-900"
+                              : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                          : selected
+                            ? "bg-[rgba(37,99,235,0.20)] text-white"
+                            : active
+                              ? "bg-white/[0.07] text-white"
+                              : "text-white/80 hover:bg-white/[0.05] hover:text-white",
                       )}
                     >
-                      {/* Real flag image — round */}
-                      <FlagImg code={option.code} size={26} />
+                      <FlagImg code={option.code} size={26} tone={tone} />
 
-                      {/* Country name */}
                       <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
                         {option.name}
                       </span>
 
-                      {/* Language */}
-                      <span className="shrink-0 text-[11.5px] text-white/45">
+                      <span
+                        className={cn(
+                          "shrink-0 text-[11.5px]",
+                          light ? "text-slate-400" : "text-white/45",
+                        )}
+                      >
                         {primaryLang?.nativeLabel ?? primaryLang?.label}
                       </span>
 
-                      {/* Currency badge (non-USD) */}
                       {currencyTag ? (
-                        <span className="shrink-0 rounded-[5px] border border-white/[0.10] bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-bold text-white/45">
+                        <span
+                          className={cn(
+                            "shrink-0 rounded-[5px] border px-1.5 py-0.5 text-[10px] font-bold",
+                            light
+                              ? "border-slate-200 bg-white text-slate-500"
+                              : "border-white/[0.10] bg-white/[0.06] text-white/45",
+                          )}
+                        >
                           {currencyTag}
                         </span>
                       ) : null}
 
-                      {/* Check */}
                       {selected ? (
                         <Check
-                          className="size-3.5 shrink-0 text-[#4f8ef7]"
+                          className={cn(
+                            "size-3.5 shrink-0",
+                            light ? "text-indigo-600" : "text-[#4f8ef7]",
+                          )}
                           aria-hidden
                         />
                       ) : (
@@ -445,8 +528,18 @@ export function CountryLanguageSelector({
 
             {/* Language picker — only for multi-language countries */}
             {languageChoices.length > 1 ? (
-              <div className="shrink-0 border-t border-white/[0.07] px-3 py-2.5">
-                <p className="mb-2 text-[10px] font-bold tracking-[0.12em] text-white/35 uppercase">
+              <div
+                className={cn(
+                  "shrink-0 border-t px-3 py-2.5",
+                  light ? "border-slate-200/80" : "border-white/[0.07]",
+                )}
+              >
+                <p
+                  className={cn(
+                    "mb-2 text-[10px] font-bold tracking-[0.12em] uppercase",
+                    light ? "text-slate-400" : "text-white/35",
+                  )}
+                >
                   {t.locale.language}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -460,9 +553,13 @@ export function CountryLanguageSelector({
                         onClick={() => setDraftLanguage(code)}
                         className={cn(
                           "rounded-[7px] border px-2.5 py-1 text-[12px] font-medium transition-colors",
-                          sel
-                            ? "border-[#2563eb]/50 bg-[#2563eb]/20 text-white"
-                            : "border-white/[0.10] bg-white/[0.04] text-white/55 hover:text-white",
+                          light
+                            ? sel
+                              ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+                              : "border-slate-200 bg-white text-slate-600 hover:text-slate-900"
+                            : sel
+                              ? "border-[#2563eb]/50 bg-[#2563eb]/20 text-white"
+                              : "border-white/[0.10] bg-white/[0.04] text-white/55 hover:text-white",
                         )}
                       >
                         {meta.nativeLabel}
@@ -474,14 +571,31 @@ export function CountryLanguageSelector({
             ) : null}
 
             {/* Footer: selected summary + Apply */}
-            <div className="flex shrink-0 items-center justify-between gap-3 border-t border-white/[0.07] bg-[rgba(5,8,18,0.7)] px-4 py-2.5">
+            <div
+              className={cn(
+                "flex shrink-0 items-center justify-between gap-3 border-t px-4 py-2.5",
+                light
+                  ? "border-slate-200/80 bg-slate-50/90"
+                  : "border-white/[0.07] bg-[rgba(5,8,18,0.7)]",
+              )}
+            >
               <div className="flex min-w-0 items-center gap-2.5">
-                <FlagImg code={draft.code} size={22} />
+                <FlagImg code={draft.code} size={22} tone={tone} />
                 <div className="min-w-0">
-                  <p className="truncate text-[12px] font-semibold text-white/85">
+                  <p
+                    className={cn(
+                      "truncate text-[12px] font-semibold",
+                      light ? "text-slate-800" : "text-white/85",
+                    )}
+                  >
                     {draft.name}
                   </p>
-                  <p className="text-[10.5px] text-white/38">
+                  <p
+                    className={cn(
+                      "text-[10.5px]",
+                      light ? "text-slate-500" : "text-white/38",
+                    )}
+                  >
                     {languages[draftLanguage]?.nativeLabel ??
                       draftLanguage.toUpperCase()}
                     {" · "}
