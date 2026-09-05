@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Gift, Mail, ShieldCheck } from "lucide-react";
 
@@ -30,7 +31,7 @@ function IconTile({
   return (
     <span
       className={`flex h-8 shrink-0 items-center justify-center rounded-[10px] sm:h-9 ${
-        wide ? "w-10 sm:w-11" : "w-8 sm:w-9"
+        wide ? "w-11 sm:w-12" : "w-8 sm:w-9"
       } ${tones[tone]}`}
     >
       {children}
@@ -45,14 +46,13 @@ const features = [
     subtitle: "cPanel Access",
     icon: (
       <IconTile tone="orange" wide>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/feature-marks/cpanel-cp.svg?v=3"
+        <Image
+          src="/images/feature-marks/cpanel-user.png"
           alt="cPanel"
-          width={36}
-          height={20}
-          className="h-[15px] w-auto object-contain sm:h-[17px]"
-          draggable={false}
+          width={40}
+          height={30}
+          className="h-[18px] w-auto object-contain sm:h-[21px]"
+          priority
         />
       </IconTile>
     ),
