@@ -57,7 +57,7 @@ function BuiltInMark({ id }: { id: string }) {
             fontWeight="700"
             letterSpacing="-0.02em"
           >
-            Plesk
+            plesk
           </text>
         </svg>
       );
@@ -122,7 +122,7 @@ function BuiltInMark({ id }: { id: string }) {
       );
     case "nvme":
       return (
-        <svg viewBox="0 0 56 24" className="h-[18px] w-auto" aria-hidden>
+        <svg viewBox="0 0 118 24" className="h-[18px] w-auto" aria-hidden>
           <text
             x="0"
             y="17"
@@ -130,9 +130,21 @@ function BuiltInMark({ id }: { id: string }) {
             fontFamily="ui-sans-serif, system-ui, sans-serif"
             fontSize="13"
             fontWeight="800"
-            letterSpacing="0.04em"
+            letterSpacing="0.02em"
           >
-            NVMe
+            nvme
+          </text>
+          <text
+            x="48"
+            y="17"
+            fill="currentColor"
+            fontFamily="ui-sans-serif, system-ui, sans-serif"
+            fontSize="12.5"
+            fontWeight="650"
+            letterSpacing="0.06em"
+            opacity="0.92"
+          >
+            EXPRESS
           </text>
         </svg>
       );

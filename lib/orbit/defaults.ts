@@ -670,12 +670,16 @@ export function defaultTechnologyPartners(): CmsTechPartner[] {
       order: 0,
     },
     { id: "cpanel", label: "cPanel", imageUrl: "", visible: true, order: 1 },
-    { id: "plesk", label: "Plesk", imageUrl: "", visible: true, order: 2 },
-    { id: "intel", label: "Intel", imageUrl: "", visible: true, order: 3 },
+    { id: "plesk", label: "plesk", imageUrl: "", visible: true, order: 2 },
+    { id: "intel", label: "intel", imageUrl: "", visible: true, order: 3 },
     { id: "amd", label: "AMD", imageUrl: "", visible: true, order: 4 },
-    { id: "dell", label: "DELL", imageUrl: "", visible: true, order: 5 },
-    { id: "nvme", label: "NVMe", imageUrl: "", visible: true, order: 6 },
-    { id: "express", label: "Express", imageUrl: "", visible: true, order: 7 },
+    {
+      id: "nvme",
+      label: "nvme EXPRESS",
+      imageUrl: "",
+      visible: true,
+      order: 5,
+    },
   ];
 }
 
@@ -691,8 +695,8 @@ export function defaultHomeSections(): CmsHomeSections {
       searchPlaceholder: "Find your perfect domain name...",
       searchButtonLabel: "Search",
       bulkSearchLabel: "Bulk Search",
-      backgroundImage: "/images/hero-speaker-scene.png",
-      speakerImage: "/images/hero-speaker-cutout.png",
+      backgroundImage: "/images/hero-glass-bg.jpg",
+      speakerImage: "/images/hero-speaker-half.png",
       glassPanelLeft: "Ideas\nHost\nGrow\nBeyond",
       glassPanelRight: "Global Infrastructure for a Brighter Tomorrow",
       domainPricing: [
@@ -941,9 +945,19 @@ export function mergeHomeSections(
   const storedPartners = Array.isArray(storedHero.technologyPartners)
     ? storedHero.technologyPartners
     : [];
+  const partnerIds = new Set(
+    storedPartners.map((partner) => (partner.id || "").toLowerCase()),
+  );
+  // Prefer mockup strip (WordPress…NVMe Express) over older DELL/Express splits
+  const useDefaultPartners =
+    !storedPartners.length ||
+    partnerIds.has("dell") ||
+    partnerIds.has("express") ||
+    storedPartners.filter((p) => p.visible !== false).length !== 6;
   const technologyPartners = (
-    storedPartners.length
-      ? storedPartners.map((partner, index) => ({
+    useDefaultPartners
+      ? defaults.hero.technologyPartners!
+      : storedPartners.map((partner, index) => ({
           id: partner.id || `partner-${index}`,
           label: partner.label || `Partner ${index + 1}`,
           imageUrl:
@@ -951,7 +965,6 @@ export function mergeHomeSections(
           visible: partner.visible !== false,
           order: typeof partner.order === "number" ? partner.order : index,
         }))
-      : defaults.hero.technologyPartners!
   ).sort((a, b) => a.order - b.order);
 
   const storedPricing = Array.isArray(storedHero.domainPricing)
@@ -987,7 +1000,7 @@ export function mergeHomeSections(
       if (
         !path ||
         path.includes("hero-atmosphere") ||
-        path.includes("hero-speaker-scene-v") ||
+        path.includes("hero-speaker-scene") ||
         path === "/images/hero-speaker.png" ||
         path === "/images/hero-speaker.jpg"
       ) {
@@ -998,6 +1011,7 @@ export function mergeHomeSections(
     speakerImage:
       !storedHero.speakerImage?.trim() ||
       storedHero.speakerImage.includes("hero-speaker-clear") ||
+      storedHero.speakerImage.includes("hero-speaker-cutout") ||
       storedHero.speakerImage.includes("hero-speaker-scene") ||
       storedHero.speakerImage === "/images/hero-speaker.png" ||
       storedHero.speakerImage === "/images/hero-speaker.jpg"

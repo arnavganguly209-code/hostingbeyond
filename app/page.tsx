@@ -15,8 +15,8 @@ export default async function HomePage() {
 
   return (
     <div className="overflow-x-hidden bg-[#07122a]">
-      {/* Light glass hero — fits first viewport, no scroll needed */}
-      <div className="relative flex flex-col overflow-hidden bg-[#f4f7fc] lg:h-svh lg:max-h-svh">
+      {/* Light glass hero — first viewport includes partner strip */}
+      <div className="relative flex min-h-0 flex-col overflow-hidden bg-[#f4f7fc] lg:h-svh lg:max-h-svh">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden"
