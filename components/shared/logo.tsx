@@ -7,35 +7,36 @@ import { cn } from "@/lib/utils";
 type LogoProps = {
   className?: string;
   href?: string;
+  /** Kept for Orbit CMS API compatibility */
   src?: string;
-  /** `image` = official raster wordmark; `mark` = crisp SVG */
   variant?: "image" | "mark";
 };
 
 /**
- * Official HostingBeyond wordmark for the light glass header.
+ * Premium HostingBeyond wordmark for light glass header.
+ * Uses a clean transparent PNG (HB monogram) — sharp at retina sizes.
  */
 export function Logo({
   className,
   href = "/",
-  src = "/logo/hostingbeyond-logo-v4.png",
+  src = "/logo/hostingbeyond-logo-v5.png",
   variant = "image",
 }: LogoProps) {
   const content =
     variant === "mark" ? (
       <HostingBeyondLogo
-        className={cn("h-[34px] w-auto sm:h-9 xl:h-10", className)}
+        className={cn("h-[32px] w-auto sm:h-[36px] xl:h-[40px]", className)}
       />
     ) : (
       <Image
         src={src}
         alt="HostingBeyond"
-        width={1200}
-        height={183}
+        width={1400}
+        height={232}
         priority
         unoptimized
         className={cn(
-          "m-0 block h-[34px] w-auto max-w-[min(100%,270px)] bg-transparent object-contain object-left align-middle sm:h-9 sm:max-w-[300px] xl:h-10 xl:max-w-[320px]",
+          "m-0 block h-[30px] w-auto max-w-[min(100%,250px)] bg-transparent object-contain object-left align-middle sm:h-[34px] sm:max-w-[280px] xl:h-[38px] xl:max-w-[310px]",
           className,
         )}
       />

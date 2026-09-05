@@ -130,7 +130,7 @@ export function SiteHeader({
   loginHref = routes.login,
   getStartedLabel,
   getStartedHref = routes.getStarted,
-  logoPath,
+  logoPath: _logoPath,
 }: {
   navigation?: NavItem[];
   loginLabel?: string;
@@ -174,16 +174,6 @@ export function SiteHeader({
     return sortNav(deduped);
   })();
 
-  const resolvedLogo =
-    !logoPath ||
-    logoPath.includes("hostingbeyond-logo-transparent") ||
-    logoPath.includes("hostingbeyond-logo-wordmark") ||
-    logoPath.includes("hostingbeyond-logo-header") ||
-    logoPath.includes("hostingbeyond-logo-light") ||
-    logoPath.includes("hostingbeyond-logo-v3")
-      ? "/logo/hostingbeyond-logo-v4.png"
-      : logoPath;
-
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -200,8 +190,8 @@ export function SiteHeader({
   return (
     <header className="relative z-50 w-full shrink-0 bg-transparent px-[2.2%] pt-3 pb-1 sm:pt-4">
       <div className="mx-auto flex h-[64px] w-full max-w-[1280px] items-center rounded-full border border-white/70 bg-white/70 px-4 shadow-[0_10px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl sm:h-[70px] sm:px-5 lg:px-6">
-        <div className="flex min-w-[200px] shrink-0 items-center sm:min-w-[230px] xl:min-w-[250px]">
-          <Logo src={resolvedLogo} variant="image" />
+        <div className="flex min-w-[210px] shrink-0 items-center sm:min-w-[240px] xl:min-w-[270px]">
+          <Logo src="/logo/hostingbeyond-logo-v5.png" variant="image" />
         </div>
 
         <nav
